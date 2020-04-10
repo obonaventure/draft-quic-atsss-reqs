@@ -64,9 +64,6 @@ This document briefly presents the ATSSS service being specified within
 # Introduction  {#intro}
 
 
-[comment]: # (OB: to be provided) 
-
-
 # Conventions and Definitions
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
@@ -74,6 +71,24 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
 "OPTIONAL" in this document are to be interpreted as described in BCP 14
 {{RFC2119}}{{RFC8174}} when, and only when, they appear in all capitals,
 as shown here.
+
+[comment]: # (OB: not sure we need that section, we'll see later)
+
+# High level Overview {#overview}
+
+
+# Carrying bytestreams over different access networks {#bytestreams}
+
+
+# Carrying packets over different access networks {#packets}
+
+
+# Conclusion {#conclusion}
+
+Based on the two above questions, it should be clear that MPQUIC could
+cover both cases.
+
+
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
