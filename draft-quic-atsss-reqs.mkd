@@ -119,6 +119,14 @@ The two scenarios that we consider in this document are:
 - the possibility of splitting the transmission of the data over the two access networks even if they have different characteristics (delay, bandwidth, congestion)
 
 
+## External IP Addresses Used by the MPTCP Proxy
+
+The MPTCP proxy translates the link-specific multipath addresses into an address called Multi-Access (MA) PDU session IP address and vice versa. Such address is also assigned to the UE (that is, packets that are not eligible to the ATSSS service are sourced with that IP address).
+
+Absent any coordination between the UE and UPF (e.g., assignment of port ranges), the same port number may be used simultaneously by the MPTCP proxy and the UE; which is problematic.
+
+To avoid such issue, the MPTCP proxy may be configured with a pool of IP addresses that it can use in the External Realm instead of preserving the MA PDU session IP address assigned to the UE. How that pool is used is deployment- and implementation-specific.
+
 
 # Carrying bytestreams over different access networks {#bytestreams}
 
