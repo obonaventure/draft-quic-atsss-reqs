@@ -118,6 +118,11 @@ The two scenarios that we consider in this document are:
 - the failure of one access network that forces all data to switch to the other access network
 - the possibility of splitting the transmission of the data over the two access networks even if they have different characteristics (delay, bandwidth, congestion)
 
+## Multipath-Specific Addressing
+
+An ATSSS-capable UE is assigned two additional IP addresses/prefixes, called "link-specific multipath" addresses/prefixes; each associated with an access network. These addresses are only used by the MPTCP functionality of the UE to manage subflows with the MPTCP proxy.
+
+Link-specific multipath addresses/prefixes may not be global routeable addresses/prefixes.
 
 
 # Carrying bytestreams over different access networks {#bytestreams}
