@@ -30,7 +30,11 @@ author:
   name: Quentin De Coninck
   organization: UCLouvain
   email: quentin.deconinck@uclouvain.be
-
+ -
+  ins: S. Dawkins
+  name: Spencer Dawkins
+  organization: Tencent America
+  email: spencerdawkins.ietf@gmail.com
 
 normative:
   RFC8174:
@@ -75,6 +79,33 @@ as shown here.
 [comment]: # (OB: not sure we need that section, we'll see later)
 
 # High level Overview {#overview}
+
+## Reference Architecture
+
+A simplified reference architecture is shown in {{ref-arch}}.  
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                 ____________
+                /            \
+    +----------| Access Net A |--+
+    |           \____________/   |
+    |                     _______|_____
+ +--+---+                /             \     +-----+        +------+
+ |MPTCP |               | 3GPP Core Net +----|MPTCP|-/.../--|Server|
+ |Client|                \_______ _____/     |Proxy|        +------+
+ +--+---+                        |           +-----+
+    |                            |
+    |            ___________     |
+    |           /            \   |
+    +----------| Access Net B ---+
+                \____________/
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{: #ref-arch title="Simplified Reference Architecture for ATSSS with Multipath TCP"}
+
+For ATSSS with Multipath TCP functionality, a client with at least two interfaces connected to two disjoint access networks (in this case, Access Net A and Access Net B), uses MPTCP to reach an MPTCP proxy over either, or both, of the access networks, which allows the client to communicate with a server which does not terminate MPTCP connections.
+
+In this case, 
 
 
 # Carrying bytestreams over different access networks {#bytestreams}
