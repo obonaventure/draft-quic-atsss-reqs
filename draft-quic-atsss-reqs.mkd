@@ -55,7 +55,7 @@ informative:
 
 --- abstract
 
-This document briefly presents the Access Traffic Steering, Switching, and Splitting (ATSSS) service being specified within the 3rd Generation Partnership Project (3GPP). The document also captures a set of data plane requirements to benefit from multipath capabilities. 
+This document briefly presents the Access Traffic Steering, Switching, and Splitting (ATSSS) service being specified within the 3rd Generation Partnership Project (3GPP). Future verssions of the document will capture a set of data plane requirements to benefit from multipath capabilities. 
 
 --- middle
 
