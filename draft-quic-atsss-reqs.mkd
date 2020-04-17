@@ -85,28 +85,34 @@ as shown here.
 A simplified reference architecture is shown in {{ref-arch}}.  
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                 ____________
-                /            \
-    +----------| Access Net A |--+
-    |           \____________/   |
-    |                     _______|_____
- +--+---+                /             \     +-----+        +------+
- |MPTCP |               | 3GPP Core Net +----|MPTCP|-/.../--|Server|
- |Client|                \_______ _____/     |Proxy|        +------+
- +--+---+                        |           +-----+
-    |                            |
-    |            ___________     |
-    |           /            \   |
-    +----------| Access Net B ---+
-                \____________/
 
+  ........(ATSSS Rules From Network)..........
+  .                                          .
+  .              ------------                .
+  .             /            \               .
+  .   +--------| Access Net A |-+            .
+  .   |         \   (3GPP)   /  |            .
+  .   |          ------------   |            .
+  .   |                         |            .
+  .   |                         |            .
+  .   |                 -------------        .
+ +---+--+              /             \    +-----+        +------+
+ |MPTCP |             | 3GPP Core Net +---|MPTCP|-/.../--|Server|
+ |Client|              \             /    |Proxy|        +------+
+ +--+---+               -------------     +-----+
+    |                          |    
+    |                          |
+    |          ------------    |
+    |         /            \   |
+    +--------| Access Net B |--+
+              \ (non 3GPP) /
+               ------------
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {: #ref-arch title="Simplified Reference Architecture for ATSSS with Multipath TCP"}
 
 For ATSSS with Multipath TCP functionality, a client with at least two interfaces connected to two disjoint access networks (in this case, Access Net A and Access Net B), uses MPTCP to reach an MPTCP proxy over either, or both, of the access networks, which allows the client to communicate with a server which does not terminate MPTCP connections.
 
-In this case, 
-
+Both the MPTCP Client and MPTCP proxy are configured with ATSSS rules from the network that govern how the multiple network paths between the MPTCP Client and MPTCP Proxy are used. This relationship is shown using "." between the MPTCP Client and MPTCP Proxy. 
 
 # Carrying bytestreams over different access networks {#bytestreams}
 
