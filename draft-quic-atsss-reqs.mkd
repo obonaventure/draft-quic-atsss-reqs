@@ -118,6 +118,16 @@ The two scenarios that we consider in this document are:
 - the failure of one access network that forces all data to switch to the other access network
 - the possibility of splitting the transmission of the data over the two access networks even if they have different characteristics (delay, bandwidth, congestion)
 
+## Steering Modes
+
+The traffic that matches an ATSSS rule can be distributed among available access networks following one of these modes:
+- “Active-Standby”: The traffic associated with the matching flow will be forwarded via a specific access (called, active access) and to switch to another access (called, standby access) when the active access is unavailable. 
+
+-	“Smallest Delay”: The traffic associated with the matching flow will be forwarded via the access that presents the smallest Round-Trip Time (RTT). To that aim, specific measurements are conducted by the UE and a dedicated function co-located with the MPTCP Proxy: Performance Measurement Function (PMF). Dedicated messages (called, PMF-Echo Request and PMF-Echo Response) are used to perform the measurements.
+
+-	“Load-Balancing”: The traffic associated with the matching flow will be distributed among available access networks following a distribution ratio (e.g., 30% via a first access, 70% via a second access).
+
+-	“Priority-based”: For this mode, accesses are assigned priority levels that indicate which access I to be used first. Concretely, the traffic associated with the matching flow will be steered on the access with a high priority till congestion is detected, then the overflow will be forwarded over a low priority access. 
 
 
 # Carrying bytestreams over different access networks {#bytestreams}
