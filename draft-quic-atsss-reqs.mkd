@@ -85,7 +85,7 @@ This document makes use of 3GPP-specific terms defined in RFC6459, mainly the fo
       either belongs to the operator or is an external network such as
       the Internet or a corporate intranet.  The user eventually
       accesses services in one or more PDNs.  The operator's packet core
-      networks are separated from packet data networks either by GGSNs, PDN Gateways (PDN-GWs), or User Plane Function (UPF).
+      networks are separated from packet data networks either by User Plane Functions (UPFs).
 
 -     UE (User Equipment): refers to the devices that are hosts with the
       ability to obtain Internet connectivity via a 3GPP network.  A MS
