@@ -122,7 +122,7 @@ The two scenarios that we consider in this document are:
 
 During the attachment of an ATSSS-capable UE to the network, the UE retrieves the MPTCP proxy information: an IP address, a port number, and the type of the MPTCP proxy. In the current release, the mandatory MPTCP proxy type is the "Transport Converter" [I-D.ietf-tcpm-converters].
 
-The UE is also provided with a set of steering policies that will be used by the UE to decide how flows will be distributed among available access networks.
+The UE is also provided with a set of steering policies that will be used by the UE to decide how flows will be distributed among available access networks. More details are provided in "ATSSS Steering Modes" Section. 
 
 # Carrying bytestreams over different access networks {#bytestreams}
 
