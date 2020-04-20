@@ -108,7 +108,7 @@ The 5G Core (5GC) supports a service that provides exchange of data between a UE
 
 It is out of the scope of this document to provide a comprehensive overview of 5G System (5GS) architecture. In particuler, this document won't describe how PDU Sessions are established, and thus how IP addresses/prefixes are assigned to requetsing User Equipment (UEs). 
 
-An UE can be provided a multi-access PDU Connectivity Service. That is, an UA can exchange data with a PDN by using a "3GPP access network" and a "non-3GPP access network". Such service relies upon the The ATSSS feature.
+An UE can be provided a multi-access PDU Connectivity Service. That is, an UE can exchange data with a PDN by using a "3GPP access network" and a "non-3GPP access network". Such service relies upon the The ATSSS feature.
 
 3GPP defined the following procedures [TS.23501] that are applicable between between one "3GPP access" and one "non-3GPP access":
  
