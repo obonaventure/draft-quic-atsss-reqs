@@ -127,8 +127,9 @@ The traffic that matches an ATSSS rule can be distributed among available access
 
 -	“Load-Balancing”: The traffic associated with the matching flow will be distributed among available access networks following a distribution ratio (e.g., 30% via a first access, 70% via a second access).
 
--	“Priority-based”: For this mode, accesses are assigned priority levels that indicate which access I to be used first. Concretely, the traffic associated with the matching flow will be steered on the access with a high priority till congestion is detected, then the overflow will be forwarded over a low priority access. 
+-	“Priority-based”: For this mode, accesses are assigned priority levels that indicate which access to be used first. Concretely, the traffic associated with the matching flow will be steered on the access with a high priority till congestion is detected, then the overflow will be forwarded over a low priority access. 
 
+Which flows are eligible to the ATSSS service and which mode to follow are communicated to the UE using the control plane. See Section XXX.
 
 # Carrying bytestreams over different access networks {#bytestreams}
 
