@@ -102,13 +102,13 @@ This document makes use of 3GPP-specific terms defined in RFC6459, mainly the fo
 
 # High level Overview {#overview}
 
-The 5G Core (5GC) supports a service that provides exchange of data between a UE and a data network identified by a Data Network Name (DNN). Such connectivity service, called PDU Connectivity Service, is supported via 'PDU Sessions' that are established upon request from the UE. The type of PDU Session can be IPv4, IPv6, IPv4v6, Ethernet or Unstructured.
+The 5G Core (5GC) supports a service that provides exchange of data between an UE and a data network (referred to as PDN) identified by a Data Network Name (DNN). Such connectivity service, called PDU Connectivity Service, is supported via 'PDU Sessions' that are established upon request from the UE. The type of PDU Session can be IPv4, IPv6, IPv4v6, or Ethernet or Unstructured.
 
 It is out of the scope of this document to provide a comprehensive overview of 5G System (5GS) architecture. In particular, this document won't describe how PDU Sessions are established, and thus how IP addresses/prefixes are assigned to requetsing User Equipment (UEs). 
 
-An UE can be provided a multi-access PDU Connectivity Service. That is, an UE can exchange data with a PDN by using a "3GPP access network" and a "non-3GPP access network". Such service relies upon the The ATSSS feature.
+An UE can be provided a multi-access PDU Connectivity Service. That is, an UE can exchange data with a PDN by using a "3GPP access network" and a "non-3GPP access network". Such service relies upon the  ATSSS feature.
 
-3GPP defined the following procedures [TS.23501] that are applicable between between one "3GPP access" and one "non-3GPP access":
+3GPP defined the following procedures [TS.23501] that are applicable between one "3GPP access" and one "non-3GPP access":
  
 - Access Traffic Steering: selection of an access network for a new data flow and the transfer of the traffic of that data flow over the selected access network. 
 
@@ -116,7 +116,7 @@ An UE can be provided a multi-access PDU Connectivity Service. That is, an UE ca
 
 - Access Traffic Splitting: split of the traffic of a data flow across multiple access networks.  
 
-TBC.
+
 
 
 
