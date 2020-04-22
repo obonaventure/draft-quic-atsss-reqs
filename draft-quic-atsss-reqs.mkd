@@ -129,7 +129,7 @@ The MPTCP-based ATSSS discussed in Section XX is specific to TCP, obviously. In 
 
 Some proposals were made in the past to encapsulate UDP in MPTCP (by means of header swapping and extraction of the UDP payload). For example, early versions of {{I.D-boucadair-mptcp-plain-mode}} specified how UDP flows, in particular, can be distributed among available paths by leveraging MPTCP capabilities. It does so by including a “Protocol” TLV in the MPTCP payload; doing so allows an MPTCP Proxy to unambiguously identify UDP packets vs. native TCP connections. Some modifications are also required at the MPTCP Proxy to avoid HOL blocking issues of UDP-encapsulated data. This design approach is sub-optimal if the UDP-encapsulated data carry its own congestion control signals (that are not visible to the MPTCP proxy because these signals are encrypted such as in QUIC). 
 
-Some ATSSS modes can be natively supported by the base QUIC specification. For example, the “Active-Standby” and “Smallest Delay” steering modes can be supported directly between an UE and a QUIC server without any assistance for the network other than the performance measurement information. 
+Some ATSSS modes can be natively supported by the base QUIC specification. For example, the “Active-Standby” and “Smallest Delay” steering modes can be supported directly between an UE and a QUIC server without any assistance from the network other than the performance measurement information. 
 
 Nevertheless, blindly distributing packets among existing paths may lead to complications such as:
 -	Aggressive use of user quota if one of the access networks is subject to volume-based quota. 
