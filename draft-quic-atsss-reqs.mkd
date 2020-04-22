@@ -120,7 +120,7 @@ The two scenarios that we consider in this document are:
 
 ## MPTCP-Proxied Connections
 
-This section describes how TCP connections matching ATSSS rules are currently established over differnt access networks.
+This section describes how TCP connections matching ATSSS rules are currently established over different access networks.
 
 An ATSSS-capable UE can make use of the MPTCP functionality by establishing MPTCP-assisted connections via the MPTCP proxy relying upon the Convert Protocol {{I-D.ietf-tcpm-converter}}. The UE behaves as a “Client”, while the MPTCP proxy behaves as a Transport Converter {{I-D.ietf-tcpm-converter}}. 
 
