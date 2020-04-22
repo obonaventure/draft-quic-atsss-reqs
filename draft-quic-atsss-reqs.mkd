@@ -128,21 +128,20 @@ The ATSSS-capable UE sends packets bound to connections matching an ATSSS rule t
 
 A flow example of an MPTCP-proxied connection is show in {{fig-example}}. This example assumes the Server is not MPTCP-aware. The access network used to establish the matching ATSSS rule to select the access network to be used to establish the first subflow. The instruction included in the ATSSS rule will be followed for the management of the MPTCP connection. 
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                           Transport
-          UE              Converter              Server
-          |SYN,               |                      |
-          |MPC [->Server:port]|         SYN, MPC     |
-          |------------------>|--------------------->|
-          |<------------------|<---------------------|
-          |  SYN+ACK, MPC [.] |      SYN+ACK         |
-          |------------------>|--------------------->|
-          |     ACK, MPC      |          ACK         |
-          |        ...        |          ...         |
+~~~~~~~~~~~~~~~~~~~~~~~~~~~                           
+          UE                   MPTCP Proxy               Server
+          |                        |                        |
+          |SYN, MPC [->Server:port]|         SYN, MPC       |
+          |----------------------->|----------------------->|
+          |<-----------------------|<-----------------------|
+          |  SYN+ACK, MPC [...]    |        SYN+ACK         |
+          |----------------------->|----------------------->|
+          |        ACK, MPC        |          ACK           |
+          |          ...           |           ...          |
 
 Legend:
-     []: Convert Protocol messages
-    MPC: MP_CAPABLE option  
+     []: Convert Protocol TLVs
+    MPC: MP_CAPABLE option [RFC8684] 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {: #fig-example title="An Example of MPTCP-proxied Connection Matching an ATSSS Rule."}
 
