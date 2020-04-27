@@ -1,7 +1,7 @@
 ---
 title: ATSSS Requirements for QUIC
 abbrev: QUIC ATSSS
-docname: draft-bla-quic-atsss-reqss-00
+docname: draft-bla-quic-atsss-req-00
 date: 2020-04-15
 category: exp
 
@@ -55,8 +55,7 @@ informative:
 
 --- abstract
 
-This document briefly presents the ATSSS service being specified within
-3GPPP and its requirements on the transport layer. 
+This document briefly presents the Access Traffic Steering, Switching, and Splitting (ATSSS) service being specified within the 3rd Generation Partnership Project (3GPP). Future versions of the document will capture a set of data plane requirements to benefit from multipath capabilities. 
 
 --- middle
 
@@ -74,7 +73,7 @@ as shown here.
 
 [comment]: # (OB: not sure we need that section, we'll see later)
 
-# High level Overview {#overview}
+# ATSSS: High Level Overview {#overview}
 
 The ATSSS service is defined several 3GPP documents that reference several
 other documents. A detailed presentation of this service is outside the
@@ -120,10 +119,10 @@ The two scenarios that we consider in this document are:
 
 
 
-# Carrying bytestreams over different access networks {#bytestreams}
+# Carrying Bytestreams over Different Access Networks {#bytestreams}
 
 
-# Carrying packets over different access networks {#packets}
+# Carrying Packets over Different Access Networks {#packets}
 
 
 # Conclusion {#conclusion}
