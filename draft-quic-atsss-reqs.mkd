@@ -126,7 +126,7 @@ An ATSSS-capable UE can make use of the MPTCP functionality by establishing MPTC
 
 The ATSSS-capable UE sends packets bound to connections matching an ATSSS rule to the provisioned Transport Converter and destination port number. Concretely, the UE initiates the MPTCP connection towards the Transport Converter and indicates the IP address and port number of the Server within the connection establishment packet (i.e., in the payload of the SYN sent to the Transport Converter).  Doing so enables the Transport Converter to immediately initiate a connection towards that Server, without experiencing an extra delay. The Transport Converter waits until the receipt of the confirmation that the Server agrees to establish the connection before confirming it to the Client.
 
-A flow example of an MPTCP-proxied connection is show in {{fig-example}}. This example assumes the Server is not MPTCP-aware. The access network used to establish the matching ATSSS rule to select the access network to be used to establish the first subflow. The instruction included in the ATSSS rule will be followed for the management of the MPTCP connection. 
+A flow example of an MPTCP-proxied connection is show in {{fig-example}}. This example assumes the Server is not MPTCP-aware. The instructions included in the matching ATSSS rule will be followed for the management of the MPTCP connection (including the selection of the access network to establish the first subflow). 
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~                           
           UE                   MPTCP Proxy               Server
