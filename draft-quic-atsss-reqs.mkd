@@ -1,7 +1,7 @@
 ---
 title: ATSSS Requirements for QUIC
 abbrev: QUIC ATSSS
-docname: draft-bla-quic-atsss-reqss-00
+docname: draft-bla-quic-atsss-req-00
 date: 2020-04-15
 category: exp
 
@@ -59,8 +59,7 @@ informative:
 
 --- abstract
 
-This document briefly presents the ATSSS service being specified within
-3GPPP and its requirements on the transport layer. 
+This document briefly presents the Access Traffic Steering, Switching, and Splitting (ATSSS) service being specified within the 3rd Generation Partnership Project (3GPP). Future versions of the document will capture a set of data plane requirements to benefit from multipath capabilities. 
 
 --- middle
 
@@ -78,7 +77,8 @@ as shown here.
 
 [comment]: # (OB: not sure we need that section, we'll see later)
 
-# High level Overview {#overview}
+# ATSSS: High Level Overview {#overview}
+
 
 ## Reference Architecture
 
@@ -114,10 +114,55 @@ For ATSSS with Multipath TCP functionality, a client with at least two interface
 
 Both the MPTCP Client and MPTCP proxy are configured with ATSSS rules from the network that govern how the multiple network paths between the MPTCP Client and MPTCP Proxy are used. This relationship is shown using "." between the MPTCP Client and MPTCP Proxy. 
 
-# Carrying bytestreams over different access networks {#bytestreams}
+The ATSSS service is defined several 3GPP documents that reference several
+other documents. A detailed presentation of this service is outside the
+scope of this section.
 
 
-# Carrying packets over different access networks {#packets}
+To understand the operation of the ATSSS service, it is useful to consider the
+reference environment shown in the figure below. A host, called A in the
+figure, is attached to two different access networks (Net1 and Net2).
+These networks can be managed by different organizations.
+A second host, called B in the figure, 
+is connected to the Internet. B does not use multipath transport protocols
+while A would like to be able to use its two access networks to reach B. To
+enable A to use its two paths efficiently, a possible solution is to use
+a midpoint node, called M in the figure, so that multipath transport is
+used between A and M while regular (single path) transport is used
+between A and B. 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  +------ Net 1 ------+
+  |                   |
++-+-+               +-+-+                     +---+
+| A |               | M |----- Internet  -----+ B |
++-+-+               +-+-+                     +---+
+  |                   |
+  +------ Net 2 ------+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{: #fig-env title="Reference environment"}
+
+
+Several use cases correspond to this environment. A first use case are the
+mobile devices like smartphones that are equipped with a cellular and
+a Wi-Fi interface.
+A second use case are the hybrid access networks where A is a CPE router that
+is attached to fixed (e.g. xDSL) and wireless (e.g. cellular) networks.
+
+In this document, we focus on the first use case, but most of the discussion
+applies to the second one as well.
+
+The two scenarios that we consider in this document are:
+- the failure of one access network that forces all data to switch to the other access network
+- the possibility of splitting the transmission of the data over the two access networks even if they have different characteristics (delay, bandwidth, congestion)
+
+
+
+# Carrying Bytestreams over Different Access Networks {#bytestreams}
+
+
+# Carrying Packets over Different Access Networks {#packets}
 
 
 # Conclusion {#conclusion}
