@@ -188,13 +188,14 @@ the 3GPP specifications. The second network is potentially managed by
 a different organization. It is important to note that in this case, there
 is an IPSec tunnel between the UE and one device in the 5G network
 (not shown in {{fig-arch}}). The UE interacts with a distant server
-through a Proxy function which supports ATSSS and is part of the 5G network.
+through a ATSSS specific User Plane Function further referred to as "Proxy"
+which supports ATSSS and is part of the 5G network.
 The Proxy function enables the UE to use a transport protocol that supports
 the different access networks even if the server does not support it.
 The UE and the Proxy exchange, using the 5G control plane, rules that specify
 which flows are eligible to the ATSSS service.
 
-A simplified reference architecture is shown in {{fig-arch}}.  
+A simplified reference architecture is shown in {{fig-arch}}.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -209,10 +210,10 @@ A simplified reference architecture is shown in {{fig-arch}}.
   .   |                         |            .
   .   |                 -------------        .
  +---+--+              /             \    +-----+        +------+
- |  U E |             | 3GPP Core Net +---|     |-/.../--|Server|
- |      |              \             /    |Proxy|        +------+
+ |  U E |             | 3GPP Core Net +---|ATSSS|-/.../--|Server|
+ |      |              \             /    | UPF |        +------+
  +--+---+               -------------     +-----+
-    |                          |    
+    |                          |          (Proxy)
     |                          |
     |          ------------    |
     |         /            \   |
