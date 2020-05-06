@@ -67,6 +67,9 @@ This document briefly presents the Access Traffic Steering, Switching, and Split
 # Introduction  {#intro}
 
 
+
+ 
+
 # Conventions and Definitions
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
@@ -76,6 +79,34 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
 as shown here.
 
 [comment]: # (OB: not sure we need that section, we'll see later)
+
+
+# Terminology 
+
+This document makes use of 3GPP-specific terms defined in RFC6459, mainly the following ones: 
+
+-    Packet Data Network (PDN): is a packet-based network that
+      either belongs to the operator or is an external network such as
+      the Internet or a corporate intranet.  The user eventually
+      accesses services in one or more PDNs.  The operator's packet core
+      networks are separated from packet data networks either by User Plane Functions (UPFs).
+
+-     UE (User Equipment): refers to the devices that are hosts with the
+      ability to obtain Internet connectivity via a 3GPP network.    
+
+- Access Point Name (APN): is a Fully Qualified Domain Name
+      (FQDN) and resolves to a set of gateways in an operator's network. Data Network Name (DNN) is the APN equivalent in 5GS. DNN is used for the selection of the UPF(s) for a PDU Session.
+      
+ -    User Plane: refers to data traffic and the required sessions for
+      the data traffic.  In practice, IP is the only data traffic
+      protocol used in the user plane.
+ 
+ 
+
+
+# High level Overview {#overview}
+
+The 5G Core (5GC) supports a service that provides exchange of data between an UE and a data network (referred to as PDN) identified by a Data Network Name (DNN). Such connectivity service, called PDU Connectivity Service, is supported via 'PDU Sessions' that are established upon request from the UE. The type of PDU Session can be IPv4, IPv6, IPv4v6, or Ethernet or Unstructured.
 
 # ATSSS: High Level Overview {#overview}
 
@@ -131,31 +162,22 @@ a midpoint node, called M in the figure, so that multipath transport is
 used between A and M while regular (single path) transport is used
 between A and B. 
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  +------ Net 1 ------+
-  |                   |
-+-+-+               +-+-+                     +---+
-| A |               | M |----- Internet  -----+ B |
-+-+-+               +-+-+                     +---+
-  |                   |
-  +------ Net 2 ------+
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-{: #fig-env title="Reference environment"}
+It is out of the scope of this document to provide a comprehensive overview of 5G System (5GS) architecture. In particular, this document won't describe how PDU Sessions are established, and thus how IP addresses/prefixes are assigned to requetsing User Equipment (UEs). 
 
+An UE can be provided a multi-access PDU Connectivity Service. That is, an UE can exchange data with a PDN by using a "3GPP access network" and a "non-3GPP access network". Such service relies upon the  ATSSS feature.
 
-Several use cases correspond to this environment. A first use case are the
-mobile devices like smartphones that are equipped with a cellular and
-a Wi-Fi interface.
-A second use case are the hybrid access networks where A is a CPE router that
-is attached to fixed (e.g. xDSL) and wireless (e.g. cellular) networks.
+3GPP defined the following procedures [TS.23501] that are applicable between one "3GPP access" and one "non-3GPP access":
+ 
+- Access Traffic Steering: selection of an access network for a new data flow and the transfer of the traffic of that data flow over the selected access network. 
 
-In this document, we focus on the first use case, but most of the discussion
-applies to the second one as well.
+- Access Traffic Switching: migration of all traffic of an ongoing data flow from one access network to another access network while ensuring session continuity. 
 
-The two scenarios that we consider in this document are:
-- the failure of one access network that forces all data to switch to the other access network
-- the possibility of splitting the transmission of the data over the two access networks even if they have different characteristics (delay, bandwidth, congestion)
+- Access Traffic Splitting: split of the traffic of a data flow across multiple access networks.  
+
+Techniques to provide ATSSS are classified by the 3GPP into two flavors: (1) high-layer techniques which operate above the IP layer (e.g., MPTCP), and (2) low-layer techniques which operate below the IP layer. 
+
+Only high-layer steering techniques are discussed in this document.
 
 ## MPTCP-Proxied Connections
 
