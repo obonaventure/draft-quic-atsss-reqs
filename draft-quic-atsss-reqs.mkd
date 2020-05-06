@@ -125,10 +125,12 @@ Other smartphones users may want to combine the cellular and the Wi-Fi network
 to improve the performance of individual flows. The GigaLTE service deployed
 using Multipath TCP in South Korea in an example of this use case {{IETFJ16}}.
 
-To support these different use cases in 5G networks, 3GPP is working on
-the Access Traffic Steering, Switching and Splitting (ATSSS) service. In this
-document, we abstract many of the technical details of future 5G networks to
-explain the requirements of the ATSSS service on IETF protocols.
+To support these different use cases in 5G networks, 3GPP is working on the
+Access Traffic Steering, Switching and Splitting (ATSSS) service. This work is
+further adopted by BBF to provide similar capabilites to residential gateways
+equipped with multiple access interfaces. In this document, we abstract many of
+the technical details of future 5G networks to explain the requirements of the
+ATSSS service on IETF protocols.
 
 This document is organized as follows.
 
