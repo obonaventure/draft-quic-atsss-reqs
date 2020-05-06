@@ -122,8 +122,8 @@ This steering can be managed by the smartphone, but flows need to continue
 after a handover. 
 
 Other smartphones users may want to combine the cellular and the Wi-Fi network
-to improve the performance of individual flows. The GigaLTE service deployed
-using Multipath TCP in South Korea in an example of this use case {{IETFJ16}}.
+to improve the up and download throughput performance of individual flows. 
+The GiGA LTE and GiGA 5G service deployed using Multipath TCP in South Korea in an example of this use case {{IETFJ16}}.
 
 To support these different use cases in 5G networks, 3GPP is working on
 the Access Traffic Steering, Switching and Splitting (ATSSS) service. In this
@@ -152,17 +152,19 @@ This document makes use of 3GPP specific terms defined in {{RFC6459}}, mainly th
       either belongs to the operator or is an external network such as
       the Internet or a corporate intranet.  The user eventually
       accesses services in one or more PDNs.  The operator's packet core
-      networks are separated from packet data networks either by User Plane Functions (UPFs).
+      networks are separated from packet data networks either by User Plane Functions (UPFs) or by PDN Gateways (PGWs) depending on standalone or non-standalone mode of 5G.
 
 -     UE (User Equipment): refers to the devices that are hosts with the
       ability to obtain Internet connectivity via a 3GPP network.    
 
 - Access Point Name (APN): is a Fully Qualified Domain Name
       (FQDN) and resolves to a set of gateways in an operator's network. Data Network Name (DNN) is the APN equivalent in 5GS. DNN is used for the selection of the UPF(s) for a PDU Session.
+      (SEO's comment : In broad range of meaning, don't we need to describe NSSAI (Network Slice Selection Assistance Inforamation)? 
       
  -    User Plane: refers to data traffic and the required sessions for
       the data traffic.  In practice, IP is the only data traffic
       protocol used in the user plane.
+      (SEO's comment : In 3GPP, 5G LAN is also one of the traffic protocol for the User Plane other than IP)
  
  
 
@@ -193,6 +195,8 @@ The Proxy function enables the UE to use a transport protocol that supports
 the different access networks even if the server does not support it.
 The UE and the Proxy exchange, using the 5G control plane, rules that specify
 which flows are eligible to the ATSSS service.
+
+(SEO's comment : we should check the "ATSSS rules from network node" in Figure 1 can directly interact with and provision the rules to the Proxy denpending on the location of the Proxy. It's okay if the Proxy is inside the 3GPP CN (Core NW), but we need to implement exposure function e.g., SCEF and/or NEF to communicate the Proxy with other 3GPP nodes and UE.)
 
 A simplified reference architecture is shown in {{fig-arch}}.  
 
@@ -338,7 +342,7 @@ performance as Multipath TCP when carrying bytestreams over different
 access networks {{MPQUIC-Conext}}. Second, Multipath QUIC can be combined
 with the Unreliable Datagram Extension {{I-D.ietf-quic-datagram}} that
 provides the capability to transport unreliable messages such as UDP datagrams
-or IP packets inside a QUIC session. Third,the MASQUE BOF is currently
+or IP packets inside a QUIC session. Third, the MASQUE BOF is currently
 discussing different solutions to provide proxy services over a QUIC
 connection {{I-D.schinazi-masque-protocol}},{{I-D.schinazi-masque-connect-udp}},
 {{I-D.piraux-quic-tunnel}},{{I-D.piraux-quic-tunnel-tcp}}.
