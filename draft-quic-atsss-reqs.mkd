@@ -1,7 +1,7 @@
 ---
 title: ATSSS Requirements for QUIC
 abbrev: QUIC ATSSS
-docname: draft-bla-quic-atsss-reqss-00
+docname: draft-bla-quic-atsss-req-00
 date: 2020-04-15
 category: exp
 
@@ -30,7 +30,11 @@ author:
   name: Quentin De Coninck
   organization: UCLouvain
   email: quentin.deconinck@uclouvain.be
-
+ -
+  ins: S. Dawkins
+  name: Spencer Dawkins
+  organization: Tencent America
+  email: spencerdawkins.ietf@gmail.com
 
 normative:
   RFC8174:
@@ -55,8 +59,7 @@ informative:
 
 --- abstract
 
-This document briefly presents the ATSSS service being specified within
-3GPPP and its requirements on the transport layer. 
+This document briefly presents the Access Traffic Steering, Switching, and Splitting (ATSSS) service being specified within the 3rd Generation Partnership Project (3GPP). Future versions of the document will capture a set of data plane requirements to benefit from multipath capabilities. 
 
 --- middle
 
@@ -74,11 +77,47 @@ as shown here.
 
 [comment]: # (OB: not sure we need that section, we'll see later)
 
-# High level Overview {#overview}
+# ATSSS: High Level Overview {#overview}
+
+
+## Reference Architecture
+
+A simplified reference architecture is shown in {{ref-arch}}.  
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  ........(ATSSS Rules From Network)..........
+  .                                          .
+  .              ------------                .
+  .             /            \               .
+  .   +--------| Access Net A |-+            .
+  .   |         \   (3GPP)   /  |            .
+  .   |          ------------   |            .
+  .   |                         |            .
+  .   |                         |            .
+  .   |                 -------------        .
+ +---+--+              /             \    +-----+        +------+
+ |MPTCP |             | 3GPP Core Net +---|MPTCP|-/.../--|Server|
+ |Client|              \             /    |Proxy|        +------+
+ +--+---+               -------------     +-----+
+    |                          |    
+    |                          |
+    |          ------------    |
+    |         /            \   |
+    +--------| Access Net B |--+
+              \ (non 3GPP) /
+               ------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{: #ref-arch title="Simplified Reference Architecture for ATSSS with Multipath TCP"}
+
+For ATSSS with Multipath TCP functionality, a client with at least two interfaces connected to two disjoint access networks (in this case, Access Net A and Access Net B), uses MPTCP to reach an MPTCP proxy over either, or both, of the access networks, which allows the client to communicate with a server which does not terminate MPTCP connections.
+
+Both the MPTCP Client and MPTCP proxy are configured with ATSSS rules from the network that govern how the multiple network paths between the MPTCP Client and MPTCP Proxy are used. This relationship is shown using "." between the MPTCP Client and MPTCP Proxy. 
 
 The ATSSS service is defined several 3GPP documents that reference several
 other documents. A detailed presentation of this service is outside the
 scope of this section.
+
 
 To understand the operation of the ATSSS service, it is useful to consider the
 reference environment shown in the figure below. A host, called A in the
@@ -118,6 +157,7 @@ The two scenarios that we consider in this document are:
 - the failure of one access network that forces all data to switch to the other access network
 - the possibility of splitting the transmission of the data over the two access networks even if they have different characteristics (delay, bandwidth, congestion)
 
+
 ## Steering Modes
 
 The traffic that matches an ATSSS rule can be distributed among available access networks following one of these modes:
@@ -131,10 +171,18 @@ The traffic that matches an ATSSS rule can be distributed among available access
 
 Which flows are eligible to the ATSSS service and which mode to follow are communicated to the UE using the control plane. See Section XXX.
 
-# Carrying bytestreams over different access networks {#bytestreams}
+
+## Discovery of the MPTCP Proxy
+
+During the attachment of an ATSSS-capable UE to the network, the UE retrieves the MPTCP proxy information: an IP address, a port number, and the type of the MPTCP proxy. In the current release, the mandatory MPTCP proxy type is the "Transport Converter" [I-D.ietf-tcpm-converters].
+
+The UE is also provided with a set of steering policies that will be used by the UE to decide how flows will be distributed among available access networks. More details are provided in "ATSSS Steering Modes" Section. 
 
 
-# Carrying packets over different access networks {#packets}
+# Carrying Bytestreams over Different Access Networks {#bytestreams}
+
+
+# Carrying Packets over Different Access Networks {#packets}
 
 
 # Conclusion {#conclusion}
