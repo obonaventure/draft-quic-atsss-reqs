@@ -1,0 +1,280 @@
+
+
+
+
+QUIC Working Group                                        O. Bonaventure
+Internet-Draft                                                 M. Piraux
+Intended status: Experimental                              Q. De Coninck
+Expires: October 17, 2020                                      UCLouvain
+                                                              S. Dawkins
+                                                         Tencent America
+                                                          April 15, 2020
+
+
+                      ATSSS Requirements for QUIC
+                     draft-bla-quic-atsss-reqss-00
+
+Abstract
+
+   This document briefly presents the ATSSS service being specified
+   within 3GPPP and its requirements on the transport layer.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on October 17, 2020.
+
+Copyright Notice
+
+   Copyright (c) 2020 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
+   (https://trustee.ietf.org/license-info) in effect on the date of
+   publication of this document.  Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+   to this document.  Code Components extracted from this document must
+   include Simplified BSD License text as described in Section 4.e of
+   the Trust Legal Provisions and are provided without warranty as
+   described in the Simplified BSD License.
+
+
+
+Bonaventure, et al.     Expires October 17, 2020                [Page 1]
+
+Internet-Draft                 QUIC ATSSS                     April 2020
+
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
+   2.  Conventions and Definitions . . . . . . . . . . . . . . . . .   2
+   3.  High level Overview . . . . . . . . . . . . . . . . . . . . .   2
+     3.1.  Reference Architecture  . . . . . . . . . . . . . . . . .   2
+   4.  Carrying bytestreams over different access networks . . . . .   3
+   5.  Carrying packets over different access networks . . . . . . .   3
+   6.  Conclusion  . . . . . . . . . . . . . . . . . . . . . . . . .   3
+   7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   4
+     7.1.  Normative References  . . . . . . . . . . . . . . . . . .   4
+     7.2.  Informative References  . . . . . . . . . . . . . . . . .   4
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   4
+
+1.  Introduction
+
+2.  Conventions and Definitions
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in BCP
+   14 [RFC2119][RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+3.  High level Overview
+
+3.1.  Reference Architecture
+
+   A simplified reference architecture is shown in Figure 1.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Bonaventure, et al.     Expires October 17, 2020                [Page 2]
+
+Internet-Draft                 QUIC ATSSS                     April 2020
+
+
+     ........(ATSSS Rules From Network)..........
+     .                                          .
+     .              ------------                .
+     .             /            \               .
+     .   +--------| Access Net A |-+            .
+     .   |         \   (3GPP)   /  |            .
+     .   |          ------------   |            .
+     .   |                         |            .
+     .   |                         |            .
+     .   |                 -------------        .
+    +---+--+              /             \    +-----+        +------+
+    |MPTCP |             | 3GPP Core Net +---|MPTCP|-/.../--|Server|
+    |Client|              \             /    |Proxy|        +------+
+    +--+---+               -------------     +-----+
+       |                          |
+       |                          |
+       |          ------------    |
+       |         /            \   |
+       +--------| Access Net B |--+
+                 \ (non 3GPP) /
+                  ------------
+
+   Figure 1: Simplified Reference Architecture for ATSSS with Multipath
+                                    TCP
+
+   For ATSSS with Multipath TCP functionality, a client with at least
+   two interfaces connected to two disjoint access networks (in this
+   case, Access Net A and Access Net B), uses MPTCP to reach an MPTCP
+   proxy over either, or both, of the access networks, which allows the
+   client to communicate with a server which does not terminate MPTCP
+   connections.
+
+   Both the MPTCP Client and MPTCP proxy are configured with ATSSS rules
+   from the network that govern how the multiple network paths between
+   the MPTCP Client and MPTCP Proxy are used.  This relationship is
+   shown using "." between the MPTCP Client and MPTCP Proxy.
+
+4.  Carrying bytestreams over different access networks
+
+5.  Carrying packets over different access networks
+
+6.  Conclusion
+
+   Based on the two above questions, it should be clear that MPQUIC
+   could cover both cases.
+
+
+
+
+
+
+Bonaventure, et al.     Expires October 17, 2020                [Page 3]
+
+Internet-Draft                 QUIC ATSSS                     April 2020
+
+
+   ASCII figure
+
+
+                         Figure 2: A simple figure
+
+7.  References
+
+7.1.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/info/rfc2119>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
+
+7.2.  Informative References
+
+   [I-D.amend-tsvwg-multipath-dccp]
+              Amend, M., Bogenfeld, E., Brunstrom, A., Kassler, A., and
+              V. Rakocevic, "DCCP Extensions for Multipath Operation
+              with Multiple Addresses", draft-amend-tsvwg-multipath-
+              dccp-03 (work in progress), November 2019.
+
+   [I-D.deconinck-quic-multipath]
+              Coninck, Q. and O. Bonaventure, "Multipath Extensions for
+              QUIC (MP-QUIC)", draft-deconinck-quic-multipath-04 (work
+              in progress), March 2020.
+
+   [IETFJ16]  Bonaventure, O. and S. Seo, "Multipath TCP Deployment",
+              IETF Journal, Fall 2016 , n.d..
+
+   [TS23501]  3GPP (3rd Generation Partnership Project), ., "Technical
+              Specification Group Services and System Aspects; System
+              Architecture for the 5G System; Stage 2 (Release 16)",
+              2019, <https://www.3gpp.org/ftp/Specs/
+              archive/23_series/23.501/>.
+
+Authors' Addresses
+
+   Olivier Bonaventure
+   UCLouvain
+
+   Email: Olivier.Bonaventure@uclouvain.be
+
+
+
+
+
+Bonaventure, et al.     Expires October 17, 2020                [Page 4]
+
+Internet-Draft                 QUIC ATSSS                     April 2020
+
+
+   Maxime Piraux
+   UCLouvain
+
+   Email: Maxime.Piraux@uclouvain.be
+
+
+   Quentin De Coninck
+   UCLouvain
+
+   Email: quentin.deconinck@uclouvain.be
+
+
+   Spencer Dawkins
+   Tencent America
+
+   Email: spencerdawkins.ietf@gmail.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Bonaventure, et al.     Expires October 17, 2020                [Page 5]

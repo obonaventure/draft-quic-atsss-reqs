@@ -1,7 +1,7 @@
 ---
 title: ATSSS Requirements for QUIC
 abbrev: QUIC ATSSS
-docname: draft-bla-quic-atsss-reqss-00
+docname: draft-bla-quic-atsss-req-00
 date: 2020-04-15
 category: exp
 
@@ -30,7 +30,11 @@ author:
   name: Quentin De Coninck
   organization: UCLouvain
   email: quentin.deconinck@uclouvain.be
-
+ -
+  ins: S. Dawkins
+  name: Spencer Dawkins
+  organization: Tencent America
+  email: spencerdawkins.ietf@gmail.com
 
 normative:
   RFC8174:
@@ -55,8 +59,7 @@ informative:
 
 --- abstract
 
-This document briefly presents the ATSSS service being specified within
-3GPPP and its requirements on the transport layer. 
+This document briefly presents the Access Traffic Steering, Switching, and Splitting (ATSSS) service being specified within the 3rd Generation Partnership Project (3GPP). Future versions of the document will capture a set of data plane requirements to benefit from multipath capabilities. 
 
 --- middle
 
@@ -76,6 +79,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
 as shown here.
 
 [comment]: # (OB: not sure we need that section, we'll see later)
+
 
 # Terminology 
 
@@ -104,6 +108,61 @@ This document makes use of 3GPP-specific terms defined in RFC6459, mainly the fo
 
 The 5G Core (5GC) supports a service that provides exchange of data between an UE and a data network (referred to as PDN) identified by a Data Network Name (DNN). Such connectivity service, called PDU Connectivity Service, is supported via 'PDU Sessions' that are established upon request from the UE. The type of PDU Session can be IPv4, IPv6, IPv4v6, or Ethernet or Unstructured.
 
+# ATSSS: High Level Overview {#overview}
+
+
+## Reference Architecture
+
+A simplified reference architecture is shown in {{ref-arch}}.  
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  ........(ATSSS Rules From Network)..........
+  .                                          .
+  .              ------------                .
+  .             /            \               .
+  .   +--------| Access Net A |-+            .
+  .   |         \   (3GPP)   /  |            .
+  .   |          ------------   |            .
+  .   |                         |            .
+  .   |                         |            .
+  .   |                 -------------        .
+ +---+--+              /             \    +-----+        +------+
+ |MPTCP |             | 3GPP Core Net +---|MPTCP|-/.../--|Server|
+ |Client|              \             /    |Proxy|        +------+
+ +--+---+               -------------     +-----+
+    |                          |    
+    |                          |
+    |          ------------    |
+    |         /            \   |
+    +--------| Access Net B |--+
+              \ (non 3GPP) /
+               ------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{: #ref-arch title="Simplified Reference Architecture for ATSSS with Multipath TCP"}
+
+For ATSSS with Multipath TCP functionality, a client with at least two interfaces connected to two disjoint access networks (in this case, Access Net A and Access Net B), uses MPTCP to reach an MPTCP proxy over either, or both, of the access networks, which allows the client to communicate with a server which does not terminate MPTCP connections.
+
+Both the MPTCP Client and MPTCP proxy are configured with ATSSS rules from the network that govern how the multiple network paths between the MPTCP Client and MPTCP Proxy are used. This relationship is shown using "." between the MPTCP Client and MPTCP Proxy. 
+
+The ATSSS service is defined several 3GPP documents that reference several
+other documents. A detailed presentation of this service is outside the
+scope of this section.
+
+
+To understand the operation of the ATSSS service, it is useful to consider the
+reference environment shown in the figure below. A host, called A in the
+figure, is attached to two different access networks (Net1 and Net2).
+These networks can be managed by different organizations.
+A second host, called B in the figure, 
+is connected to the Internet. B does not use multipath transport protocols
+while A would like to be able to use its two access networks to reach B. To
+enable A to use its two paths efficiently, a possible solution is to use
+a midpoint node, called M in the figure, so that multipath transport is
+used between A and M while regular (single path) transport is used
+between A and B. 
+
+
 It is out of the scope of this document to provide a comprehensive overview of 5G System (5GS) architecture. In particular, this document won't describe how PDU Sessions are established, and thus how IP addresses/prefixes are assigned to requetsing User Equipment (UEs). 
 
 An UE can be provided a multi-access PDU Connectivity Service. That is, an UE can exchange data with a PDN by using a "3GPP access network" and a "non-3GPP access network". Such service relies upon the  ATSSS feature.
@@ -120,12 +179,73 @@ Techniques to provide ATSSS are classified by the 3GPP into two flavors: (1) hig
 
 Only high-layer steering techniques are discussed in this document.
 
+## MPTCP-Proxied Connections
 
 
-# Carrying bytestreams over different access networks {#bytestreams}
+This section describes how TCP connections matching ATSSS rules are currently established over different access networks.
+
+An ATSSS-capable UE can make use of the MPTCP functionality by establishing MPTCP-assisted connections via the MPTCP proxy relying upon the Convert Protocol {{I-D.ietf-tcpm-converter}}. The UE behaves as a “Client”, while the MPTCP proxy behaves as a Transport Converter {{I-D.ietf-tcpm-converter}}. 
+
+The ATSSS-capable UE sends packets bound to connections matching an ATSSS rule to the provisioned Transport Converter and destination port number. Concretely, the UE initiates the MPTCP connection towards the Transport Converter and indicates the IP address and port number of the Server within the connection establishment packet (i.e., in the payload of the SYN sent to the Transport Converter).  Doing so enables the Transport Converter to immediately initiate a connection towards that Server, without experiencing an extra delay. The Transport Converter waits until the receipt of the confirmation that the Server agrees to establish the connection before confirming it to the Client.
+
+A flow example of an MPTCP-proxied connection is show in {{fig-example}}. This example assumes the Server is not MPTCP-aware. The instructions included in the matching ATSSS rule will be followed for the management of the MPTCP connection (including the selection of the access network to establish the first subflow). 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~                           
+          UE                   MPTCP Proxy               Server
+          |                        |                        |
+          |SYN, MPC [->Server:port]|         SYN, MPC       |
+          |----------------------->|----------------------->|
+          |<-----------------------|<-----------------------|
+          |  SYN+ACK, MPC [...]    |        SYN+ACK         |
+          |----------------------->|----------------------->|
+          |        ACK, MPC        |          ACK           |
+          |          ...           |           ...          |
+
+Legend:
+     []: Convert Protocol TLVs
+    MPC: MP_CAPABLE option [RFC8684] 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{: #fig-example title="An Example of MPTCP-proxied Connection Matching an ATSSS Rule."}
+
+This approach provides 0-RTT (Zero Round-Trip Time) conversion service since no extra delay is induced by the Convert protocol compared to connections that are not proxied. Also, the Convert Protocol does not require any encapsulation (no tunnels, whatsoever).
+
+## Steering Modes
+
+The traffic that matches an ATSSS rule can be distributed among available access networks following one of these modes:
+- “Active-Standby”: The traffic associated with the matching flow will be forwarded via a specific access (called, active access) and to switch to another access (called, standby access) when the active access is unavailable. 
+
+-	“Smallest Delay”: The traffic associated with the matching flow will be forwarded via the access that presents the smallest Round-Trip Time (RTT). To that aim, specific measurements are conducted by the UE and a dedicated function co-located with the MPTCP Proxy: Performance Measurement Function (PMF). Dedicated messages (called, PMF-Echo Request and PMF-Echo Response) are used to perform the measurements.
+
+-	“Load-Balancing”: The traffic associated with the matching flow will be distributed among available access networks following a distribution ratio (e.g., 30% via a first access, 70% via a second access).
+
+-	“Priority-based”: For this mode, accesses are assigned priority levels that indicate which access to be used first. Concretely, the traffic associated with the matching flow will be steered on the access with a high priority till congestion is detected, then the overflow will be forwarded over a low priority access. 
+
+Which flows are eligible to the ATSSS service and which mode to follow are communicated to the UE using the control plane. See Section XXX.
 
 
-# Carrying packets over different access networks {#packets}
+## Discovery of the MPTCP Proxy
+
+During the attachment of an ATSSS-capable UE to the network, the UE retrieves the MPTCP proxy information: an IP address, a port number, and the type of the MPTCP proxy. In the current release, the mandatory MPTCP proxy type is the "Transport Converter" [I-D.ietf-tcpm-converters].
+
+The UE is also provided with a set of steering policies that will be used by the UE to decide how flows will be distributed among available access networks. More details are provided in "ATSSS Steering Modes" Section. 
+
+
+
+# Carrying Bytestreams over Different Access Networks {#bytestreams}
+
+
+# Carrying Packets over Different Access Networks {#packets}
+
+The MPTCP-based ATSSS discussed in Section XX is specific to TCP, obviously. In particular, it does not provide a similar feature for UDP flows that would require such service. A UDP flow can be defined as series of UDP packets that have the same source and destination address and port numbers.
+
+Some proposals were made in the past to encapsulate UDP in MPTCP (by means of header swapping and extraction of the UDP payload). For example, early versions of {{I.D-boucadair-mptcp-plain-mode}} specified how UDP flows, in particular, can be distributed among available paths by leveraging MPTCP capabilities. It does so by including a “Protocol” TLV in the MPTCP payload; doing so allows an MPTCP Proxy to unambiguously identify UDP packets vs. native TCP connections. Some modifications are also required at the MPTCP Proxy to avoid HOL blocking issues of UDP-encapsulated data. This design approach is sub-optimal if the UDP-encapsulated data carry its own congestion control signals (that are not visible to the MPTCP proxy because these signals are encrypted such as in QUIC). 
+
+Some ATSSS modes can be natively supported by the base QUIC specification. For example, the “Active-Standby” and “Smallest Delay” steering modes can be supported directly between an UE and a QUIC server without any assistance from the network other than the performance measurement information. 
+
+Nevertheless, blindly distributing packets among existing paths may lead to complications such as:
+-	Aggressive use of user quota if one of the access networks is subject to volume-based quota. 
+-	The steering policy as currently defined in ATSSS is local to the UE and the proxy. There are no means to signal that policy to an upstream server. 
+-	Frequent connection migration if both access networks are used to forward data; each with a distinct source IP address.
 
 
 # Conclusion {#conclusion}
