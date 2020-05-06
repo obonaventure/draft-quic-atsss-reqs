@@ -123,10 +123,13 @@ Other users may want to combine the resources provided by the cellular and the W
 to improve the performance of individual flows. The GigaLTE service deployed
 using Multipath TCP in South Korea in an example of this use case {{IETFJ16}}.
 
-To support these different use cases in 5G networks, 3GPP is working on
-the Access Traffic Steering, Switching and Splitting (ATSSS) service {{TS23501}}. This
-document provides an overview of the technical details of future 5G networks to
-explain the requirements of the ATSSS service on IETF protocols.
+To support these different use cases in 5G networks, 3GPP is working on the
+Access Traffic Steering, Switching and Splitting (ATSSS) service {{TS23501}}. This work is
+further adopted by BBF to provide similar capabilites to residential gateways
+equipped with multiple access interfaces. In this document, we abstract many of
+the technical details of future 5G networks to explain the requirements of the
+ATSSS service on IETF protocols.
+
 
 # Conventions and Definitions
 
@@ -182,18 +185,19 @@ is attached to two different access networks (Net A and Net B).
 One of these access networks is managed by a 5G provider according to
 the 3GPP specifications. The second network is potentially managed by
 a different organization. It is important to note that in this case, there
-is an IPsec tunnel between the UE and a dedciated device in the 5G network
+is an IPsec tunnel between the UE and a dedicated device in the 5G network
 (not shown in {{fig-arch}}). A dedicated IP address is assigned by means of IKEv2 to the UE to access the 5GC via this second network. 
 
 The UE interacts with a distant server
-through a Proxy function which supports ATSSS and is part of the 5G network.
-The Proxy function enables the UE to use a transport protocol that supports
+through a ATSSS specific User Plane Function further referred to as "Proxy"
+which supports ATSSS and is part of the 5G network.
+The Proxy enables the UE to use a transport protocol that supports
 the different access networks even if the server does not support it (i.e., is not multipath-capable).
 
 The UE and the Proxy are provided, using the 5G control plane, rules that specify
 which flows are eligible to the ATSSS service.
 
-A simplified reference architecture is shown in {{fig-arch}}.  
+A simplified reference architecture is shown in {{fig-arch}}.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -208,10 +212,10 @@ A simplified reference architecture is shown in {{fig-arch}}.
   .   |                         |            .
   .   |                 -------------        .
  +---+--+              /             \    +-----+        +------+
- |  U E |             | 3GPP Core Net +---|     |-/.../--|Server|
- |      |              \             /    |Proxy|        +------+
+ |  U E |             | 3GPP Core Net +---|ATSSS|-/.../--|Server|
+ |      |              \             /    | UPF |        +------+
  +--+---+               -------------     +-----+
-    |                          |    
+    |                          |          (Proxy)
     |                          |
     |          ------------    |
     |         /            \   |
