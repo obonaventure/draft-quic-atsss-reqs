@@ -3,9 +3,9 @@ kramdown-rfc2629 ?= kramdown-rfc2629
 
 drafts := draft-quic-atsss-reqs.txt 
 xml := $(drafts:.txt=.xml)
+mkd := $(drafts:.txt=.mkd)
 
 %.txt: %.mkd 
-	mdspell -n -a --en-us -r $< 
 	$(kramdown-rfc2629) $< > $(patsubst %.txt,%.xml, $@)
 	$(xml2rfc) $(patsubst %.txt,%.xml, $@) > $@
 
@@ -15,4 +15,8 @@ xml := $(drafts:.txt=.xml)
 %.html: %.xml
 	$(xml2rfc) --html $< $@
 
+
 all: $(drafts)
+
+spell: $(mkd)
+	mdspell -n -a --en-us -r $(mkd)
