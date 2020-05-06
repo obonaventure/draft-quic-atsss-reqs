@@ -157,6 +157,35 @@ The two scenarios that we consider in this document are:
 - the failure of one access network that forces all data to switch to the other access network
 - the possibility of splitting the transmission of the data over the two access networks even if they have different characteristics (delay, bandwidth, congestion)
 
+## MPTCP-Proxied Connections
+
+
+This section describes how TCP connections matching ATSSS rules are currently established over different access networks.
+
+An ATSSS-capable UE can make use of the MPTCP functionality by establishing MPTCP-assisted connections via the MPTCP proxy relying upon the Convert Protocol {{I-D.ietf-tcpm-converter}}. The UE behaves as a “Client”, while the MPTCP proxy behaves as a Transport Converter {{I-D.ietf-tcpm-converter}}. 
+
+The ATSSS-capable UE sends packets bound to connections matching an ATSSS rule to the provisioned Transport Converter and destination port number. Concretely, the UE initiates the MPTCP connection towards the Transport Converter and indicates the IP address and port number of the Server within the connection establishment packet (i.e., in the payload of the SYN sent to the Transport Converter).  Doing so enables the Transport Converter to immediately initiate a connection towards that Server, without experiencing an extra delay. The Transport Converter waits until the receipt of the confirmation that the Server agrees to establish the connection before confirming it to the Client.
+
+A flow example of an MPTCP-proxied connection is show in {{fig-example}}. This example assumes the Server is not MPTCP-aware. The instructions included in the matching ATSSS rule will be followed for the management of the MPTCP connection (including the selection of the access network to establish the first subflow). 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~                           
+          UE                   MPTCP Proxy               Server
+          |                        |                        |
+          |SYN, MPC [->Server:port]|         SYN, MPC       |
+          |----------------------->|----------------------->|
+          |<-----------------------|<-----------------------|
+          |  SYN+ACK, MPC [...]    |        SYN+ACK         |
+          |----------------------->|----------------------->|
+          |        ACK, MPC        |          ACK           |
+          |          ...           |           ...          |
+
+Legend:
+     []: Convert Protocol TLVs
+    MPC: MP_CAPABLE option [RFC8684] 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{: #fig-example title="An Example of MPTCP-proxied Connection Matching an ATSSS Rule."}
+
+This approach provides 0-RTT (Zero Round-Trip Time) conversion service since no extra delay is induced by the Convert protocol compared to connections that are not proxied. Also, the Convert Protocol does not require any encapsulation (no tunnels, whatsoever).
 
 ## Steering Modes
 
@@ -177,6 +206,7 @@ Which flows are eligible to the ATSSS service and which mode to follow are commu
 During the attachment of an ATSSS-capable UE to the network, the UE retrieves the MPTCP proxy information: an IP address, a port number, and the type of the MPTCP proxy. In the current release, the mandatory MPTCP proxy type is the "Transport Converter" [I-D.ietf-tcpm-converters].
 
 The UE is also provided with a set of steering policies that will be used by the UE to decide how flows will be distributed among available access networks. More details are provided in "ATSSS Steering Modes" Section. 
+
 
 
 # Carrying Bytestreams over Different Access Networks {#bytestreams}
