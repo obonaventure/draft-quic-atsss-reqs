@@ -81,6 +81,87 @@ as shown here.
 [comment]: # (OB: not sure we need that section, we'll see later)
 
 
+## Terms used in this document
+
+Access Traffic Steering, Switching, and Splitting (ATSSS) service - PR8
+
+MPTCP Client - PR10
+
+Access Net - PR10
+
+3GPP Core Net - PR10
+
+ATSSS Rules - PR10
+
+MPTCP Proxy - PR10
+
+UE - PR10 (Med's diagram)
+
+AMF - PR10 (Med's diagram)
+
+SMF - PR10 (Med's diagram)
+
+PCF - PR10 (Med's diagram)
+
+UPF - PR10 (Med's diagram)
+
+DN - PR10 (Med's diagram)
+
+ATSSS-LL PR10 (Med's diagram)
+
+PMF PR10 (Med's diagram)
+
+Packet Data Network (PDN) - PR11
+
+UE (User Equipment) - PR11
+
+Access Point Name (APN) - PR11
+
+User Plane - PR11
+
+The 5G Core (5GC) - PR11
+
+Data Network Name (DNN) - PR11
+
+PDU Connectivity Service - PR11
+
+PDU Sessions - PR11
+
+3GPP access network - PR11
+
+Access Traffic Steering - PR11
+
+Access Traffic Switching - PR11
+
+Access Traffic Splitting - PR11
+
+Transport Converter - PR11
+
+link-specific multipath" addresses/prefixes - PR12
+
+Multi-Access (MA) PDU session IP address - PR14
+
+External Realm - PR14
+
+Active-Standby - PR15
+
+“Smallest Delay” - PR15
+
+“Load-Balancing” - PR15
+
+Priority-Based" - PR15
+
+SYN - PR16
+
+ACK - PR16
+
+MPC - PR16
+
+0-RTT (Zero Round-Trip Time) - PR16
+
+GPRS Tunneling Protocol for the user plane (GTP-U) - PR17
+
+
 # Terminology 
 
 This document makes use of 3GPP-specific terms defined in RFC6459, mainly the following ones: 
@@ -102,6 +183,7 @@ This document makes use of 3GPP-specific terms defined in RFC6459, mainly the fo
       protocol used in the user plane.
  
  
+
 
 
 # High level Overview {#overview}
