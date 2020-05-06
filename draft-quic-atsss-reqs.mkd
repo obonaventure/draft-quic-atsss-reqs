@@ -316,7 +316,17 @@ The UE is also provided with a set of steering policies that will be used by the
 # Carrying Bytestreams over Different Access Networks {#bytestreams}
 
 
+
+## Multipath-Specific Addressing
+
+An ATSSS-capable UE is assigned two additional IP addresses/prefixes, called "link-specific multipath" addresses/prefixes; each associated with an access network. These addresses are only used by the MPTCP functionality of the UE to manage subflows that are established with the assistance of the MPTCP proxy.
+
+Link-specific multipath addresses/prefixes may not be globally reachable IP addresses/prefixes {{?RFC8190}}. 
+
+Note, "Link-specific multipath" addresses/prefixes are not link-local addresses/prefixes (i.e., 169.254.0.0/16 {{?RFC8690}} or fe80::/10 {{?RFC4291}}). 
+
 # Carrying Packets over Different Access Networks {#packets}
+
 
 The MPTCP-based ATSSS discussed in Section XX is specific to TCP, obviously. In particular, it does not provide a similar feature for UDP flows that would require such service. A UDP flow can be defined as series of UDP packets that have the same source and destination address and port numbers.
 
