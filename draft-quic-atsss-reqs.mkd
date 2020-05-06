@@ -3,7 +3,7 @@ title: ATSSS Requirements for QUIC
 abbrev: QUIC ATSSS
 docname: draft-bla-quic-atsss-req-00
 date: 2020-05-15
-category: Informational
+category: info
 
 ipr: trust200902
 area: transport
