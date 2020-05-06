@@ -214,6 +214,17 @@ The UE is also provided with a set of steering policies that will be used by the
 
 # Carrying Packets over Different Access Networks {#packets}
 
+The MPTCP-based ATSSS discussed in Section XX is specific to TCP, obviously. In particular, it does not provide a similar feature for UDP flows that would require such service. A UDP flow can be defined as series of UDP packets that have the same source and destination address and port numbers.
+
+Some proposals were made in the past to encapsulate UDP in MPTCP (by means of header swapping and extraction of the UDP payload). For example, early versions of {{I.D-boucadair-mptcp-plain-mode}} specified how UDP flows, in particular, can be distributed among available paths by leveraging MPTCP capabilities. It does so by including a “Protocol” TLV in the MPTCP payload; doing so allows an MPTCP Proxy to unambiguously identify UDP packets vs. native TCP connections. Some modifications are also required at the MPTCP Proxy to avoid HOL blocking issues of UDP-encapsulated data. This design approach is sub-optimal if the UDP-encapsulated data carry its own congestion control signals (that are not visible to the MPTCP proxy because these signals are encrypted such as in QUIC). 
+
+Some ATSSS modes can be natively supported by the base QUIC specification. For example, the “Active-Standby” and “Smallest Delay” steering modes can be supported directly between an UE and a QUIC server without any assistance from the network other than the performance measurement information. 
+
+Nevertheless, blindly distributing packets among existing paths may lead to complications such as:
+-	Aggressive use of user quota if one of the access networks is subject to volume-based quota. 
+-	The steering policy as currently defined in ATSSS is local to the UE and the proxy. There are no means to signal that policy to an upstream server. 
+-	Frequent connection migration if both access networks are used to forward data; each with a distinct source IP address.
+
 
 # Conclusion {#conclusion}
 
