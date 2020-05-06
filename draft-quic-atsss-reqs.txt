@@ -2,22 +2,27 @@
 
 
 
-QUIC Working Group                                        O. Bonaventure
-Internet-Draft                                                 M. Piraux
-Intended status: Experimental                              Q. De Coninck
-Expires: October 17, 2020                                      UCLouvain
+QUIC Working Group                                          M. Boucadair
+Internet-Draft                                                    Orange
+Intended status: Experimental                             O. Bonaventure
+Expires: November 16, 2020                                     M. Piraux
+                                                           Q. De Coninck
+                                                               UCLouvain
                                                               S. Dawkins
                                                          Tencent America
-                                                          April 15, 2020
+                                                            May 15, 2020
 
 
                       ATSSS Requirements for QUIC
-                     draft-bla-quic-atsss-reqss-00
+                      draft-bla-quic-atsss-req-00
 
 Abstract
 
-   This document briefly presents the ATSSS service being specified
-   within 3GPPP and its requirements on the transport layer.
+   This document briefly presents the Access Traffic Steering,
+   Switching, and Splitting (ATSSS) service being specified within the
+   3rd Generation Partnership Project (3GPP).  Future versions of the
+   document will capture a set of data plane requirements to benefit
+   from multipath capabilities.
 
 Status of This Memo
 
@@ -34,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on October 17, 2020.
+   This Internet-Draft will expire on November 16, 2020.
 
 Copyright Notice
 
@@ -45,34 +50,92 @@ Copyright Notice
    Provisions Relating to IETF Documents
    (https://trustee.ietf.org/license-info) in effect on the date of
    publication of this document.  Please review these documents
+
+
+
+Boucadair, et al.       Expires November 16, 2020               [Page 1]
+
+Internet-Draft                 QUIC ATSSS                       May 2020
+
+
    carefully, as they describe your rights and restrictions with respect
    to this document.  Code Components extracted from this document must
    include Simplified BSD License text as described in Section 4.e of
    the Trust Legal Provisions and are provided without warranty as
    described in the Simplified BSD License.
 
-
-
-Bonaventure, et al.     Expires October 17, 2020                [Page 1]
-
-Internet-Draft                 QUIC ATSSS                     April 2020
-
-
 Table of Contents
 
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
-   2.  Conventions and Definitions . . . . . . . . . . . . . . . . .   2
-   3.  High level Overview . . . . . . . . . . . . . . . . . . . . .   2
-     3.1.  Reference Architecture  . . . . . . . . . . . . . . . . .   2
-   4.  Carrying bytestreams over different access networks . . . . .   3
-   5.  Carrying packets over different access networks . . . . . . .   3
-   6.  Conclusion  . . . . . . . . . . . . . . . . . . . . . . . . .   3
-   7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   4
-     7.1.  Normative References  . . . . . . . . . . . . . . . . . .   4
-     7.2.  Informative References  . . . . . . . . . . . . . . . . .   4
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   4
+   2.  Conventions and Definitions . . . . . . . . . . . . . . . . .   3
+   3.  Terminology . . . . . . . . . . . . . . . . . . . . . . . . .   3
+   4.  High level Overview . . . . . . . . . . . . . . . . . . . . .   4
+     4.1.  Reference Architecture  . . . . . . . . . . . . . . . . .   4
+   5.  ATSSS version 1 . . . . . . . . . . . . . . . . . . . . . . .   6
+     5.1.  Sections to remove ?  . . . . . . . . . . . . . . . . . .   8
+       5.1.1.  Discovery of the MPTCP Proxy  . . . . . . . . . . . .   8
+       5.1.2.  Multipath-Specific Addressing . . . . . . . . . . . .   8
+   6.  ATSSS version 2 . . . . . . . . . . . . . . . . . . . . . . .   9
+     6.1.  Paragraph to remove ? . . . . . . . . . . . . . . . . . .  10
+   7.  Terms used in this document . . . . . . . . . . . . . . . . .  10
+   8.  Conclusion  . . . . . . . . . . . . . . . . . . . . . . . . .  12
+   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  12
+     9.1.  Normative References  . . . . . . . . . . . . . . . . . .  12
+     9.2.  Informative References  . . . . . . . . . . . . . . . . .  12
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  14
 
 1.  Introduction
+
+   Mobile devices such as laptops, smartphones, tablets include
+   different network interfaces that attach to different networks.  Over
+   the years, various techniques have been proposed to support such
+   multi-homed devices [RFC5533],[RFC6275],[RFC5213],[RFC6824].  For 5G
+   networks, 3GPP is developing new solutions to ease the coexistence of
+   different access networks.
+
+   Users of these devices have different expectations concerning the
+   utilization of their different network interfaces.  For simplicity,
+   we consider a smartphone that is equipped with a Wi-Fi interface and
+   a cellular interface, but the discussion below can be generalized to
+   any network interface that supports IP.
+
+   Some users of these smartphones expect seamless handovers.  For
+   example, when they move out of the reach of their home Wi-Fi, they
+   expect that the established flows (i.e.  TCP connections, UDP flows,
+   ...) will continue over the cellular interface without any
+   interruption.  As the Wi-Fi and the cellular networks use different
+   IP addresses, this seamless handover requires some specific support
+
+
+
+
+Boucadair, et al.       Expires November 16, 2020               [Page 2]
+
+Internet-Draft                 QUIC ATSSS                       May 2020
+
+
+   from the network.  The current utilization of Multipath TCP on Apple
+   smartphones is an example of this use case [IETFJ16].
+
+   Some users of these smartphones want to load balance their flows over
+   the different networks, e.g. by sending a delay sensitive flow over
+   cellular and a long download over the Wi-Fi network.  Several
+   smartphones enable applications to indicate their preferences when
+   using network interfaces.  This steering can be managed by the
+   smartphone, but flows need to continue after a handover.
+
+   Other smartphones users may want to combine the cellular and the Wi-
+   Fi network to improve the performance of individual flows.  The
+   GigaLTE service deployed using Multipath TCP in South Korea in an
+   example of this use case [IETFJ16].
+
+   To support these different use cases in 5G networks, 3GPP is working
+   on the Access Traffic Steering, Switching and Splitting (ATSSS)
+   service.  In this document, we abstract many of the technical details
+   of future 5G networks to explain the requirements of the ATSSS
+   service on IETF protocols.
+
+   This document is organized as follows.
 
 2.  Conventions and Definitions
 
@@ -82,9 +145,75 @@ Table of Contents
    14 [RFC2119][RFC8174] when, and only when, they appear in all
    capitals, as shown here.
 
-3.  High level Overview
+3.  Terminology
 
-3.1.  Reference Architecture
+   This document makes use of 3GPP specific terms defined in [RFC6459],
+   mainly the following ones:
+
+   o  Packet Data Network (PDN): is a packet-based network that either
+      belongs to the operator or is an external network such as the
+      Internet or a corporate intranet.  The user eventually accesses
+      services in one or more PDNs.  The operator's packet core networks
+      are separated from packet data networks either by User Plane
+      Functions (UPFs).
+
+   o  UE (User Equipment): refers to the devices that are hosts with the
+      ability to obtain Internet connectivity via a 3GPP network.
+
+   o  Access Point Name (APN): is a Fully Qualified Domain Name (FQDN)
+      and resolves to a set of gateways in an operator's network.  Data
+
+
+
+Boucadair, et al.       Expires November 16, 2020               [Page 3]
+
+Internet-Draft                 QUIC ATSSS                       May 2020
+
+
+      Network Name (DNN) is the APN equivalent in 5GS.  DNN is used for
+      the selection of the UPF(s) for a PDU Session.
+
+   o  User Plane: refers to data traffic and the required sessions for
+      the data traffic.  In practice, IP is the only data traffic
+      protocol used in the user plane.
+
+4.  High level Overview
+
+   The 5G Core (5GC) supports a service that provides exchange of data
+   between an User Equipment (UE) and a data network (referred to as
+   Packet Data Network (PDN)) identified by a Data Network Name (DNN).
+   Such connectivity service, called PDU Connectivity Service, is
+   supported via 'PDU Sessions' that are established upon request from
+   the UE.  The type of PDU Session can be IPv4, IPv6, IPv4v6, Ethernet
+   or Unstructured.
+
+   It is out of the scope of this document to provide a comprehensive
+   overview of 5G System (5GS) architecture.  In particular, this
+   document does not describe how PDU Sessions are established, and thus
+   how IP addresses/prefixes are assigned to requesting User Equipment
+   (UEs).
+
+   An UE can be provided a multi-access PDU Connectivity Service.  That
+   is, an UE can exchange data with a PDN by using a "3GPP access
+   network" and a "non-3GPP access network".  Such service relies upon
+   the ATSSS feature.
+
+4.1.  Reference Architecture
+
+   To understand the operation of the ATSSS service, it is useful to
+   consider the reference environment shown in Figure 1.  An UE is
+   attached to two different access networks (Net A and Net B).  One of
+   these access networks is managed by a 5G provider according to the
+   3GPP specifications.  The second network is potentially managed by a
+   different organization.  It is important to note that in this case,
+   there is an IPSec tunnel between the UE and one device in the 5G
+   network (not shown in Figure 1).  The UE interacts with a distant
+   server through a Proxy function which supports ATSSS and is part of
+   the 5G network.  The Proxy function enables the UE to use a transport
+   protocol that supports the different access networks even if the
+   server does not support it.  The UE and the Proxy exchange, using the
+   5G control plane, rules that specify which flows are eligible to the
+   ATSSS service.
 
    A simplified reference architecture is shown in Figure 1.
 
@@ -92,26 +221,121 @@ Table of Contents
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Bonaventure, et al.     Expires October 17, 2020                [Page 2]
+Boucadair, et al.       Expires November 16, 2020               [Page 4]
 
-Internet-Draft                 QUIC ATSSS                     April 2020
+Internet-Draft                 QUIC ATSSS                       May 2020
+
+
+     ........(ATSSS Rules From Network)..........
+     .                                          .
+     .              ------------                .
+     .             /            \               .
+     .   +--------| Access Net A |-+            .
+     .   |         \   (3GPP)   /  |            .
+     .   |          ------------   |            .
+     .   |                         |            .
+     .   |                         |            .
+     .   |                 -------------        .
+    +---+--+              /             \    +-----+        +------+
+    |  U E |             | 3GPP Core Net +---|     |-/.../--|Server|
+    |      |              \             /    |Proxy|        +------+
+    +--+---+               -------------     +-----+
+       |                          |
+       |                          |
+       |          ------------    |
+       |         /            \   |
+       +--------| Access Net B |--+
+                 \ (non 3GPP) /
+                  ------------
+
+           Figure 1: Simplified Reference Architecture for ATSSS
+
+   3GPP defined the following procedures [TS23501] that are applicable
+   between "3GPP access" and "non-3GPP access" networks:
+
+   o  Access Traffic Steering: selection of an access network for a new
+      data flow and the transfer of the traffic of that data flow over
+      the selected access network.
+
+   o  Access Traffic Switching: migration of all packets of an ongoing
+      data flow from one access network to another access network while
+      ensuring session continuity.
+
+   o  Access Traffic Splitting: split of the packets of a data flow
+      across multiple access networks.
+
+   Techniques to provide ATSSS are classified by the 3GPP into two
+   flavors: (1) high-layer techniques which operate above the IP layer
+   (e.g., MPTCP), and (2) low-layer techniques which operate below the
+   IP layer.  Only high-layer steering techniques are discussed in this
+   document.
+
+   The traffic that matches an ATSSS rule can be distributed among
+   available access networks following one of these modes:
+
+
+
+
+
+Boucadair, et al.       Expires November 16, 2020               [Page 5]
+
+Internet-Draft                 QUIC ATSSS                       May 2020
+
+
+   o  "Active-Standby": The traffic associated with the matching flow
+      will be forwarded via a specific access (called, active access)
+      and switched to another access (called, standby access) when the
+      active access is unavailable.
+
+   o  "Smallest Delay": The traffic associated with the matching flow
+      will be forwarded via the access that presents the smallest Round-
+      Trip Time (RTT).  To that aim, specific measurements are conducted
+      by the UE and a dedicated function co-located with the Proxy.
+
+   o  "Load-Balancing": The traffic associated with the matching flow
+      will be distributed among available access networks following a
+      distribution ratio (e.g., 30% via a first access, 70% via a second
+      access).
+
+   o  "Priority-based": For this mode, accesses are assigned priority
+      levels that indicate which access to be used first.  Concretely,
+      the traffic associated with the matching flow will be steered on
+      the access with a high priority till congestion is detected, then
+      the overflow will be forwarded over a low priority access.
+
+   We first describe version 1 of the ATSSS specification that uses
+   Multipath TCP [RFC6824] and the 0-RTT convert protocol
+   [I-D.ietf-tcpm-converters].  We then discuss the requirements for
+   version 2 of the ATSSS specification.
+
+5.  ATSSS version 1
+
+   For ATSSS with Multipath TCP functionality, a client with at least
+   two interfaces connected to two disjoint access networks (in this
+   case, Access Net A and Access Net B), uses MPTCP to reach an MPTCP
+   proxy over either, or both, of the access networks.  This allows the
+   client to communicate with a server which does not terminate MPTCP
+   connections.
+
+   Both the MPTCP Client and MPTCP proxy are configured with ATSSS rules
+   from the network that govern how the multiple network paths between
+   the MPTCP Client and MPTCP Proxy are used.  This relationship is
+   shown using "." between the MPTCP Client and MPTCP Proxy.
+
+
+
+
+
+
+
+
+
+
+
+
+Boucadair, et al.       Expires November 16, 2020               [Page 6]
+
+Internet-Draft                 QUIC ATSSS                       May 2020
 
 
      ........(ATSSS Rules From Network)..........
@@ -136,48 +360,274 @@ Internet-Draft                 QUIC ATSSS                     April 2020
                  \ (non 3GPP) /
                   ------------
 
-   Figure 1: Simplified Reference Architecture for ATSSS with Multipath
+   Figure 2: Simplified Reference Architecture for ATSSS with Multipath
                                     TCP
 
-   For ATSSS with Multipath TCP functionality, a client with at least
-   two interfaces connected to two disjoint access networks (in this
-   case, Access Net A and Access Net B), uses MPTCP to reach an MPTCP
-   proxy over either, or both, of the access networks, which allows the
-   client to communicate with a server which does not terminate MPTCP
-   connections.
+   An ATSSS-capable UE can make use of the MPTCP functionality by
+   establishing MPTCP-assisted connections via the MPTCP proxy relying
+   upon the Convert Protocol [I-D.ietf-tcpm-converters].  The UE behaves
+   as a "Client", while the MPTCP proxy behaves as a Transport Converter
+   [I-D.ietf-tcpm-converters].
 
-   Both the MPTCP Client and MPTCP proxy are configured with ATSSS rules
-   from the network that govern how the multiple network paths between
-   the MPTCP Client and MPTCP Proxy are used.  This relationship is
-   shown using "." between the MPTCP Client and MPTCP Proxy.
+   The ATSSS-capable UE sends packets bound to connections matching an
+   ATSSS rule to the provisioned Transport Converter and destination
+   port number.  Concretely, the UE initiates the MPTCP connection
+   towards the Transport Converter and indicates the IP address and port
+   number of the Server within the connection establishment packet
+   (i.e., in the payload of the SYN sent to the Transport Converter).
+   Doing so enables the Transport Converter to immediately initiate a
+   connection towards that Server, without experiencing an extra delay.
+   The Transport Converter waits until the receipt of the confirmation
+   that the Server agrees to establish the connection before confirming
+   it to the Client.
 
-4.  Carrying bytestreams over different access networks
+   A flow example of an MPTCP-proxied connection is show in Figure 3.
+   This example assumes that the Server is not MPTCP-aware.  The
+   instructions included in the matching ATSSS rule will be followed for
+   the management of the MPTCP connection (including the selection of
+   the access network to establish the first subflow).
 
-5.  Carrying packets over different access networks
 
-6.  Conclusion
+
+Boucadair, et al.       Expires November 16, 2020               [Page 7]
+
+Internet-Draft                 QUIC ATSSS                       May 2020
+
+
+             UE                   MPTCP Proxy               Server
+             |                        |                        |
+             |SYN, MPC [->Server:port]|         SYN, MPC       |
+             |----------------------->|----------------------->|
+             |<-----------------------|<-----------------------|
+             |  SYN+ACK, MPC [...]    |        SYN+ACK         |
+             |----------------------->|----------------------->|
+             |        ACK, MPC        |          ACK           |
+             |          ...           |           ...          |
+
+   Legend:
+        []: Convert Protocol TLVs
+       MPC: MP_CAPABLE option [RFC8684]
+
+    Figure 3: An Example of MPTCP-proxied Connection Matching an ATSSS
+                                   Rule.
+
+   This approach provides 0-RTT (Zero Round-Trip Time) conversion
+   service since no extra delay is induced by the Convert protocol
+   compared to connections that are not proxied.  Also, the Convert
+   Protocol does not require any encapsulation (no tunnels, whatsoever).
+
+5.1.  Sections to remove ?
+
+5.1.1.  Discovery of the MPTCP Proxy
+
+   During the attachment of an ATSSS-capable UE to the network, the UE
+   retrieves the MPTCP proxy information: an IP address, a port number,
+   and the type of the MPTCP proxy.  In the current release, the
+   mandatory MPTCP proxy type is the "Transport Converter"
+   [I-D.ietf-tcpm-converters].
+
+   The UE is also provided with a set of steering policies that will be
+   used by the UE to decide how flows will be distributed among
+   available access networks.  More details are provided in "ATSSS
+   Steering Modes" Section.
+
+5.1.2.  Multipath-Specific Addressing
+
+   An ATSSS-capable UE is assigned two additional IP addresses/prefixes,
+   called "link-specific multipath" addresses/prefixes; each associated
+   with an access network.  These addresses are only used by the MPTCP
+   functionality of the UE to manage subflows that are established with
+   the assistance of the MPTCP proxy.
+
+   Link-specific multipath addresses/prefixes may not be globally
+   reachable IP addresses/prefixes [RFC8190].
+
+
+
+
+Boucadair, et al.       Expires November 16, 2020               [Page 8]
+
+Internet-Draft                 QUIC ATSSS                       May 2020
+
+
+   Note, "Link-specific multipath" addresses/prefixes are not link-local
+   addresses/prefixes (i.e., 169.254.0.0/16 [RFC8690] or fe80::/10
+   [RFC4291]).
+
+6.  ATSSS version 2
+
+   The MPTCP-based ATSSS discussed in the previous section is specific
+   to TCP, obviously.  In particular, it does not provide a similar
+   feature for UDP flows that would require such service.  A UDP flow
+   can be defined as series of UDP packets that have the same source and
+   destination address and port numbers.
+
+   ATSSS version 2 aims at providing the same service as ATSSS version
+   1, i.e.  splitting, switching and steering, to non-TCP flows.  Such
+   flows include generic UDP flows, QUIC connections, DTLS or IPSec
+   flows between the UE and a remote host. 3GPP discussed several
+   proposals to carry non-TCP traffic, including using TCP as proposed
+   earlier in [I-D.boucadair-mptcp-plain-mode], using multipath
+   extensions to DCCP [I-D.amend-tsvwg-multipath-dccp].  The work within
+   3GPP now focuses on using Multipath extensions to QUIC
+   [I-D.deconinck-quic-multipath].
+
+   It appears that Multipath QUIC brings several benefits to support the
+   ATSSS service.  First, Multipath QUIC is a multipath transport
+   protocol which is capable of splitting data over different access
+   networks as Multipath TCP.  Measurements and simulations show that
+   Multipath QUIC provides similar performance as Multipath TCP when
+   carrying bytestreams over different access networks [MPQUIC-Conext].
+   Second, Multipath QUIC can be combined with the Unreliable Datagram
+   Extension [I-D.ietf-quic-datagram] that provides the capability to
+   transport unreliable messages such as UDP datagrams or IP packets
+   inside a QUIC session.  Third,the MASQUE BOF is currently discussing
+   different solutions to provide proxy services over a QUIC connection
+   [I-D.schinazi-masque-protocol],[I-D.schinazi-masque-connect-udp],
+   [I-D.piraux-quic-tunnel],[I-D.piraux-quic-tunnel-tcp].
+
+   Some ATSSS modes can be natively supported by the base QUIC
+   specification.  For example, the "Active-Standby" and "Smallest
+   Delay" steering modes can be supported directly between an UE and a
+   QUIC server without any assistance from the network other than the
+   performance measurement information.
+
+   Nevertheless, blindly distributing packets among existing paths may
+   lead to complications such as: - Aggressive use of user quota if one
+   of the access networks is subject to volume-based quota.  - The
+   steering policy as currently defined in ATSSS is local to the UE and
+   the proxy.  There are no means to signal that policy to an upstream
+
+
+
+
+Boucadair, et al.       Expires November 16, 2020               [Page 9]
+
+Internet-Draft                 QUIC ATSSS                       May 2020
+
+
+   server.  - Frequent connection migration if both access networks are
+   used to forward data; each with a distinct source IP address.
+
+6.1.  Paragraph to remove ?
+
+   Some proposals were made in the past to encapsulate UDP in MPTCP (by
+   means of header swapping and extraction of the UDP payload).  For
+   example, early versions of specified how UDP flows, in particular,
+   can be distributed among available paths by leveraging MPTCP
+   capabilities.  It does so by including a "Protocol" TLV in the MPTCP
+   payload; doing so allows an MPTCP Proxy to unambiguously identify UDP
+   packets vs. native TCP connections.  Some modifications are also
+   required at the MPTCP Proxy to avoid HOL blocking issues of UDP-
+   encapsulated data.  This design approach is sub-optimal if the UDP-
+   encapsulated data carry its own congestion control signals (that are
+   not visible to the MPTCP proxy because these signals are encrypted
+   such as in QUIC).
+
+7.  Terms used in this document
+
+   Access Traffic Steering, Switching, and Splitting (ATSSS) service -
+   PR8
+
+   MPTCP Client - PR10
+
+   Access Net - PR10
+
+   3GPP Core Net - PR10
+
+   ATSSS Rules - PR10
+
+   MPTCP Proxy - PR10
+
+   UE - PR10 (Med's diagram)
+
+   AMF - PR10 (Med's diagram)
+
+   SMF - PR10 (Med's diagram)
+
+   PCF - PR10 (Med's diagram)
+
+   UPF - PR10 (Med's diagram)
+
+   DN - PR10 (Med's diagram)
+
+   ATSSS-LL PR10 (Med's diagram)
+
+   PMF PR10 (Med's diagram)
+
+
+
+Boucadair, et al.       Expires November 16, 2020              [Page 10]
+
+Internet-Draft                 QUIC ATSSS                       May 2020
+
+
+   Packet Data Network (PDN) - PR11
+
+   UE (User Equipment) - PR11
+
+   Access Point Name (APN) - PR11
+
+   User Plane - PR11
+
+   The 5G Core (5GC) - PR11
+
+   Data Network Name (DNN) - PR11
+
+   PDU Connectivity Service - PR11
+
+   PDU Sessions - PR11
+
+   3GPP access network - PR11
+
+   Access Traffic Steering - PR11
+
+   Access Traffic Switching - PR11
+
+   Access Traffic Splitting - PR11
+
+   Transport Converter - PR11
+
+   link-specific multipath" addresses/prefixes - PR12
+
+   Multi-Access (MA) PDU session IP address - PR14
+
+   External Realm - PR14
+
+   Active-Standby - PR15
+
+   "Smallest Delay" - PR15
+
+   "Load-Balancing" - PR15
+
+   Priority-Based" - PR15
+
+   SYN - PR16
+
+   ACK - PR16
+
+   MPC - PR16
+
+   0-RTT (Zero Round-Trip Time) - PR16
+
+
+
+
+Boucadair, et al.       Expires November 16, 2020              [Page 11]
+
+Internet-Draft                 QUIC ATSSS                       May 2020
+
+
+   GPRS Tunneling Protocol for the user plane (GTP-U) - PR17
+
+8.  Conclusion
 
    Based on the two above questions, it should be clear that MPQUIC
    could cover both cases.
 
+9.  References
 
-
-
-
-
-Bonaventure, et al.     Expires October 17, 2020                [Page 3]
-
-Internet-Draft                 QUIC ATSSS                     April 2020
-
-
-   ASCII figure
-
-
-                         Figure 2: A simple figure
-
-7.  References
-
-7.1.  Normative References
+9.1.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -188,7 +638,7 @@ Internet-Draft                 QUIC ATSSS                     April 2020
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/info/rfc8174>.
 
-7.2.  Informative References
+9.2.  Informative References
 
    [I-D.amend-tsvwg-multipath-dccp]
               Amend, M., Bogenfeld, E., Brunstrom, A., Kassler, A., and
@@ -196,13 +646,114 @@ Internet-Draft                 QUIC ATSSS                     April 2020
               with Multiple Addresses", draft-amend-tsvwg-multipath-
               dccp-03 (work in progress), November 2019.
 
+   [I-D.boucadair-mptcp-plain-mode]
+              Boucadair, M., Jacquenet, C., Bonaventure, O., Behaghel,
+              D., stefano.secci@lip6.fr, s., Henderickx, W., Skog, R.,
+              Vinapamula, S., Seo, S., Cloetens, W., Meyer, U.,
+              Contreras, L., and B. Peirens, "Extensions for Network-
+              Assisted MPTCP Deployment Models", draft-boucadair-mptcp-
+              plain-mode-10 (work in progress), March 2017.
+
    [I-D.deconinck-quic-multipath]
               Coninck, Q. and O. Bonaventure, "Multipath Extensions for
               QUIC (MP-QUIC)", draft-deconinck-quic-multipath-04 (work
               in progress), March 2020.
 
+   [I-D.ietf-quic-datagram]
+              Pauly, T., Kinnear, E., and D. Schinazi, "An Unreliable
+              Datagram Extension to QUIC", draft-ietf-quic-datagram-00
+              (work in progress), February 2020.
+
+
+
+
+
+
+Boucadair, et al.       Expires November 16, 2020              [Page 12]
+
+Internet-Draft                 QUIC ATSSS                       May 2020
+
+
+   [I-D.ietf-tcpm-converters]
+              Bonaventure, O., Boucadair, M., Gundavelli, S., Seo, S.,
+              and B. Hesmans, "0-RTT TCP Convert Protocol", draft-ietf-
+              tcpm-converters-19 (work in progress), March 2020.
+
+   [I-D.piraux-quic-tunnel]
+              Piraux, M. and O. Bonaventure, "Tunneling Internet
+              protocols inside QUIC", draft-piraux-quic-tunnel-01 (work
+              in progress), March 2020.
+
+   [I-D.piraux-quic-tunnel-tcp]
+              Piraux, M. and O. Bonaventure, "Tunneling TCP inside
+              QUIC", draft-piraux-quic-tunnel-tcp-00 (work in progress),
+              March 2020.
+
+   [I-D.schinazi-masque-connect-udp]
+              Schinazi, D., "The CONNECT-UDP HTTP Method", draft-
+              schinazi-masque-connect-udp-00 (work in progress), April
+              2020.
+
+   [I-D.schinazi-masque-protocol]
+              Schinazi, D., "The MASQUE Protocol", draft-schinazi-
+              masque-protocol-01 (work in progress), March 2020.
+
    [IETFJ16]  Bonaventure, O. and S. Seo, "Multipath TCP Deployment",
-              IETF Journal, Fall 2016 , n.d..
+              IETF Journal, Fall 2016 , 2016.
+
+   [MPQUIC-Conext]
+              De Coninck, Q. and O. Bonaventure, "Multipath QUIC -
+              Design and evaluation", Proceedings of the 13th
+              international conference on emerging networking
+              experiments and technologies 2017 Nov 28 (pp. 160-166). ,
+              2017.
+
+   [RFC4291]  Hinden, R. and S. Deering, "IP Version 6 Addressing
+              Architecture", RFC 4291, DOI 10.17487/RFC4291, February
+              2006, <https://www.rfc-editor.org/info/rfc4291>.
+
+   [RFC5213]  Gundavelli, S., Ed., Leung, K., Devarapalli, V.,
+              Chowdhury, K., and B. Patil, "Proxy Mobile IPv6",
+              RFC 5213, DOI 10.17487/RFC5213, August 2008,
+              <https://www.rfc-editor.org/info/rfc5213>.
+
+   [RFC5533]  Nordmark, E. and M. Bagnulo, "Shim6: Level 3 Multihoming
+              Shim Protocol for IPv6", RFC 5533, DOI 10.17487/RFC5533,
+              June 2009, <https://www.rfc-editor.org/info/rfc5533>.
+
+
+
+
+
+Boucadair, et al.       Expires November 16, 2020              [Page 13]
+
+Internet-Draft                 QUIC ATSSS                       May 2020
+
+
+   [RFC6275]  Perkins, C., Ed., Johnson, D., and J. Arkko, "Mobility
+              Support in IPv6", RFC 6275, DOI 10.17487/RFC6275, July
+              2011, <https://www.rfc-editor.org/info/rfc6275>.
+
+   [RFC6459]  Korhonen, J., Ed., Soininen, J., Patil, B., Savolainen,
+              T., Bajko, G., and K. Iisakkila, "IPv6 in 3rd Generation
+              Partnership Project (3GPP) Evolved Packet System (EPS)",
+              RFC 6459, DOI 10.17487/RFC6459, January 2012,
+              <https://www.rfc-editor.org/info/rfc6459>.
+
+   [RFC6824]  Ford, A., Raiciu, C., Handley, M., and O. Bonaventure,
+              "TCP Extensions for Multipath Operation with Multiple
+              Addresses", RFC 6824, DOI 10.17487/RFC6824, January 2013,
+              <https://www.rfc-editor.org/info/rfc6824>.
+
+   [RFC8190]  Bonica, R., Cotton, M., Haberman, B., and L. Vegoda,
+              "Updates to the Special-Purpose IP Address Registries",
+              BCP 153, RFC 8190, DOI 10.17487/RFC8190, June 2017,
+              <https://www.rfc-editor.org/info/rfc8190>.
+
+   [RFC8690]  Nainar, N., Pignataro, C., Iqbal, F., and A. Vainshtein,
+              "Clarification of Segment ID Sub-TLV Length for RFC 8287",
+              RFC 8690, DOI 10.17487/RFC8690, December 2019,
+              <https://www.rfc-editor.org/info/rfc8690>.
 
    [TS23501]  3GPP (3rd Generation Partnership Project), ., "Technical
               Specification Group Services and System Aspects; System
@@ -211,6 +762,15 @@ Internet-Draft                 QUIC ATSSS                     April 2020
               archive/23_series/23.501/>.
 
 Authors' Addresses
+
+   Mohamed Boucadair
+   Orange
+   Clos Courtel
+   Rennes  35000
+   France
+
+   Email: mohamed.boucadair@orange.com
+
 
    Olivier Bonaventure
    UCLouvain
@@ -221,9 +781,9 @@ Authors' Addresses
 
 
 
-Bonaventure, et al.     Expires October 17, 2020                [Page 4]
+Boucadair, et al.       Expires November 16, 2020              [Page 14]
 
-Internet-Draft                 QUIC ATSSS                     April 2020
+Internet-Draft                 QUIC ATSSS                       May 2020
 
 
    Maxime Piraux
@@ -277,4 +837,4 @@ Internet-Draft                 QUIC ATSSS                     April 2020
 
 
 
-Bonaventure, et al.     Expires October 17, 2020                [Page 5]
+Boucadair, et al.       Expires November 16, 2020              [Page 15]

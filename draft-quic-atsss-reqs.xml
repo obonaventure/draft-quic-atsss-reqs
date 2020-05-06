@@ -9,11 +9,23 @@
 <?rfc sortrefs="yes"?>
 <?rfc symrefs="yes"?>
 
-<rfc ipr="trust200902" docName="draft-bla-quic-atsss-reqss-00" category="exp">
+<rfc ipr="trust200902" docName="draft-bla-quic-atsss-req-00" category="exp">
 
   <front>
     <title abbrev="QUIC ATSSS">ATSSS Requirements for QUIC</title>
 
+    <author initials="M." surname="Boucadair" fullname="Mohamed Boucadair">
+      <organization>Orange</organization>
+      <address>
+        <postal>
+          <street>Clos Courtel</street>
+          <city>Rennes</city>
+          <code>35000</code>
+          <country>France</country>
+        </postal>
+        <email>mohamed.boucadair@orange.com</email>
+      </address>
+    </author>
     <author initials="O." surname="Bonaventure" fullname="Olivier Bonaventure">
       <organization>UCLouvain</organization>
       <address>
@@ -39,7 +51,7 @@
       </address>
     </author>
 
-    <date year="2020" month="April" day="15"/>
+    <date year="2020" month="May" day="15"/>
 
     <area>transport</area>
     <workgroup>QUIC Working Group</workgroup>
@@ -48,8 +60,7 @@
     <abstract>
 
 
-<t>This document briefly presents the ATSSS service being specified within
-3GPPP and its requirements on the transport layer.</t>
+<t>This document briefly presents the Access Traffic Steering, Switching, and Splitting (ATSSS) service being specified within the 3rd Generation Partnership Project (3GPP). Future versions of the document will capture a set of data plane requirements to benefit from multipath capabilities.</t>
 
 
 
@@ -63,6 +74,43 @@
 
 <section anchor="intro" title="Introduction">
 
+<t>Mobile devices such as laptops, smartphones, tablets include different network
+interfaces that attach to different networks. Over the years, various techniques
+have been proposed to support such multi-homed devices <xref target="RFC5533"/>,<xref target="RFC6275"/>,<xref target="RFC5213"/>,<xref target="RFC6824"/>. For 5G networks, 3GPP is developing new solutions
+to ease the coexistence of different access networks.</t>
+
+<t>Users of these devices
+have different expectations concerning the utilization of their different
+network interfaces. For simplicity, we consider a smartphone that
+is equipped with a Wi-Fi interface and a cellular interface, but the discussion
+below can be generalized to any network interface that supports IP.</t>
+
+<t>Some users of these smartphones expect seamless handovers. For example, when
+they move out of the reach of their home Wi-Fi, they expect that the established flows (i.e. TCP connections, UDP flows, &#8230;)
+will continue over the cellular interface without any interruption. As the
+Wi-Fi and the cellular networks use different IP addresses, this seamless
+handover requires some specific support from the network. The current
+utilization of Multipath TCP on Apple smartphones is an example of this use
+case <xref target="IETFJ16"/>.</t>
+
+<t>Some users of these smartphones want to load balance their flows over the
+different networks, e.g. by sending a delay sensitive flow over cellular and
+a long download over the Wi-Fi network. Several smartphones enable applications
+to indicate their preferences when using network interfaces.
+This steering can be managed by the smartphone, but flows need to continue
+after a handover.</t>
+
+<t>Other smartphones users may want to combine the cellular and the Wi-Fi network
+to improve the performance of individual flows. The GigaLTE service deployed
+using Multipath TCP in South Korea in an example of this use case <xref target="IETFJ16"/>.</t>
+
+<t>To support these different use cases in 5G networks, 3GPP is working on
+the Access Traffic Steering, Switching and Splitting (ATSSS) service. In this
+document, we abstract many of the technical details of future 5G networks to
+explain the requirements of the ATSSS service on IETF protocols.</t>
+
+<t>This document is organized as follows.</t>
+
 </section>
 <section anchor="conventions-and-definitions" title="Conventions and Definitions">
 
@@ -73,13 +121,107 @@
 as shown here.</t>
 
 </section>
+<section anchor="terminology" title="Terminology">
+
+<t>This document makes use of 3GPP specific terms defined in <xref target="RFC6459"/>, mainly the following ones:</t>
+
+<t><list style="symbols">
+  <t>Packet Data Network (PDN): is a packet-based network that
+ either belongs to the operator or is an external network such as
+ the Internet or a corporate intranet.  The user eventually
+ accesses services in one or more PDNs.  The operator's packet core
+ networks are separated from packet data networks either by User Plane Functions (UPFs).</t>
+  <t>UE (User Equipment): refers to the devices that are hosts with the
+ability to obtain Internet connectivity via a 3GPP network.</t>
+  <t>Access Point Name (APN): is a Fully Qualified Domain Name
+    (FQDN) and resolves to a set of gateways in an operator's network. Data Network Name (DNN) is the APN equivalent in 5GS. DNN is used for the selection of the UPF(s) for a PDU Session.</t>
+  <t>User Plane: refers to data traffic and the required sessions for
+the data traffic.  In practice, IP is the only data traffic
+protocol used in the user plane.</t>
+</list></t>
+
+</section>
 <section anchor="overview" title="High level Overview">
+
+<t>The 5G Core (5GC) supports a service that provides exchange of data between an User Equipment (UE) and a data network (referred to as Packet Data Network (PDN)) identified by a Data Network Name (DNN). Such connectivity service, called PDU Connectivity Service, is supported via 'PDU Sessions' that are established upon request from the UE. The type of PDU Session can be IPv4, IPv6, IPv4v6, Ethernet or Unstructured.</t>
+
+<t>It is out of the scope of this document to provide a comprehensive overview of 5G System (5GS) architecture. In particular, this document does not describe how PDU Sessions are established, and thus how IP addresses/prefixes are assigned to requesting User Equipment (UEs).</t>
+
+<t>An UE can be provided a multi-access PDU Connectivity Service. That is, an UE can exchange data with a PDN by using a "3GPP access network" and a "non-3GPP access network". Such service relies upon the ATSSS feature.</t>
 
 <section anchor="reference-architecture" title="Reference Architecture">
 
-<t>A simplified reference architecture is shown in <xref target="ref-arch"/>.</t>
+<t>To understand the operation of the ATSSS service, it is useful to consider the
+reference environment shown in <xref target="fig-arch"/>. An UE
+is attached to two different access networks (Net A and Net B).
+One of these access networks is managed by a 5G provider according to
+the 3GPP specifications. The second network is potentially managed by
+a different organization. It is important to note that in this case, there
+is an IPSec tunnel between the UE and one device in the 5G network
+(not shown in <xref target="fig-arch"/>). The UE interacts with a distant server
+through a Proxy function which supports ATSSS and is part of the 5G network.
+The Proxy function enables the UE to use a transport protocol that supports
+the different access networks even if the server does not support it.
+The UE and the Proxy exchange, using the 5G control plane, rules that specify
+which flows are eligible to the ATSSS service.</t>
 
-<figure title="Simplified Reference Architecture for ATSSS with Multipath TCP" anchor="ref-arch"><artwork><![CDATA[
+<t>A simplified reference architecture is shown in <xref target="fig-arch"/>.</t>
+
+<figure title="Simplified Reference Architecture for ATSSS" anchor="fig-arch"><artwork><![CDATA[
+  ........(ATSSS Rules From Network)..........
+  .                                          .
+  .              ------------                .
+  .             /            \               .
+  .   +--------| Access Net A |-+            .
+  .   |         \   (3GPP)   /  |            .
+  .   |          ------------   |            .
+  .   |                         |            .
+  .   |                         |            .
+  .   |                 -------------        .
+ +---+--+              /             \    +-----+        +------+
+ |  U E |             | 3GPP Core Net +---|     |-/.../--|Server|
+ |      |              \             /    |Proxy|        +------+
+ +--+---+               -------------     +-----+
+    |                          |    
+    |                          |
+    |          ------------    |
+    |         /            \   |
+    +--------| Access Net B |--+
+              \ (non 3GPP) /
+               ------------
+]]></artwork></figure>
+
+<t>3GPP defined the following procedures <xref target="TS23501"/> that are applicable between "3GPP access" and "non-3GPP access" networks:</t>
+
+<t><list style="symbols">
+  <t>Access Traffic Steering: selection of an access network for a new data flow and the transfer of the traffic of that data flow over the selected access network.</t>
+  <t>Access Traffic Switching: migration of all packets of an ongoing data flow from one access network to another access network while ensuring session continuity.</t>
+  <t>Access Traffic Splitting: split of the packets of a data flow across multiple access networks.</t>
+</list></t>
+
+<t>Techniques to provide ATSSS are classified by the 3GPP into two flavors: (1) high-layer techniques which operate above the IP layer (e.g., MPTCP), and (2) low-layer techniques which operate below the IP layer. Only high-layer steering techniques are discussed in this document.</t>
+
+<t>The traffic that matches an ATSSS rule can be distributed among available access networks following one of these modes:</t>
+
+<t><list style="symbols">
+  <t>"Active-Standby": The traffic associated with the matching flow will be forwarded via a specific access (called, active access) and switched to another access (called, standby access) when the active access is unavailable.</t>
+  <t>"Smallest Delay": The traffic associated with the matching flow will be forwarded via the access that presents the smallest Round-Trip Time (RTT). To that aim, specific measurements are conducted by the UE and a dedicated function co-located with the Proxy.</t>
+  <t>"Load-Balancing": The traffic associated with the matching flow will be distributed among available access networks following a distribution ratio (e.g., 30% via a first access, 70% via a second access).</t>
+  <t>"Priority-based": For this mode, accesses are assigned priority levels that indicate which access to be used first. Concretely, the traffic associated with the matching flow will be steered on the access with a high priority till congestion is detected, then the overflow will be forwarded over a low priority access.</t>
+</list></t>
+
+<t>We first describe version 1 of the ATSSS specification that uses
+Multipath TCP <xref target="RFC6824"/> and the 0-RTT convert protocol <xref target="I-D.ietf-tcpm-converters"/>. We then discuss the requirements for version 2 of the ATSSS specification.</t>
+
+</section>
+</section>
+<section anchor="atsss-version-1" title="ATSSS version 1">
+
+<t>For ATSSS with Multipath TCP functionality, a client with at least two interfaces connected to two disjoint access networks (in this case, Access Net A and Access Net B), uses MPTCP to reach an MPTCP proxy over either, or both, of the access networks. This allows the client to communicate with a server which does not terminate MPTCP connections.</t>
+
+<t>Both the MPTCP Client and MPTCP proxy are configured with ATSSS rules from the network that govern how the multiple network paths between the MPTCP Client and MPTCP Proxy are used. This relationship is shown using "." between the MPTCP Client and MPTCP Proxy.</t>
+
+<figure title="Simplified Reference Architecture for ATSSS with Multipath TCP" anchor="fig-mptcp-arch"><artwork><![CDATA[
   ........(ATSSS Rules From Network)..........
   .                                          .
   .              ------------                .
@@ -103,27 +245,174 @@ as shown here.</t>
                ------------
 ]]></artwork></figure>
 
-<t>For ATSSS with Multipath TCP functionality, a client with at least two interfaces connected to two disjoint access networks (in this case, Access Net A and Access Net B), uses MPTCP to reach an MPTCP proxy over either, or both, of the access networks, which allows the client to communicate with a server which does not terminate MPTCP connections.</t>
+<t>An ATSSS-capable UE can make use of the MPTCP functionality by establishing MPTCP-assisted connections via the MPTCP proxy relying upon the Convert Protocol <xref target="I-D.ietf-tcpm-converters"/>. The UE behaves as a "Client", while the MPTCP proxy behaves as a Transport Converter <xref target="I-D.ietf-tcpm-converters"/>.</t>
 
-<t>Both the MPTCP Client and MPTCP proxy are configured with ATSSS rules from the network that govern how the multiple network paths between the MPTCP Client and MPTCP Proxy are used. This relationship is shown using "." between the MPTCP Client and MPTCP Proxy.</t>
+<t>The ATSSS-capable UE sends packets bound to connections matching an ATSSS rule to the provisioned Transport Converter and destination port number. Concretely, the UE initiates the MPTCP connection towards the Transport Converter and indicates the IP address and port number of the Server within the connection establishment packet (i.e., in the payload of the SYN sent to the Transport Converter).  Doing so enables the Transport Converter to immediately initiate a connection towards that Server, without experiencing an extra delay. The Transport Converter waits until the receipt of the confirmation that the Server agrees to establish the connection before confirming it to the Client.</t>
+
+<t>A flow example of an MPTCP-proxied connection is show in <xref target="fig-example"/>. This example assumes that the Server is not MPTCP-aware. The instructions included in the matching ATSSS rule will be followed for the management of the MPTCP connection (including the selection of the access network to establish the first subflow).</t>
+
+<figure title="An Example of MPTCP-proxied Connection Matching an ATSSS Rule." anchor="fig-example"><artwork><![CDATA[
+          UE                   MPTCP Proxy               Server
+          |                        |                        |
+          |SYN, MPC [->Server:port]|         SYN, MPC       |
+          |----------------------->|----------------------->|
+          |<-----------------------|<-----------------------|
+          |  SYN+ACK, MPC [...]    |        SYN+ACK         |
+          |----------------------->|----------------------->|
+          |        ACK, MPC        |          ACK           |
+          |          ...           |           ...          |
+
+Legend:
+     []: Convert Protocol TLVs
+    MPC: MP_CAPABLE option [RFC8684] 
+]]></artwork></figure>
+
+<t>This approach provides 0-RTT (Zero Round-Trip Time) conversion service since no extra delay is induced by the Convert protocol compared to connections that are not proxied. Also, the Convert Protocol does not require any encapsulation (no tunnels, whatsoever).</t>
+
+<section anchor="sections-to-remove-" title="Sections to remove ?">
+
+<section anchor="discovery-of-the-mptcp-proxy" title="Discovery of the MPTCP Proxy">
+
+<t>During the attachment of an ATSSS-capable UE to the network, the UE retrieves the MPTCP proxy information: an IP address, a port number, and the type of the MPTCP proxy. In the current release, the mandatory MPTCP proxy type is the "Transport Converter" <xref target="I-D.ietf-tcpm-converters"/>.</t>
+
+<t>The UE is also provided with a set of steering policies that will be used by the UE to decide how flows will be distributed among available access networks. More details are provided in "ATSSS Steering Modes" Section.</t>
+
+</section>
+<section anchor="multipath-specific-addressing" title="Multipath-Specific Addressing">
+
+<t>An ATSSS-capable UE is assigned two additional IP addresses/prefixes, called "link-specific multipath" addresses/prefixes; each associated with an access network. These addresses are only used by the MPTCP functionality of the UE to manage subflows that are established with the assistance of the MPTCP proxy.</t>
+
+<t>Link-specific multipath addresses/prefixes may not be globally reachable IP addresses/prefixes <xref target="RFC8190"/>.</t>
+
+<t>Note, "Link-specific multipath" addresses/prefixes are not link-local addresses/prefixes (i.e., 169.254.0.0/16 <xref target="RFC8690"/> or fe80::/10 <xref target="RFC4291"/>).</t>
 
 </section>
 </section>
-<section anchor="bytestreams" title="Carrying bytestreams over different access networks">
+</section>
+<section anchor="atsss-version-2" title="ATSSS version 2">
+
+<t>The MPTCP-based ATSSS discussed in the previous section is specific to TCP, obviously. In particular, it does not provide a similar feature for UDP flows that would require such service. A UDP flow can be defined as series of UDP packets that have the same source and destination address and port numbers.</t>
+
+<t>ATSSS version 2 aims at providing the same service as ATSSS version 1, i.e.
+splitting, switching and steering, to non-TCP flows. Such flows include generic
+UDP flows, QUIC connections, DTLS or IPSec flows between the UE and a remote
+host. 3GPP discussed several proposals to carry non-TCP traffic, including
+using TCP as proposed earlier in <xref target="I-D.boucadair-mptcp-plain-mode"/>,
+using multipath extensions to DCCP <xref target="I-D.amend-tsvwg-multipath-dccp"/>.
+The work within 3GPP now focuses on using Multipath extensions to QUIC
+<xref target="I-D.deconinck-quic-multipath"/>.</t>
+
+<t>It appears that Multipath QUIC brings several benefits to support the ATSSS
+service. First, Multipath QUIC is a multipath transport protocol which is
+capable of splitting data over different access networks as Multipath TCP.
+Measurements and simulations show that Multipath QUIC provides similar
+performance as Multipath TCP when carrying bytestreams over different
+access networks <xref target="MPQUIC-Conext"/>. Second, Multipath QUIC can be combined
+with the Unreliable Datagram Extension <xref target="I-D.ietf-quic-datagram"/> that
+provides the capability to transport unreliable messages such as UDP datagrams
+or IP packets inside a QUIC session. Third,the MASQUE BOF is currently
+discussing different solutions to provide proxy services over a QUIC
+connection <xref target="I-D.schinazi-masque-protocol"/>,<xref target="I-D.schinazi-masque-connect-udp"/>,
+<xref target="I-D.piraux-quic-tunnel"/>,<xref target="I-D.piraux-quic-tunnel-tcp"/>.</t>
+
+<t>Some ATSSS modes can be natively supported by the base QUIC specification. For example, the "Active-Standby" and "Smallest Delay" steering modes can be supported directly between an UE and a QUIC server without any assistance from the network other than the performance measurement information.</t>
+
+<t>Nevertheless, blindly distributing packets among existing paths may lead to complications such as:
+- Aggressive use of user quota if one of the access networks is subject to volume-based quota. 
+- The steering policy as currently defined in ATSSS is local to the UE and the proxy. There are no means to signal that policy to an upstream server. 
+- Frequent connection migration if both access networks are used to forward data; each with a distinct source IP address.</t>
+
+<section anchor="paragraph-to-remove-" title="Paragraph to remove ?">
+
+<t>Some proposals were made in the past to encapsulate UDP in MPTCP (by means of header swapping and extraction of the UDP payload). For example, early versions of specified how UDP flows, in particular, can be distributed among available paths by leveraging MPTCP capabilities. It does so by including a "Protocol" TLV in the MPTCP payload; doing so allows an MPTCP Proxy to unambiguously identify UDP packets vs. native TCP connections. Some modifications are also required at the MPTCP Proxy to avoid HOL blocking issues of UDP-encapsulated data. This design approach is sub-optimal if the UDP-encapsulated data carry its own congestion control signals (that are not visible to the MPTCP proxy because these signals are encrypted such as in QUIC).</t>
 
 </section>
-<section anchor="packets" title="Carrying packets over different access networks">
+</section>
+<section anchor="terms-used-in-this-document" title="Terms used in this document">
+
+<t>Access Traffic Steering, Switching, and Splitting (ATSSS) service - PR8</t>
+
+<t>MPTCP Client - PR10</t>
+
+<t>Access Net - PR10</t>
+
+<t>3GPP Core Net - PR10</t>
+
+<t>ATSSS Rules - PR10</t>
+
+<t>MPTCP Proxy - PR10</t>
+
+<t>UE - PR10 (Med's diagram)</t>
+
+<t>AMF - PR10 (Med's diagram)</t>
+
+<t>SMF - PR10 (Med's diagram)</t>
+
+<t>PCF - PR10 (Med's diagram)</t>
+
+<t>UPF - PR10 (Med's diagram)</t>
+
+<t>DN - PR10 (Med's diagram)</t>
+
+<t>ATSSS-LL PR10 (Med's diagram)</t>
+
+<t>PMF PR10 (Med's diagram)</t>
+
+<t>Packet Data Network (PDN) - PR11</t>
+
+<t>UE (User Equipment) - PR11</t>
+
+<t>Access Point Name (APN) - PR11</t>
+
+<t>User Plane - PR11</t>
+
+<t>The 5G Core (5GC) - PR11</t>
+
+<t>Data Network Name (DNN) - PR11</t>
+
+<t>PDU Connectivity Service - PR11</t>
+
+<t>PDU Sessions - PR11</t>
+
+<t>3GPP access network - PR11</t>
+
+<t>Access Traffic Steering - PR11</t>
+
+<t>Access Traffic Switching - PR11</t>
+
+<t>Access Traffic Splitting - PR11</t>
+
+<t>Transport Converter - PR11</t>
+
+<t>link-specific multipath" addresses/prefixes - PR12</t>
+
+<t>Multi-Access (MA) PDU session IP address - PR14</t>
+
+<t>External Realm - PR14</t>
+
+<t>Active-Standby - PR15</t>
+
+<t>"Smallest Delay" - PR15</t>
+
+<t>"Load-Balancing" - PR15</t>
+
+<t>Priority-Based" - PR15</t>
+
+<t>SYN - PR16</t>
+
+<t>ACK - PR16</t>
+
+<t>MPC - PR16</t>
+
+<t>0-RTT (Zero Round-Trip Time) - PR16</t>
+
+<t>GPRS Tunneling Protocol for the user plane (GTP-U) - PR17</t>
 
 </section>
 <section anchor="conclusion" title="Conclusion">
 
 <t>Based on the two above questions, it should be clear that MPQUIC could
 cover both cases.</t>
-
-<figure title="A simple figure" anchor="fig-ascii"><artwork><![CDATA[
-ASCII figure
-
-]]></artwork></figure>
 
 </section>
 
@@ -236,6 +525,313 @@ ASCII figure
 </reference>
 
 
+
+<reference anchor="I-D.ietf-tcpm-converters">
+<front>
+<title>0-RTT TCP Convert Protocol</title>
+
+<author initials='O' surname='Bonaventure' fullname='Olivier Bonaventure'>
+    <organization />
+</author>
+
+<author initials='M' surname='Boucadair' fullname='Mohamed Boucadair'>
+    <organization />
+</author>
+
+<author initials='S' surname='Gundavelli' fullname='Sri Gundavelli'>
+    <organization />
+</author>
+
+<author initials='S' surname='Seo' fullname='SungHoon Seo'>
+    <organization />
+</author>
+
+<author initials='B' surname='Hesmans' fullname='Benjamin Hesmans'>
+    <organization />
+</author>
+
+<date month='March' day='22' year='2020' />
+
+<abstract><t>This document specifies an application proxy, called Transport Converter, to assist the deployment of TCP extensions such as Multipath TCP.  A Transport Converter may provide conversion service for one or more TCP extensions.  The conversion service is provided by means of the TCP Convert Protocol (Convert).  This protocol provides 0-RTT (Zero Round-Trip Time) conversion service since no extra delay is induced by the protocol compared to connections that are not proxied.  Also, the Convert Protocol does not require any encapsulation (no tunnels, whatsoever).  This specification assumes an explicit model, where the Transport Converter is explicitly configured on hosts.  As a sample applicability use case, this document specifies how the Convert Protocol applies for Multipath TCP.</t></abstract>
+
+</front>
+
+<seriesInfo name='Internet-Draft' value='draft-ietf-tcpm-converters-19' />
+<format type='TXT'
+        target='http://www.ietf.org/internet-drafts/draft-ietf-tcpm-converters-19.txt' />
+</reference>
+
+
+
+<reference anchor="I-D.ietf-quic-datagram">
+<front>
+<title>An Unreliable Datagram Extension to QUIC</title>
+
+<author initials='T' surname='Pauly' fullname='Tommy Pauly'>
+    <organization />
+</author>
+
+<author initials='E' surname='Kinnear' fullname='Eric Kinnear'>
+    <organization />
+</author>
+
+<author initials='D' surname='Schinazi' fullname='David Schinazi'>
+    <organization />
+</author>
+
+<date month='February' day='26' year='2020' />
+
+<abstract><t>This document defines an extension to the QUIC transport protocol to add support for sending and receiving unreliable datagrams over a QUIC connection.  Discussion of this work is encouraged to happen on the QUIC IETF mailing list quic@ietf.org (mailto:quic@ietf.org) or on the GitHub repository which contains the draft: https://github.com/quicwg/ datagram (https://github.com/quicwg/datagram).</t></abstract>
+
+</front>
+
+<seriesInfo name='Internet-Draft' value='draft-ietf-quic-datagram-00' />
+<format type='TXT'
+        target='http://www.ietf.org/internet-drafts/draft-ietf-quic-datagram-00.txt' />
+</reference>
+
+
+
+<reference anchor="I-D.schinazi-masque-protocol">
+<front>
+<title>The MASQUE Protocol</title>
+
+<author initials='D' surname='Schinazi' fullname='David Schinazi'>
+    <organization />
+</author>
+
+<date month='March' day='12' year='2020' />
+
+<abstract><t>This document describes MASQUE (Multiplexed Application Substrate over QUIC Encryption).  MASQUE is a framework that allows concurrently running multiple networking applications inside an HTTP/3 connection.  For example, MASQUE can allow a QUIC client to negotiate proxying capability with an HTTP/3 server, and subsequently make use of this functionality while concurrently processing HTTP/3 requests and responses.  Discussion of this work is encouraged to happen on the MASQUE IETF mailing list masque@ietf.org (mailto:masque@ietf.org) or on the GitHub repository which contains the draft: https://github.com/DavidSchinazi/masque-drafts (https://github.com/DavidSchinazi/masque-drafts).</t></abstract>
+
+</front>
+
+<seriesInfo name='Internet-Draft' value='draft-schinazi-masque-protocol-01' />
+<format type='TXT'
+        target='http://www.ietf.org/internet-drafts/draft-schinazi-masque-protocol-01.txt' />
+</reference>
+
+
+
+<reference anchor="I-D.schinazi-masque-connect-udp">
+<front>
+<title>The CONNECT-UDP HTTP Method</title>
+
+<author initials='D' surname='Schinazi' fullname='David Schinazi'>
+    <organization />
+</author>
+
+<date month='April' day='16' year='2020' />
+
+<abstract><t>This document describes the CONNECT-UDP HTTP method.  CONNECT-UDP is similar to the HTTP CONNECT method, but it uses UDP instead of TCP.  Discussion of this work is encouraged to happen on the MASQUE IETF mailing list masque@ietf.org or on the GitHub repository which contains the draft: https://github.com/DavidSchinazi/masque-drafts.</t></abstract>
+
+</front>
+
+<seriesInfo name='Internet-Draft' value='draft-schinazi-masque-connect-udp-00' />
+<format type='TXT'
+        target='http://www.ietf.org/internet-drafts/draft-schinazi-masque-connect-udp-00.txt' />
+</reference>
+
+
+
+<reference anchor="I-D.piraux-quic-tunnel">
+<front>
+<title>Tunneling Internet protocols inside QUIC</title>
+
+<author initials='M' surname='Piraux' fullname='Maxime Piraux'>
+    <organization />
+</author>
+
+<author initials='O' surname='Bonaventure' fullname='Olivier Bonaventure'>
+    <organization />
+</author>
+
+<date month='March' day='9' year='2020' />
+
+<abstract><t>This document specifies methods for tunneling Ethernet frames and Internet protocols such as TCP, UDP, IP and QUIC inside a QUIC connection.</t></abstract>
+
+</front>
+
+<seriesInfo name='Internet-Draft' value='draft-piraux-quic-tunnel-01' />
+<format type='TXT'
+        target='http://www.ietf.org/internet-drafts/draft-piraux-quic-tunnel-01.txt' />
+</reference>
+
+
+
+<reference anchor="I-D.piraux-quic-tunnel-tcp">
+<front>
+<title>Tunneling TCP inside QUIC</title>
+
+<author initials='M' surname='Piraux' fullname='Maxime Piraux'>
+    <organization />
+</author>
+
+<author initials='O' surname='Bonaventure' fullname='Olivier Bonaventure'>
+    <organization />
+</author>
+
+<date month='March' day='9' year='2020' />
+
+<abstract><t>This document specifies a new operating mode for a QUIC tunnel to efficiently convey TCP bytestreams.</t></abstract>
+
+</front>
+
+<seriesInfo name='Internet-Draft' value='draft-piraux-quic-tunnel-tcp-00' />
+<format type='TXT'
+        target='http://www.ietf.org/internet-drafts/draft-piraux-quic-tunnel-tcp-00.txt' />
+</reference>
+
+
+
+<reference anchor="I-D.boucadair-mptcp-plain-mode">
+<front>
+<title>Extensions for Network-Assisted MPTCP Deployment Models</title>
+
+<author initials='M' surname='Boucadair' fullname='Mohamed Boucadair'>
+    <organization />
+</author>
+
+<author initials='C' surname='Jacquenet' fullname='Christian Jacquenet'>
+    <organization />
+</author>
+
+<author initials='O' surname='Bonaventure' fullname='Olivier Bonaventure'>
+    <organization />
+</author>
+
+<author initials='D' surname='Behaghel' fullname='Denis Behaghel'>
+    <organization />
+</author>
+
+<author initials='s' surname='stefano.secci@lip6.fr' fullname='stefano.secci@lip6.fr'>
+    <organization />
+</author>
+
+<author initials='W' surname='Henderickx' fullname='Wim Henderickx'>
+    <organization />
+</author>
+
+<author initials='R' surname='Skog' fullname='Robert Skog'>
+    <organization />
+</author>
+
+<author initials='S' surname='Vinapamula' fullname='Suresh Vinapamula'>
+    <organization />
+</author>
+
+<author initials='S' surname='Seo' fullname='SungHoon Seo'>
+    <organization />
+</author>
+
+<author initials='W' surname='Cloetens' fullname='Wouter Cloetens'>
+    <organization />
+</author>
+
+<author initials='U' surname='Meyer' fullname='Ullrich Meyer'>
+    <organization />
+</author>
+
+<author initials='L' surname='Contreras' fullname='Luis Contreras'>
+    <organization />
+</author>
+
+<author initials='B' surname='Peirens' fullname='Bart Peirens'>
+    <organization />
+</author>
+
+<date month='March' day='9' year='2017' />
+
+<abstract><t>Because of the lack of Multipath TCP (MPTCP) support at the server side, some service providers now consider a network-assisted model that relies upon the activation of a dedicated function called MPTCP Conversion Point (MCP).  Network-Assisted MPTCP deployment models are designed to facilitate the adoption of MPTCP for the establishment of multi-path communications without making any assumption about the support of MPTCP by the communicating peers.  MCPs located in the network are responsible for establishing multi-path communications on behalf of endpoints, thereby taking advantage of MPTCP capabilities to achieve different goals that include (but are not limited to) optimization of resource usage (e.g., bandwidth aggregation), of resiliency (e.g., primary/backup communication paths), and traffic offload management.  This document specifies extensions for Network-Assisted MPTCP deployment models.</t></abstract>
+
+</front>
+
+<seriesInfo name='Internet-Draft' value='draft-boucadair-mptcp-plain-mode-10' />
+<format type='TXT'
+        target='http://www.ietf.org/internet-drafts/draft-boucadair-mptcp-plain-mode-10.txt' />
+</reference>
+
+
+
+<reference  anchor="RFC5533" target='https://www.rfc-editor.org/info/rfc5533'>
+<front>
+<title>Shim6: Level 3 Multihoming Shim Protocol for IPv6</title>
+<author initials='E.' surname='Nordmark' fullname='E. Nordmark'><organization /></author>
+<author initials='M.' surname='Bagnulo' fullname='M. Bagnulo'><organization /></author>
+<date year='2009' month='June' />
+<abstract><t>This document defines the Shim6 protocol, a layer 3 shim for providing locator agility below the transport protocols, so that multihoming can be provided for IPv6 with failover and load-sharing properties, without assuming that a multihomed site will have a provider-independent IPv6 address prefix announced in the global IPv6 routing table.  The hosts in a site that has multiple provider- allocated IPv6 address prefixes will use the Shim6 protocol specified in this document to set up state with peer hosts so that the state can later be used to failover to a different locator pair, should the original one stop working.  [STANDARDS-TRACK]</t></abstract>
+</front>
+<seriesInfo name='RFC' value='5533'/>
+<seriesInfo name='DOI' value='10.17487/RFC5533'/>
+</reference>
+
+
+
+<reference  anchor="RFC6275" target='https://www.rfc-editor.org/info/rfc6275'>
+<front>
+<title>Mobility Support in IPv6</title>
+<author initials='C.' surname='Perkins' fullname='C. Perkins' role='editor'><organization /></author>
+<author initials='D.' surname='Johnson' fullname='D. Johnson'><organization /></author>
+<author initials='J.' surname='Arkko' fullname='J. Arkko'><organization /></author>
+<date year='2011' month='July' />
+<abstract><t>This document specifies Mobile IPv6, a protocol that allows nodes to remain reachable while moving around in the IPv6 Internet.  Each mobile node is always identified by its home address, regardless of its current point of attachment to the Internet.  While situated away from its home, a mobile node is also associated with a care-of address, which provides information about the mobile node's current location.  IPv6 packets addressed to a mobile node's home address are transparently routed to its care-of address.  The protocol enables IPv6 nodes to cache the binding of a mobile node's home address with its care-of address, and to then send any packets destined for the mobile node directly to it at this care-of address.  To support this operation, Mobile IPv6 defines a new IPv6 protocol and a new destination option.  All IPv6 nodes, whether mobile or stationary, can communicate with mobile nodes.  This document obsoletes RFC 3775. [STANDARDS-TRACK]</t></abstract>
+</front>
+<seriesInfo name='RFC' value='6275'/>
+<seriesInfo name='DOI' value='10.17487/RFC6275'/>
+</reference>
+
+
+
+<reference  anchor="RFC5213" target='https://www.rfc-editor.org/info/rfc5213'>
+<front>
+<title>Proxy Mobile IPv6</title>
+<author initials='S.' surname='Gundavelli' fullname='S. Gundavelli' role='editor'><organization /></author>
+<author initials='K.' surname='Leung' fullname='K. Leung'><organization /></author>
+<author initials='V.' surname='Devarapalli' fullname='V. Devarapalli'><organization /></author>
+<author initials='K.' surname='Chowdhury' fullname='K. Chowdhury'><organization /></author>
+<author initials='B.' surname='Patil' fullname='B. Patil'><organization /></author>
+<date year='2008' month='August' />
+<abstract><t>Network-based mobility management enables IP mobility for a host without requiring its participation in any mobility-related signaling.  The network is responsible for managing IP mobility on behalf of the host.  The mobility entities in the network are responsible for tracking the movements of the host and initiating the required mobility signaling on its behalf.  This specification describes a network-based mobility management protocol and is referred to as Proxy Mobile IPv6.  [STANDARDS-TRACK]</t></abstract>
+</front>
+<seriesInfo name='RFC' value='5213'/>
+<seriesInfo name='DOI' value='10.17487/RFC5213'/>
+</reference>
+
+
+
+<reference  anchor="RFC6459" target='https://www.rfc-editor.org/info/rfc6459'>
+<front>
+<title>IPv6 in 3rd Generation Partnership Project (3GPP) Evolved Packet System (EPS)</title>
+<author initials='J.' surname='Korhonen' fullname='J. Korhonen' role='editor'><organization /></author>
+<author initials='J.' surname='Soininen' fullname='J. Soininen'><organization /></author>
+<author initials='B.' surname='Patil' fullname='B. Patil'><organization /></author>
+<author initials='T.' surname='Savolainen' fullname='T. Savolainen'><organization /></author>
+<author initials='G.' surname='Bajko' fullname='G. Bajko'><organization /></author>
+<author initials='K.' surname='Iisakkila' fullname='K. Iisakkila'><organization /></author>
+<date year='2012' month='January' />
+<abstract><t>The use of cellular broadband for accessing the Internet and other data services via smartphones, tablets, and notebook/netbook computers has increased rapidly as a result of high-speed packet data networks such as HSPA, HSPA+, and now Long-Term Evolution (LTE) being deployed.  Operators that have deployed networks based on 3rd Generation Partnership Project (3GPP) network architectures are facing IPv4 address shortages at the Internet registries and are feeling pressure to migrate to IPv6.  This document describes the support for IPv6 in 3GPP network architectures.  This document is  not an Internet Standards Track specification; it is published for  informational purposes.</t></abstract>
+</front>
+<seriesInfo name='RFC' value='6459'/>
+<seriesInfo name='DOI' value='10.17487/RFC6459'/>
+</reference>
+
+
+
+<reference  anchor="RFC6824" target='https://www.rfc-editor.org/info/rfc6824'>
+<front>
+<title>TCP Extensions for Multipath Operation with Multiple Addresses</title>
+<author initials='A.' surname='Ford' fullname='A. Ford'><organization /></author>
+<author initials='C.' surname='Raiciu' fullname='C. Raiciu'><organization /></author>
+<author initials='M.' surname='Handley' fullname='M. Handley'><organization /></author>
+<author initials='O.' surname='Bonaventure' fullname='O. Bonaventure'><organization /></author>
+<date year='2013' month='January' />
+<abstract><t>TCP/IP communication is currently restricted to a single path per connection, yet multiple paths often exist between peers.  The simultaneous use of these multiple paths for a TCP/IP session would improve resource usage within the network and, thus, improve user experience through higher throughput and improved resilience to network failure.</t><t>Multipath TCP provides the ability to simultaneously use multiple paths between peers.  This document presents a set of extensions to traditional TCP to support multipath operation.  The protocol offers the same type of service to applications as TCP (i.e., reliable bytestream), and it provides the components necessary to establish and use multiple TCP flows across potentially disjoint paths.  This  document defines an Experimental Protocol for the Internet community.</t></abstract>
+</front>
+<seriesInfo name='RFC' value='6824'/>
+<seriesInfo name='DOI' value='10.17487/RFC6824'/>
+</reference>
+
+
 <reference anchor="TS23501" target="https://www.3gpp.org/ftp/Specs/archive/23_series/23.501/">
   <front>
     <title>Technical Specification Group Services and System Aspects; System Architecture for the 5G System; Stage 2 (Release 16)</title>
@@ -254,10 +850,73 @@ ASCII figure
     <author initials="S." surname="Seo">
       <organization></organization>
     </author>
-    <date year="n.d."/>
+    <date year="2016"/>
   </front>
   <seriesInfo name="IETF Journal, Fall 2016" value=""/>
 </reference>
+<reference anchor="MPQUIC-Conext" >
+  <front>
+    <title>Multipath QUIC - Design and evaluation</title>
+    <author initials="Q." surname="De Coninck">
+      <organization></organization>
+    </author>
+    <author initials="O." surname="Bonaventure">
+      <organization></organization>
+    </author>
+    <date year="2017"/>
+  </front>
+  <seriesInfo name="Proceedings of the 13th international conference on emerging networking experiments and technologies 2017 Nov 28 (pp. 160-166)." value=""/>
+</reference>
+
+
+
+
+<reference  anchor="RFC8190" target='https://www.rfc-editor.org/info/rfc8190'>
+<front>
+<title>Updates to the Special-Purpose IP Address Registries</title>
+<author initials='R.' surname='Bonica' fullname='R. Bonica'><organization /></author>
+<author initials='M.' surname='Cotton' fullname='M. Cotton'><organization /></author>
+<author initials='B.' surname='Haberman' fullname='B. Haberman'><organization /></author>
+<author initials='L.' surname='Vegoda' fullname='L. Vegoda'><organization /></author>
+<date year='2017' month='June' />
+<abstract><t>This memo updates the IANA IPv4 and IPv6 Special-Purpose Address Registries to address issues raised by the definition of a &quot;global&quot; prefix.  It also corrects several errors in registry entries to ensure the integrity of the IANA Special-Purpose Address Registries.</t><t>This memo updates RFC 6890.</t></abstract>
+</front>
+<seriesInfo name='BCP' value='153'/>
+<seriesInfo name='RFC' value='8190'/>
+<seriesInfo name='DOI' value='10.17487/RFC8190'/>
+</reference>
+
+
+
+<reference  anchor="RFC8690" target='https://www.rfc-editor.org/info/rfc8690'>
+<front>
+<title>Clarification of Segment ID Sub-TLV Length for RFC 8287</title>
+<author initials='N.' surname='Nainar' fullname='N. Nainar'><organization /></author>
+<author initials='C.' surname='Pignataro' fullname='C. Pignataro'><organization /></author>
+<author initials='F.' surname='Iqbal' fullname='F. Iqbal'><organization /></author>
+<author initials='A.' surname='Vainshtein' fullname='A. Vainshtein'><organization /></author>
+<date year='2019' month='December' />
+<abstract><t>RFC 8287 defines the extensions to perform LSP Ping and Traceroute for Segment Routing IGP-Prefix and IGP-Adjacency Segment Identifiers (SIDs) with the MPLS data plane. RFC 8287 proposes three Target Forwarding Equivalence Class (FEC) Stack sub-TLVs. While RFC 8287 defines the format and procedure to handle those sub-TLVs, it does not sufficiently clarify how the length of the Segment ID sub-TLVs should be computed to be included in the Length field of the sub-TLVs. This ambiguity has resulted in interoperability issues.</t><t>This document updates RFC 8287 by clarifying the length of each of the Segment ID sub-TLVs defined in RFC 8287.</t></abstract>
+</front>
+<seriesInfo name='RFC' value='8690'/>
+<seriesInfo name='DOI' value='10.17487/RFC8690'/>
+</reference>
+
+
+
+<reference  anchor="RFC4291" target='https://www.rfc-editor.org/info/rfc4291'>
+<front>
+<title>IP Version 6 Addressing Architecture</title>
+<author initials='R.' surname='Hinden' fullname='R. Hinden'><organization /></author>
+<author initials='S.' surname='Deering' fullname='S. Deering'><organization /></author>
+<date year='2006' month='February' />
+<abstract><t>This specification defines the addressing architecture of the IP Version 6 (IPv6) protocol.  The document includes the IPv6 addressing model, text representations of IPv6 addresses, definition of IPv6 unicast addresses, anycast addresses, and multicast addresses, and an IPv6 node's required addresses.</t><t>This document obsoletes RFC 3513, &quot;IP Version 6 Addressing Architecture&quot;.   [STANDARDS-TRACK]</t></abstract>
+</front>
+<seriesInfo name='RFC' value='4291'/>
+<seriesInfo name='DOI' value='10.17487/RFC4291'/>
+</reference>
+
+
 
 
     </references>
@@ -267,45 +926,167 @@ ASCII figure
   </back>
 
 <!-- ##markdown-source:
-H4sIAGXWmV4AA7VXbW8aRxD+jsR/GNkfasu+A+wkbagqFeM4cWUCMURV1VbV
-cjfANsfuZXcPQo372zuze7zaif2lJyXe3Xl2ZnbeiaKoWnHSZdiE1qDf78Mt
-fi6kwSkqZ2GkDXz4eN2uVsRwaHDW9LuArFZSnSgxpZupESMXDTMR0d0kEs5a
-Gxn8TP/X64QTjkBn9bN6VH8RNV5WKwmdjLVZNAG/5NVKtSJz0wRnCuvO6vXX
-9TMSaFDwkVA218ZVK3NtPo2NLvJSiV9pL9UY3vJZtfIJF4RIm3CtHBqFLrpk
-rZh5olMCNqGwkbCJlNWKdUKlf4lMK1JsgbZayWUTfnc6OQVL0gyOLK0WU178
-yTxE4SbaNKsVIIMBSGWb0I3hQisxI1MVBvk4mKObyZlEs0/UZiyU/Ec4qVUT
-PrZvdDETUjEJp0Jm64vx1sWfiyQLuHiIO9I7MfSkEcWXjeCO+CKnuHX8tMhw
-JQ5Xvi7sQwyXCG2tpEo+bQR+KEhLqfZoT0v9HO7FKSbh2tcl90mymJOn7UZs
-P0eVkIG3CLsyB0xXDlpTNDIRW5JtuJqGm7FEN/p5zKQ40VN2tNJmSlxmyL6G
-26v2D43vX6zWZ43Ga7+miFWjHeR1dLl5TsiDaZE5mQs3WQNIe5VGzs7m4w01
-SpMk95BB/+z8Zb3h1wCbkPNfFOxx/rbXg6Nzk8JbVGj8g6EnjKONncgcekb/
-jYk7DvfK3B5gMlFkiYxtl8gRLf1FnzzQRzOTCVqgrID+wjqcQosslTj743pv
-kol0dERB6euCmyC8fFuSCebEGOEMjm4xQ2ERGq9KFVbp33hdqiTMGF0TJs7l
-tlmrzefz+Hyc5zH5sDZyeY1VtDXBAmdYOzv/y5IX0dIqJuvUvDHfDK5+abz6
-pqUepucWkcKqj3rHRp2VQ2DQ7lFI55lecBkMoKADe73ppcMvujBKZKdwJbKM
-n/eKw6daiaIIxNBS5Up89RlMpAUqlQXzgiFxGWULyA1aX2LZjKHy2uAFGCKX
-NRv8hCnMpZtw9rDne95Fku6Z7TpNnmQ+62oJmVhQHYGVPlOZphkG/Q65Qhqd
-FomPALg7lLy/X1EpkdlkRAvxcIkjqaTfh+cgUK0FLrYWDjof+4OD0/AX3nf9
-+vYNFejbN5e87r9r3dysFwFRrdCu+/GmBPBqc7Xd7XTevL8Mt+kU9o46rd/o
-DylGXLq9wXX3fevmgHxKBti2M7UPcJpsSSTqB2RuR6YUhECbGDmkDd25IEc3
-XlQrd3dlct/f+yXn/P09zCeovCwyMPksbMnQCxB5jsIwC3Z+InLpRGbpZSTB
-TvRcwQQNxmyw36mwsEp/NuEQjroXTVDageU0miMoJE3cRNAJeoec0ul3xNMi
-khdJ9ePglndyPIEMZ5hBd8aRgnNynS6X3nuHh9S9RySXKtxOvjKxBVZO8yyE
-lFnDxHZay5Xy9K67OwJFTL6/j8FH0r9f/5gMEJffUTlKFBnVlCujp/AeHffv
-43j9eTw8+3sMH219z8DXtjd/fA1/suK4hFZCNdGy7tCCZXTyKH65w/KIk/Q4
-CFs+gd/X/0n83vd/4aPH7Mp4Ng39O9mF75g12DXYcI0rTXpCLJadHhfXXaHL
-0NTamkKQjc34AFxGNQqVGm25RaFZMot2Jimd9vTe9afXaUmd8MtijdvS4sS/
-Y/8hjzz8ZH3lUUttvQA4RZ5CPUDsC3yAeBCzJeLxKL2gKF1pu33tSFGhD5FZ
-26fu6PBEjt9RCVtVhdA1fzrob6rK48XHDwuhIHAn222zB75wXX0DAaNC+cIo
-MukWVI0h8f4PUKqbPG04oPISKv1I8CBDc5gi8Vxbtael0v6tJTeGYC4VCpKF
-o1XrSGhoOd3Nea782+Y9PqXfEMQ9BDFxpt8oZAmhypOcAw64JgOSdmhOaS6F
-oXYTWox8i94TT9V+IplFlul5GAbK5xF3bhwFT20Oy9f6GYG4h0upJl24mdCz
-p1IxLOhRvp5btm9BF6SB5x3IIYH867b15pZJN0dyTF4LY0fpFeML+YgLOXMp
-lQ9ta8zPpXan554WptpsA2I/WurDbo6ovqVEb60E2TiNwc9NBjM/qPrJdt2e
-CssT0kF88Gy+YRSi4UYYs+DLw4VDmtFQTG1wWCpHPnofRsjd4RZ4MyatOOUi
-+YTuGVxK4PaglWT0FMrNu8NkvfH0CwrGdD3WUfyKIfHn303Wm+OUZkA2RpGl
-POMkGU8j3h+dnv91nDCJf/qyVhyBPr5DODyjl7f67etrCKHwJJzLAkHDj+tV
-XSjnDSyZhET/D3d86nNvEAAA
+H4sIAJmksl4AA+1c6ZLjuJH+z6dAVMfGqKJF1dHHTMu7tqvraJddh6al8oR3
+dsIBkSgJborkEKSq5epy+EF2X85PsnkAIKiju9fe3V8ue2YkEkcikceXiYTi
+OI5qXWdqKE4m4/FYvFc/N7pSC5XXRtwXlfj+7vI0ktNppZZD+sINo7RIcrmA
+fmkl7+t4mskYeiaxrI0xcaV+jg8Po1TW0OL48PgwPnwVH72KEngwK6rVUKiP
+ZRTpshqKumpMfXx4+ObwOJKVkvhE5qYsqjp6KKoPs6poSjv3D/Bd5zPxDp9F
+H9QKGqRDcZnXqspVHZ8hMVGUFCm0GorGxNIkWkemlnn6R5kVOdCzUiYq9VD8
+WBdJXxiYp1L3Bj6tFvjhpyiSTT0vqmEk4kgInZuhuB6It0WTyFTqCp7x0q+L
+Ofw37bwpqpnM9Z9lrYt8KG5hJTMFjw3MoeqhOM0KI06LpqpVJgS8SHQN3Hiv
+8hyogq9FCgO/eHUI3MNvTV4jty5gnATHUQups6FY8MyDqZv51wXNNEiKRUD1
+LVKdyyXsZlMpT/dtppdaVWvvupTfnV4VzVLqvJ3UdhsE3X7dJBk3G0xVl10j
+XcnmY8sr+VEvVPv0i7NxhwF32DXP9wNxpoCfuc6TD36u7xugTufdV1+c8Gfu
+NUhVwp12TTqGSeUDyKHxM45LBftTBc+7003wdV6Lk4WqdCLbSQ13TLnfQKv6
+/tczfEU7GeVFtYAhlgpkUby/OP3u6NuX9uPx0dEb/Bjp/D5sdRmftUtgnVw0
+Wa1LWc/de6A5T+PaLB9m7cs4TZLStUBC4jopFzGMtFQgrpXpvKOBQb/lrJIL
+98Ykc53LP+t4IQ2wMy6rAnSsyHa9h7FzldRxk/qJS9pvHr5u4HW2+w0S6N56
+TYgXJTyOywz2LV6gOjG/Xr168cJ+fH387Sv39PjIP3356o37+N0xsXkyPgZV
+PMKPQnijQH8xy8KLd6OR6L2oUvFO5aqi7RYjWdXwxcx1KUZV8SdY4j51s6Z2
+opJ5DmKQodwk+h4+Uj+yamKsqqVOlBFgssR4ZWq1ECcgJ0ltfuG/V8DJGh6B
+DpKZrudKvHpnX0Mz2BcljkXvvcqUNEocvWYKnEU+esMEyWqGZmle16UZHhw8
+PDwMXszKcgDie3BflwdIoDmQON1SHRy/+KMBAVYGPg2AMQfI/PPJxW+PXn+G
+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
+5S/8SAXqNjfa/DEK33/771S0tyvZvlIZgtvPnH69A1x4W9xuEQj6Osu4zqFe
+98otttxWzUCSvq0AoIWeHTra6VPwYglsQufOgLO6diN9Ls1doA3wzcbhFZc1
+gLRZNx0oUnDoH+J+gihocaB9RsAfAFWe4k0Lf4qO2NmKGcNeuibOj/EcDGES
+oH0bZy3aG6BOcodY+zObEXJd+oQyXdH4uSnA0uj7oHxkWyE0YD/6PQKYYQmy
+uVAWn1B3KjygWucO1EdWtYIeXvVi4YBhGVzZuCmopbUxzQSrmS0cQwayPiC8
+lrak105ENSWiKdkU2V0jsi6ofD+vw5RUW48F68ZT1E3Tag8McWB7xk6ab5F3
+UO4MvqZ2oKUFpDbqHMkKjUU574adpCCtw37ARS5kqtoErCFOtxGuItuj3Xlw
+D/SG2QE7Noedx7qkB/BtDq5QoN69VESwixK7+2t6hW5/1flpifbXKtBnBCBG
+d3HkV9Qr2ZNaLsEAbvgTirWfmri0kBTiyOmqRSp8mOASAajTk6vfOz7ZuIJX
+9QvobzPQ9tTbH59zUg/Lw3MJLmXWECp2d3lWHUi6BFrYUK1fwAd3hfsGpqQt
+8edyEwx+/RUrm4Jdm1kuC52K39xegXoXCV3o1cY0HhLHwV6zqNkcb2p/aMUl
+cVgXY0wwgblzZepbR7AwECEMnm8H1SWuGp01CUKZTkYGzz+CwvPuoU0iG/61
+Crwyb7tTKJgn1arEqZ23hE1CE0qhjrsnaoI7YkGFHID4f/h3VmIxev9dFHXO
+6/HZ0aEfHY8I3aPuUatvGJzSu2fhTrpnYKr4o+hdq/QbWIkmVLAPQ1xf7Hw3
+/sy70enud3ej3e/ObnaTQtmJq6tdMwI1O97sugDHUx0RA9Zvg/p3O25ntn3b
+26bu0WS+fu/Pvdl1z9K933WrqtPA3wdzD7fcjFonf10Ud773ceKuBl5k/Wq3
+HE+5d/+DNBD3OY64OCu20/auT/bprpmrAQ4ODKnDyyg6d3ea3yuZLfzjLrLi
+x6+iaCu0Cl5u1Bv6l75u7y2ChT3/HI8U6fNrmPT0d/4zpvXd588mqV2jd6P3
+YzEh+IkM9gljdz7V3kIVvXeTUXxnu34b2R8SADfDscOzxH95iiKi19XtUR6P
+yoz5IiAF75puR2E2BCOVDC/cc2w1soE+vIooscwIg37kAWFB9N+kiJY2jlIA
+AA==
 
 -->
 
