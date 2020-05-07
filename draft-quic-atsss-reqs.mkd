@@ -249,7 +249,7 @@ The traffic that matches an ATSSS rule can be distributed among available access
 We first describe version 1 of the ATSSS specification that uses
 Multipath TCP {{RFC6824}} and the 0-RTT convert protocol {{I-D.ietf-tcpm-converters}}. We then discuss the requirements for version 2 of the ATSSS specification.
 
-# ATSSS version 1
+# ATSSS Version 1: Support for TCP
 
 For ATSSS with Multipath TCP functionality, a client with two interfaces connected to two disjoint access networks (in this case, Access Net A and Access Net B), uses MPTCP to reach an MPTCP proxy over either, or both, of the access networks. This allows the client to communicate with a server which does not terminate MPTCP connections.
 
@@ -309,7 +309,7 @@ Legend:
 
 This approach provides 0-RTT (Zero Round-Trip Time) conversion service since no extra delay is induced by the Convert protocol compared to connections that are not proxied. Also, the Convert Protocol does not require any encapsulation (no tunnels, whatsoever).
 
-# ATSSS Version 2
+# ATSSS Version 2: Handling Non-TCP
 
 The MPTCP-based ATSSS discussed in the previous section is specific to TCP, obviously. In particular, it does not provide a similar feature for UDP flows that would require such service. A UDP flow can be defined as series of UDP packets that have the same source and destination address and port numbers.
 
