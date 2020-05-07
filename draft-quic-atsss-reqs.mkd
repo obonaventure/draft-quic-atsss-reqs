@@ -346,10 +346,6 @@ Nevertheless, blindly distributing packets among existing paths may lead to comp
 
 - Frequent connection migration if both access networks are used to forward data; each with a distinct source IP address.
 
-The deployment of MPTCP may bring high complexity and high cost, e.g. MPTCP client requires native support in mobile phone as well as chip, which leads to difficulty to wide-scale MPTCP deployment. MPQUIC is implemented in application layer, which can bring more convenience in deployment.
-
-In addition, MPTCP is confronted with the longer update duration, e.g. the update of congestion control. This can be avoided by MPQUIC.
-
 # Terms used in this document
 
 Access Traffic Steering, Switching, and Splitting (ATSSS) service - PR8
