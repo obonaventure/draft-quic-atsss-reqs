@@ -246,8 +246,8 @@ The traffic that matches an ATSSS rule can be distributed among available access
 - “Load-Balancing”: The traffic associated with the matching flow will be distributed among available access networks following a distribution ratio (e.g., 30% via a first access, 70% via a second access).
 - “Priority-based”: For this mode, accesses are assigned priority levels that indicate which access to be used first. Concretely, the traffic associated with the matching flow will be steered on the access with a high priority till congestion is detected, then the overflow will be forwarded over a low priority access. 
 
-We first describe version 1 of the ATSSS specification that uses
-Multipath TCP {{RFC6824}} and the 0-RTT convert protocol {{I-D.ietf-tcpm-converters}}. We then discuss the requirements for version 2 of the ATSSS specification.
+We first describe the ATSSS as specified in Release 16 (called hereafter, ATSSS version 1) that uses
+Multipath TCP {{RFC6824}} and the 0-RTT convert protocol {{I-D.ietf-tcpm-converters}}. We then discuss the requirements for version 2 of the ATSSS specification that is planned for Release 17. More details about 3GPP releaes can be found at: https://www.3gpp.org/specifications/Releases.
 
 # ATSSS Version 1: Support for TCP
 
