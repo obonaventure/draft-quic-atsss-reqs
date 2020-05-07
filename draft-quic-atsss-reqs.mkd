@@ -327,10 +327,11 @@ respect to the ATSSS high-layer approach.
 That does not allow a simple defintion of a multipath transport protocol for UDP
 like it was done for TCP purposes. Even if one would limit to support the QUIC,
 as dominating part of the UDP share, only, this raises issues by its nature of
-an end-to-end encrypted protocol. A potentially upcoming Multipath QUIC
-{{I-D.deconinck-quic-multipath}} cannot be used in the ATSSS architecture like
-the MPTCP in {{fig-mptcp-arch}}, as it dowes not allow interception nor any
-other type of traffic management in an ATSSS UPF.
+an end-to-end encrypted protocol including its connection control signals. A
+potentially upcoming Multipath QUIC {{I-D.deconinck-quic-multipath}} cannot be
+used in the ATSSS architecture like the MPTCP in {{fig-mptcp-arch}}, as it
+does not allow interception nor any other type of traffic management in an ATSSS
+UPF.
 
 In consequence it is very likely that such traffic (UDP or a subset like QUIC)
 has to be encapsulated in a multipath capable protocol between UE and UPF, which
