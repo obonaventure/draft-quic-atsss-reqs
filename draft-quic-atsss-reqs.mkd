@@ -198,7 +198,11 @@ An UE can be provided a multi-access PDU Connectivity Service. That is, an UE ca
 
 To understand the operation of the ATSSS service, it is useful to consider the
 reference environment shown in {{fig-arch}}. An UE
-is attached to two different access networks (Net A and Net B).
+is attached to two different access networks (Net A and Net B). These
+two networks are potentially shared with other users and the available
+bandwidth varies over time. These fluctuations in bandwidth are managed by
+using congestion control schemes.
+
 One of these access networks is managed by a 5G provider according to
 the 3GPP specifications. The second network is potentially managed by
 a different organization. It is important to note that in this case, there
