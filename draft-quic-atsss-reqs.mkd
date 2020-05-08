@@ -153,8 +153,8 @@ as shown here.
 This document makes use of 3GPP specific terms defined in {{RFC6459}}, mainly the following ones: 
 
 -    Packet Data Network (PDN): is a packet-based network that
-      either belongs to the operator or is an external network such as
-      the Internet or a corporate intranet.  The user eventually
+      either belongs to the operator or is external (such as
+      the Internet or a corporate intranet).  The user eventually
       accesses services in one or more PDNs.  The operator's packet core
       networks are separated from packet data networks either by User Plane Functions (UPFs).
 
@@ -197,9 +197,10 @@ The UE interacts with a distant server
 through a ATSSS specific User Plane Function further referred to as "Proxy"
 which supports ATSSS and is part of the 5G network.
 The Proxy enables the UE to use a transport protocol that supports
-the different access networks even if the server does not support it (i.e., is not multipath-capable).
+the different access networks even if the server does not support it (i.e., is not multipath-capable
+at transport layer).
 
-The UE and the Proxy are provided, using the 5G control plane, rules that specify
+The 5G control plane provides the UE and the Proxy with rules that specify
 which flows are eligible to the ATSSS service.
 
 A simplified reference architecture is shown in {{fig-arch}}.
@@ -231,7 +232,7 @@ A simplified reference architecture is shown in {{fig-arch}}.
 {: #fig-arch title="Simplified Reference Architecture for ATSSS"}
 
 
-3GPP defined the following procedures {{TS23501}} that are applicable between "3GPP access" and "non-3GPP access" networks:
+3GPP defines the following procedures {{TS23501}} that are applicable between "3GPP access" and "non-3GPP access" networks:
  
 - Access Traffic Steering: selection of an access network for a new data flow and the transfer of the traffic of that data flow over the selected access network. 
 - Access Traffic Switching: migration of all packets of an ongoing data flow from one access network to another access network while ensuring session continuity. 
@@ -241,7 +242,7 @@ Techniques to provide ATSSS are classified by the 3GPP into two flavors: (1) hig
 
 The traffic that matches an ATSSS rule can be distributed among available access networks following one of these modes:
 
-- “Active-Standby”: The traffic associated with the matching flow will be forwarded via a specific access (called, active access) and switched to another access (called, standby access) when the active access is unavailable. 
+- “Active-Standby”: The traffic associated with the matching flow will be forwarded via a specific access (called 'active access') and switched to another access (called 'standby access') when the active access is unavailable. 
 - “Smallest Delay”: The traffic associated with the matching flow will be forwarded via the access that presents the smallest Round-Trip Time (RTT). To that aim, specific measurements are conducted by the UE and a dedicated function co-located with the Proxy. 
 - “Load-Balancing”: The traffic associated with the matching flow will be distributed among available access networks following a distribution ratio (e.g., 30% via a first access, 70% via a second access).
 - “Priority-based”: For this mode, accesses are assigned priority levels that indicate which access to be used first. Concretely, the traffic associated with the matching flow will be steered on the access with a high priority till congestion is detected, then the overflow will be forwarded over a low priority access. 
@@ -340,6 +341,7 @@ connection {{I-D.schinazi-masque-protocol}}{{I-D.schinazi-masque-connect-udp}}
 Some ATSSS modes can be natively supported by the base QUIC specification. For example, the “Active-Standby” and “Smallest Delay” steering modes can be supported directly between an UE and a QUIC server without any assistance from the network other than the performance measurement information. 
 
 Nevertheless, blindly distributing packets among existing paths may lead to complications such as:
+
 - Aggressive use of user quota if one of the access networks is subject to volume-based quota. 
 
 - The steering policy as currently defined in ATSSS is local to the UE and the proxy. There are no means to signal that policy to an upstream server. 
