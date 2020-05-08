@@ -147,6 +147,13 @@ equipped with multiple access interfaces. In this document, we abstract many of
 the technical details of future 5G networks to explain the requirements of the
 ATSSS service on IETF protocols.
 
+# Contribution and Discussion Venues for this draft. 
+
+(Note to RFC Editor - if this document ever reaches you, please remove this section)
+
+This document is under development in the Github repository at https://github.com/obonaventure/draft-quic-atsss-reqs.  Readers are invited to open issues and send pull requests with contributed text for this document.
+
+Substantial discussion of this document should take place on the QUIC working group mailing list (quic@ietf.org). Subscription and archive details are at https://www.ietf.org/mailman/listinfo/quic.
 
 # Conventions and Definitions
 
@@ -157,8 +164,6 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
 as shown here.
 
 [comment]: # (OB: not sure we need that section, we'll see later)
-
-
 
 # Terminology 
 
@@ -179,10 +184,6 @@ This document makes use of 3GPP specific terms defined in {{RFC6459}}, mainly th
  -    User Plane: refers to data traffic and the required sessions for
       the data traffic.  In practice, IP is the only data traffic
       protocol used in the user plane.
- 
- 
-
-
 
 # High level Overview {#overview}
 
@@ -467,11 +468,28 @@ MPC - PR16
 
 GPRS Tunneling Protocol for the user plane (GTP-U) - PR17
 
-
 # Conclusion {#conclusion}
 
 Based on the two above questions, it should be clear that MPQUIC could
 cover both cases.
 
+# IANA Considerations
 
+(Note to RFC Editor - if this document ever reaches you, please remove this section)
+
+This document makes no requests of IANA.
+
+# Security Considerations
+
+This document is informational in nature, providing a translation of a 3GPP specification for IETF readers who are not familiar with ATSSS or 5G. It has no effect on the security of ATSSS or 5G networks. 
+
+# Acknowledgements
+
+(Reviewers and commenters - your name goes here!)
+
+# Document History
+
+(Note to RFC Editor - if this document ever reaches you, please remove this section)
+
+Version -00: initial submission
 
