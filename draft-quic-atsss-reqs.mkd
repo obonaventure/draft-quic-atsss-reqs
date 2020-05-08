@@ -75,7 +75,7 @@ informative:
   I-D.piraux-quic-tunnel:
   I-D.piraux-quic-tunnel-tcp:
   I-D.boucadair-mptcp-plain-mode:
-  I-D.draft-bonaventure-iccrg-schedulers:
+  I-D.bonaventure-iccrg-schedulers:
   RFC5533:
   RFC6275:
   RFC5213:
@@ -89,6 +89,7 @@ informative:
     title: Multipath TCP Deployment
     seriesinfo: IETF Journal, Fall 2016
     date: 2016
+    target: https://www.ietfjournal.org/multipath-tcp-deployments/
   MPQUIC-Conext:
     author:
       - ins: Q. De Coninck
@@ -96,6 +97,7 @@ informative:
     title: Multipath QUIC - Design and evaluation 
     seriesinfo: Proceedings of the 13th international conference on emerging networking experiments and technologies 2017 Nov 28 (pp. 160-166).
     date: 2017
+    target: https://multipath-quic.org/
   QUIC-Deployment:
     author:
       - ins: M. Kuehlewind
@@ -110,7 +112,15 @@ informative:
     title: Increasing broadband reach with Hybrid Access Networks
     seriesinfo: IEEE Communications and Standards Magazine
     date: 2020
-
+    target: https://arxiv.org/abs/1907.04570
+  MPTester:
+    author:
+      - ins: Q. De Coninck
+      - ins: O. Bonaventure
+    title: MultipathTester - Comparing MPTCP and MPQUIC in Mobile Environments. In 2019 Network Traffic Measurement and Analysis Conference (TMA) 
+    date: 2019
+    target: https://multipath-quic.org/multipathtester/2019/06/18/mnm-paper.html
+    
 --- abstract
 
 This document briefly presents the Access Traffic Steering, Switching, and Splitting (ATSSS) service being specified within the 3rd Generation Partnership Project (3GPP). Future versions of the document will capture a set of data plane requirements to benefit from multipath capabilities. 
@@ -215,7 +225,7 @@ using congestion control schemes.
 One of these access networks is managed by a 5G provider according to
 the 3GPP specifications. The second network is potentially managed by
 a different organization. It is important to note that in this case, there
-is an IPsec tunnel between the UE and a dedicated device in the 5G network
+is an IPSec tunnel between the UE and a dedicated device in the 5G network
 (not shown in {{fig-arch}}). A dedicated IP address is assigned by means of IKEv2 to the UE to access the 5GC via this second network. 
 
 The UE interacts with a distant server
@@ -281,7 +291,7 @@ The path manager decides when a
 new subflow needs to be established over a path while the packet scheduler
 selects the subflow over which the next packet will be sent. A more detailed
 description of several packet schedulers may be found in
-{{I-D.draft-bonaventure-iccrg-schedulers}}.
+{{I-D.bonaventure-iccrg-schedulers}}.
 
 The "Active-Standby" mode can be implemented using a path manager that tries to
 use the active access and switches to the standby one after a certain number
@@ -298,7 +308,7 @@ The "Load-Balancing" mode would use the same path manager with a weighted
 round-robin scheduler.
 
 The "Priority-based" mode can be implemented using a path manager that is
-similar to the one used by the "Active-Standy" one, but which reacts faster
+similar to the one used by the "Active-Standby" one, but which reacts faster
 and a packet scheduler that prefers the high priority path. These
 path manager and scheduler are similar to the ones used in
 deployed Hybrid Access networks {{Hybrid}}.
@@ -369,10 +379,12 @@ This approach provides 0-RTT (Zero Round-Trip Time) conversion service since no 
 # ATSSS Version 2: Adding Non-TCP Support 
 
 The MPTCP-based ATSSS discussed in the previous section is specific to TCP,
-obviously. Therefore it does not provide a similar feature to non-TCP traffic,
-in particular not to the increasing share of UDP traffic due to QUIC
-introduction {{QUIC-Deployment}}. A future ATSSS would lose its impact if the
-scope does not become extended beyond support for TCP only.
+obviously. Therefore it does not support non-TCP traffic, such as
+UDP, RTP, QUIC {{QUIC-Deployment}} or IPSec and DTLS VPN services.
+A future ATSSS would lose its impact if its scope does not extend
+beyond supporting TCP only.
+
+----- OB to be discussed, not convinced that this discussion is needed for IETF
 
 However, UDP compared to TCP has different dimensions to be considered in
 respect to the ATSSS high-layer approach.
@@ -400,26 +412,112 @@ which has to be fulfilled by such a multipath capable protocol is its ability to
 further ensure the transport characteristics of the piggy backed data exchanged
 along the path between UE and the remote endpoint.
 
+-------
+
 Several proposals to carry non-TCP traffic were discussed, including
-using TCP as proposed earlier in {{I-D.boucadair-mptcp-plain-mode}} or
-using multipath extensions to DCCP {{I-D.amend-tsvwg-multipath-dccp}}.
-The work within 3GPP now focuses on using Multipath extensions to QUIC
-{{I-D.deconinck-quic-multipath}}.
+using TCP {{I-D.boucadair-mptcp-plain-mode}} or
+defining multipath extensions to DCCP {{I-D.amend-tsvwg-multipath-dccp}}.
+The work within 3GPP now focuses on using QUIC as the baseline for the second
+version of ATSSS.
 
---- (MA) Stopp revising here to get first feedback ---
+This new version of ATSSS will differ from the first one in two aspects.
+In ATSSSv1, each TCP connection originated by the UE corresponds to
+an MPTCP connection that is terminated on the ATSSS function. ATSSSv2 will
+leverage the multi-stream capability of QUIC to carry the bytestreams
+of multiple TCP connections on a single QUIC session.
+Consider an UE that is currently attached to
+only one access network. This UE maintains one QUIC session with its
+ATSSS function. Every TCP connection that it creates results in the
+creation of a stream on the QUIC session with the ATSSSv2 function.
+The ATSSSv2 function maps each bytestream of the QUIC session onto a
+TCP connection with a remote host. This is illustrated in {{fig-atssv2-tcp}}.
 
-It appears that Multipath QUIC brings several benefits to support the ATSSS
-service. First, Multipath QUIC is a multipath transport protocol which is
-capable of splitting data over different access networks similar to Multipath TCP.
-Some measurements and simulations show that Multipath QUIC provides similar
-performance as Multipath TCP when carrying bytestreams over different
-access networks {{MPQUIC-Conext}}. Second, Multipath QUIC can be combined
-with the Unreliable Datagram Extension {{I-D.ietf-quic-datagram}} that
-provides the capability to transport unreliable messages such as UDP datagrams
-or IP packets inside a QUIC connection. Third, the MASQUE proposal is currently
-discussing different solutions to provide proxy services over a QUIC
-connection {{I-D.schinazi-masque-protocol}}{{I-D.schinazi-masque-connect-udp}}
-{{I-D.piraux-quic-tunnel}}{{I-D.piraux-quic-tunnel-tcp}}.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                               AAAAAA
+                                            ===========> +-------+
+                                           //  +---------|Server2|
+                                           ||  |         +-------+   
+                QUIC session               \/  | 
+ +---+--+ <------------------------------>+----|+        +-------+
+ |  U E |  Stream1  AAAAAAAAAAAAA...AAA   |ATSSS|-/.../--|Server1|
+ |      |  Stream2  BBBBBBBBBBBBB...BBB   | UPF | <=====>+-------+
+ +--+---+ ------------------------------- +-----+  BBBBB
+                                         
+
+<----> QUIC session
+<====> TCP connection
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{: #fig-atssv2-tcp title="ATSSSv2 maps each TCP connection on a stream of the QUIC session between UE and ATSSS"}
+
+This solution cannot be used to support other protocols than TCP. Each non-TCP
+packet (e.g. UDP, plain IP) will be transported unreliably as a datagram
+over the QUIC session by using the Unreliable Datagram Extension
+{{I-D.ietf-quic-datagram}}. Transporting these datagrams unreliably as
+in IPSec or DTLS tunnels prevents problems that arise when a reliable protocol
+is used to transport packets that do not require reliable delivery or are
+subject to their own congestion control scheme.
+
+Two application layer protocols have propose to manage the mapping
+between TCP connections and QUIC streams and the transmission of UDP
+datagrams. The MASQUE BOF proposed to use the HTTP/3 CONNECT method to
+support TCP connections {{I-D.schinazi-masque-protocol}}
+and extend it with a UDPCONNECT method to
+support UDP {{I-D.schinazi-masque-connect-udp}}. A simpler protocol
+providing similar features is proposed in {{I-D.piraux-quic-tunnel}}{{I-D.piraux-quic-tunnel-tcp}}.
+
+
+Given that QUIC will be used between the UE and ATSSSv2, we now need to
+define how the QUIC sessions will be used. There are three possible
+approaches with their advantages and drawbacks.
+
+The first and simplest approach is to use QUIC version 1 {{I-D.ietf-quic-transport}} with the Unreliable Datagram Extension {{I-D.ietf-quic-datagram}}.
+In this case, there is one QUIC session between the UE and the ATSSS function.
+This QUIC session uses only one access network at a time. Thanks to the
+connection migration capability of QUIC, it is possible to support the
+switching function of ATSSS, but steering and splitting cannot be supported.
+
+A second possible solution is to also use QUIC version 1 with the Unreliable Datagram Extension, but with one QUIC session over each access network. By using
+two QUIC sessions, it becomes possible to support steering by selecting
+the session used to carry each UDP/TCP flow. It also becomes possible
+to support the switching function of ATSSS by moving flows from one QUIC
+session to the other. However, supporting splitting is more challenging
+since this would require transmitting data from the same flow over two
+different sessions. For unreliable flows, this would be possible but
+would result in some reordering among the datagrams that belong to
+a split flow. For TCP connections, this would require a more complex
+higher layer protocol that divides each bytestream in chunks are then
+reordered at the other end of the session. Furthermore, since the bandwidth
+available on each QUIC session varies in function of the congestion experienced
+over each access network, data sent over a congested session could delay the
+delivery of subsequent data over the other session. Another difficulty
+with the utilization of independent QUIC sessions is that when load balancers
+are used to implement the ATSSS UPF, two QUIC sessions addressed to the
+same ATSSS UPF will not necessarily be handled by the same server.
+
+A third solution is to leverage the ability of QUICv1 to support multiple
+streams and the Unreliable Datagram Extension but extend is with
+Multipath capabilities as described in {{I-D.deconinck-quic-multipath}}.
+With these Multipath extensions, there is a single (Multipath) QUIC session
+between the UE and the ATSSS. The Multipath extensions provide several
+benefits to support ATSSSv2. Splitting is directly supported. Data
+sent over one access network can be retransmitted over the other if
+the first becomes congested. Measurements and simulations have
+shown that Multipath QUIC provides similar performance as Multipath
+TCP with combining different access networks {{MPQUIC-Conext}}.
+Steering is also supported since UDP Datagrams
+and TCP connections can be mapped over any access network based on the
+ATSSS rules. Since splitting is supported, this choice can be revisited
+if one of the access networks fails or becomes congested. Switching
+is also supported with Multipath QUIC. Experience with Multipath TCP on
+smartphones has shown that handovers are not a binary process. When
+a smartphone , there are frequently short periods
+of time during which both networks are imperfect {{MPTester}}. During
+these periods, it is important to be able to use both networks
+simultaneously.
+Since there is a single Multipath QUIC session between the UE and the
+ATSSS UPF load-balancers do not cause problems. 
+
+--- OB: Not convinced by the last paragraphs
 
 Some ATSSS modes can be natively supported by the base QUIC specification. For example, the “Active-Standby” and “Smallest Delay” steering modes can be supported directly between an UE and a QUIC server without any assistance from the network other than the performance measurement information. 
 
