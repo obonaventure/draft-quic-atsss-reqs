@@ -621,7 +621,7 @@ This document makes no requests of IANA.
 
 # Security Considerations
 
-This document is informational in nature, providing a translation of a 3GPP specification for IETF readers who are not familiar with ATSSS or 5G. It has no effect on the security of ATSSS or 5G networks. 
+This section will be completed. 
 
 # Acknowledgements
 
