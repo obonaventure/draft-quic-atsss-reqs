@@ -1,7 +1,7 @@
 ---
-title: ATSSS Requirements for QUIC
+title: 3GPPP Access Traffic Steering, Switching, and Splitting (ATSSS) Overview for IETF Participants
 abbrev: QUIC ATSSS
-docname: draft-bla-quic-atsss-req-00
+docname: draft-bla-quic-atsss-overview-00
 date: 2020-05-15
 category: info
 
@@ -123,7 +123,7 @@ informative:
     
 --- abstract
 
-This document briefly presents the Access Traffic Steering, Switching, and Splitting (ATSSS) service being specified within the 3rd Generation Partnership Project (3GPP). Future versions of the document will capture a set of data plane requirements to benefit from multipath capabilities. 
+This document briefly presents the Access Traffic Steering, Switching, and Splitting (ATSSS) service being specified within the 3rd Generation Partnership Project (3GPP). 
 
 --- middle
 
@@ -163,8 +163,7 @@ To support these different use cases in 5G networks, 3GPP is working on the
 Access Traffic Steering, Switching and Splitting (ATSSS) service {{TS23501}}. This work is
 further adopted by BBF to provide similar capabilities to residential gateways
 equipped with multiple access interfaces. In this document, we abstract many of
-the technical details of future 5G networks to explain the requirements of the
-ATSSS service on IETF protocols.
+the technical details of future 5G networks to explain the capabilities ATSSS needs, which may impact decisions about future work on IETF protocols.
 
 # Contribution and Discussion Venues for this draft. 
 
@@ -174,17 +173,7 @@ This document is under development in the Github repository at https://github.co
 
 Substantial discussion of this document should take place on the QUIC working group mailing list (quic@ietf.org). Subscription and archive details are at https://www.ietf.org/mailman/listinfo/quic.
 
-# Conventions and Definitions
-
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-"SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-"OPTIONAL" in this document are to be interpreted as described in BCP 14
-{{RFC2119}}{{RFC8174}} when, and only when, they appear in all capitals,
-as shown here.
-
-[comment]: # (OB: not sure we need that section, we'll see later)
-
-# Terminology 
+# Conventions, Terminology, and Definitions
 
 This document makes use of 3GPP specific terms defined in {{RFC6459}}, mainly the following ones: 
 
@@ -313,7 +302,7 @@ path manager and scheduler are similar to the ones used in
 deployed Hybrid Access networks {{Hybrid}}.
 
 We first describe the ATSSS as specified in Release 16 (called hereafter, ATSSS version 1) that uses
-Multipath TCP {{RFC6824}} and the 0-RTT convert protocol {{I-D.ietf-tcpm-converters}}. We then discuss the requirements for version 2 of the ATSSS specification that is planned for Release 17. More details about 3GPP releases can be found at: https://www.3gpp.org/specifications/Releases.
+Multipath TCP {{RFC6824}} and the 0-RTT convert protocol {{I-D.ietf-tcpm-converters}}. We then discuss the requirements for version 2 of the ATSSS specification that 3GPP plans for Release 17. More details about 3GPP releases can be found at: https://www.3gpp.org/specifications/Releases.
 
 # ATSSS Version 1: Support for TCP
 
@@ -406,8 +395,8 @@ itself.
 
 In consequence it is very likely that such traffic (UDP or a subset like QUIC)
 has to be encapsulated in a multipath capable protocol between UE and UPF, which
-meets the ATSSS demands on higher-layer steering. One of the key requirements
-which has to be fulfilled by such a multipath capable protocol is its ability to
+meets the ATSSS demands on higher-layer steering. One of the key capabilities
+which has to be provided by such a multipath capable protocol is its ability to
 further ensure the transport characteristics of the piggy backed data exchanged
 along the path between UE and the remote endpoint.
 
