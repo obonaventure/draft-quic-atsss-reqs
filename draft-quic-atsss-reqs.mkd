@@ -218,8 +218,8 @@ An UE can be provided a multi-access PDU Connectivity Service. That is, an UE ca
 
 To understand the operation of the ATSSS service, it is useful to consider the
 reference environment shown in {{fig-arch}}. An UE
-is attached to two different access networks (Net A and Net B). These
-two networks are potentially shared with other users and the available
+is attached to two different access networks (Access Net A and Access Net B).
+These two networks are potentially shared with other users and the available
 bandwidth varies over time. These fluctuations in bandwidth are managed by
 using congestion control schemes.
 
@@ -236,25 +236,23 @@ The Proxy enables the UE to use a transport protocol that supports
 the different access networks even if the server does not support it (i.e., is not multipath-capable
 at transport layer).
 
-The 5G control plane provides the UE and the Proxy with rules that specify
+The 5G control plane provides the UE and the Proxy with ATSSS rules that specify
 which flows are eligible to the ATSSS service.
-
-A simplified reference architecture is shown in {{fig-arch}}.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   ........(ATSSS Rules From Network)..........
   .                                          .
-  .              ------------                .
-  .             /            \               .
-  .   +--------| Access Net A |-+            .
-  .   |         \   (3GPP)   /  |            .
-  .   |          ------------   |            .
-  .   |                         |            .
-  .   |                         |            .
-  .   |                 -------------        .
+  .            ------------                  .
+  .           /            \                 .
+  .  +-------| Access Net A |--+             .
+  .  |        \   (3GPP)   /   |             .
+  .  |         ------------    |             .
+  .  |                         |             .
+  .  |                         |             .
+  .  |                 -------------         .
  +---+--+              /             \    +-----+        +------+
- |  U E |             | 3GPP Core Net +---|ATSSS|-/.../--|Server|
+ |  UE  |             | 3GPP Core Net +---|ATSSS|-/.../--|Server|
  |      |              \             /    | UPF |        +------+
  +--+---+               -------------     +-----+
     |                          |          (Proxy)
@@ -272,7 +270,7 @@ A simplified reference architecture is shown in {{fig-arch}}.
  
 - Access Traffic Steering: selection of an access network for a new data flow and the transfer of the traffic of that data flow over the selected access network. 
 - Access Traffic Switching: migration of all packets of an ongoing data flow from one access network to another access network while ensuring session continuity. 
-- Access Traffic Splitting: split of the packets of a data flow across multiple access networks.  
+- Access Traffic Splitting: split of the packets of a data flow across multiple access networks.
 
 Techniques to provide ATSSS are classified by the 3GPP into two flavors: (1) high-layer techniques which operate above the IP layer (e.g., MPTCP), and (2) low-layer techniques which operate below the IP layer. Only high-layer steering techniques are discussed in this document.
 
@@ -329,14 +327,14 @@ Also, both the MPTCP Client and MPTCP proxy are configured with ATSSS rules from
 
   ........(ATSSS Rules From Network)..........
   .                                          .
-  .              ------------                .
-  .             /            \               .
-  .   +--------| Access Net A |-+            .
-  .   |         \   (3GPP)   /  |            .
-  .   |          ------------   |            .
-  .   |                         |            .
-  .   |                         |            .
-  .   |                 -------------        .
+  .            ------------                  .
+  .           /            \                 .
+  .  +-------| Access Net A |--+             .
+  .  |        \   (3GPP)   /   |             .
+  .  |         ------------    |             .
+  .  |                         |             .
+  .  |                         |             .
+  .  |                  -------------        .
  +---+--+              /             \    +-----+        +------+
  |MPTCP |             | 3GPP Core Net +---|MPTCP|-/.../--|Server|
  |Client|              \             /    |Proxy|        +------+
@@ -439,7 +437,7 @@ TCP connection with a remote host. This is illustrated in {{fig-atssv2-tcp}}.
                                            //  +---------|Server2|
                                            ||  |         +-------+   
                 QUIC session               \/  | 
- +---+--+ <------------------------------>+----|+        +-------+
+ +---+--+ <------------------------------>+-----+        +-------+
  |  U E |  Stream1  AAAAAAAAAAAAA...AAA   |ATSSS|-/.../--|Server1|
  |      |  Stream2  BBBBBBBBBBBBB...BBB   | UPF | <=====>+-------+
  +--+---+ ------------------------------- +-----+  BBBBB
@@ -496,7 +494,7 @@ are used to implement the ATSSS UPF, two QUIC sessions addressed to the
 same ATSSS UPF will not necessarily be handled by the same server.
 
 A third solution is to leverage the ability of QUICv1 to support multiple
-streams and the Unreliable Datagram Extension but extend is with
+streams and the Unreliable Datagram Extension but extend it with
 Multipath capabilities as described in {{I-D.deconinck-quic-multipath}}.
 With these Multipath extensions, there is a single (Multipath) QUIC session
 between the UE and the ATSSS. The Multipath extensions provide several
@@ -511,7 +509,7 @@ ATSSS rules. Since splitting is supported, this choice can be revisited
 if one of the access networks fails or becomes congested. Switching
 is also supported with Multipath QUIC. Experience with Multipath TCP on
 smartphones has shown that handovers are not a binary process. When
-a smartphone , there are frequently short periods
+a smartphone performs handovers, there are frequently short periods
 of time during which both networks are imperfect {{MPTester}}. During
 these periods, it is important to be able to use both networks
 simultaneously.
