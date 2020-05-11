@@ -65,6 +65,12 @@ normative:
     date: 2019
     target: https://www.3gpp.org/ftp/Specs/archive/23_series/23.501/
 informative:
+  atsssliaison:
+    author:
+      - ins: 3GPP (3rd Generation Partnership Project)
+    title: LS on need for Multi-Path QUIC for ATSSS
+    date: Apr 2020
+    target: https://datatracker.ietf.org/liaison/1678/
   I-D.ietf-quic-transport:
   I-D.deconinck-quic-multipath:
   I-D.amend-tsvwg-multipath-dccp:
@@ -127,8 +133,19 @@ This document briefly presents the Access Traffic Steering, Switching, and Split
 
 --- middle
 
+# Introduction {#intro}
 
-# Introduction  {#intro}
+The 3rd Generation Partnership Project (3GPP) has described the Access Traffic Steering, Switching, and Splitting (ATSSS) service, used to direct TCP traffic between endpoints with multiple available paths, in their Release 16 {{TS23501}}. In Release 16, ATSSS uses the IETF MPTCP protocol {{RFC6824}}.
+
+As part of preparation for Release 17 studies, 3GPP has expressed an interest in other IETF protocols and protocol extensions that would remove some of the limits they experience with MPTCP. 
+
+3GPP has contacted IETF through a formal liaison {{atsssliaison}}, letting the IETF know about this interest. From the liaison document: "The work on the study has not yet started in 3GPP, and there are thus no agreed conclusions. . The goal is to enable steering, switching and splitting of traffic (primarily UDP) across multiple accesses, including latency sensitive and real time traffic. Therefore 3GPP is interested to receive regular feedback on progress and prioritization on the multipath extensions to QUIC."
+
+Because "3GPP SA kindly requests IETF to take the above information into account when discussing future work in prioritizing the multipath work for QUIC", but the complete specification of ATSSS in the relevant 3GPP architecture documents reflects the complexity of 3GPP networks, the authors of this draft worked to provide a high level overview of the parts of ATSSS that would be impacted by IETF protocol design, in terminology that is more familiar to IETF participants. 
+
+This document is an informational Internet-Draft from individuals, and does not carry any special status within the IETF.
+
+# Introduction to Access Traffic Steering, Switching, and Splitting (ATSSS) {#intro2atsss}
 
 Mobile devices such as laptops, smartphones, tablets support multiple network
 interfaces that may attach to different networks. Over the years, various techniques
