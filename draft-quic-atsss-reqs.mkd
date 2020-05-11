@@ -377,6 +377,8 @@ This approach provides 0-RTT (Zero Round-Trip Time) conversion service since no 
 
 # ATSSS Version 2: Adding Non-TCP Support 
 
+## Motivation 
+
 The MPTCP-based ATSSS discussed in the previous section is specific to TCP,
 obviously. Therefore it does not support non-TCP traffic, such as
 UDP, RTP, QUIC {{QUIC-Deployment}} or IPSec and DTLS VPN services.
@@ -419,14 +421,81 @@ defining multipath extensions to DCCP {{I-D.amend-tsvwg-multipath-dccp}}.
 The work within 3GPP now focuses on using QUIC as the baseline for the second
 version of ATSSS.
 
-This new version of ATSSS will differ from the first one in two aspects.
+## QUIC as an ATSSS Data Plane Protocol 
+
+This section discusses to what extent QUIC can be used to provide an ATSSS service and whether gaps are found.
+
+Some ATSSS modes can be natively supported by the base QUIC specification. For example, the “Active-Standby” and “Smallest Delay” steering modes can be supported directly between an UE and a QUIC server without any assistance from the network other than the performance measurement information. 
+
+Nevertheless, blindly distributing packets among existing paths may lead to complications such as:
+
+- Aggressive use of user quota if one of the access networks is subject to volume-based quota. 
+
+- The steering policy as currently defined in ATSSS is local to the UE and the proxy. There are no means to signal that policy to an upstream server. 
+
+- Frequent connection migration if both access networks are used to forward data; each with a distinct source IP address.
+
+Let's assess in more details how QUIC can be used to provide ATSSS for any kind of traffic.
+
+A first approach is to use QUIC version 1 {{I-D.ietf-quic-transport}} with the Unreliable Datagram Extension {{I-D.ietf-quic-datagram}}.
+In this case, there is one QUIC session between the UE and the ATSSS proxy function.
+This QUIC session uses only one access network at a time. Thanks to the
+connection migration capability of QUIC, it is possible to support the
+switching and steering functions of ATSSS, but splitting cannot be supported.  
+
+A second candidate solution is to also use QUIC version 1 with the Unreliable Datagram Extension, but with one QUIC session over each access network. By using
+two QUIC sessions, it becomes possible to support steering by selecting
+the session used to carry each flow. It also becomes possible
+to support the switching function of ATSSS by moving flows from one QUIC
+session to the other. However, supporting splitting is more challenging
+since this would require transmitting data from the same flow over two
+different sessions. For unreliable flows, this would be possible but
+would result in some reordering among the datagrams that belong to
+a split flow. For TCP connections, this would require a more complex
+higher layer protocol that divides each bytestream in chunks are then
+reordered at the other end of the session. Furthermore, since the bandwidth
+available for each QUIC session varies as a function of the congestion experienced
+over each access network, data sent over a congested session could delay the
+delivery of subsequent data over the other session. Another difficulty
+with the utilization of independent QUIC sessions is that when load balancers
+are used to implement the ATSSS UPF, two QUIC sessions addressed to the
+same ATSSS UPF will not necessarily be handled by the same server.
+
+-- Med: I don't parse the sentence with laod-balancers implementing the ATSSS UPF. 
+
+A third candidate solution is to leverage the ability of QUIC to support multiple
+streams and the Unreliable Datagram Extension but extend it with
+Multipath capabilities as described in {{I-D.deconinck-quic-multipath}}.
+With these Multipath extensions, there is a single (Multipath) QUIC session
+between the UE and the ATSSS. The Multipath extensions provide several
+benefits to support ATSSSv2. Splitting is naturally supported. Data
+sent over one access network can be retransmitted over the other if
+the first becomes congested. Some measurements and simulations have
+shown that Multipath QUIC provides similar performance as Multipath
+TCP with combining different access networks {{MPQUIC-Conext}}.
+Steering is also supported since UDP Datagrams
+and TCP connections can be mapped over any access network based on the
+ATSSS rules. Since splitting is supported, this choice can be revisited
+if one of the access networks fails or becomes congested. Switching
+is also supported with Multipath QUIC. Experience with Multipath TCP on
+smartphones has shown that handovers are not a binary process. When
+a smartphone performs handovers, there are frequently short periods
+of time during which both networks are imperfect {{MPTester}}. During
+these periods, it is important to be able to use both networks
+simultaneously.
+Since there is a single Multipath QUIC session between the UE and the
+ATSSS UPF, load-balancers do not cause problems. 
+
+
+## Handling both TCP and Non-TCP using QUIC
+
 In ATSSSv1, each TCP connection originated by the UE corresponds to
-an MPTCP connection that is terminated on the ATSSS function. ATSSSv2 will
+an MPTCP connection that is terminated on the ATSSS function. ATSSSv2 may
 leverage the multi-stream capability of QUIC to carry the bytestreams
-of multiple TCP connections on a single QUIC session.
+of multiple TCP connections over a single QUIC session.
 Consider an UE that is currently attached to
 only one access network. This UE maintains one QUIC session with its
-ATSSS function. Every TCP connection that it creates results in the
+ATSSS proxy function. Every TCP connection that it creates results in the
 creation of a stream on the QUIC session with the ATSSSv2 function.
 The ATSSSv2 function maps each bytestream of the QUIC session onto a
 TCP connection with a remote host. This is illustrated in {{fig-atssv2-tcp}}.
@@ -456,77 +525,13 @@ in IPSec or DTLS tunnels prevents problems that arise when a reliable protocol
 is used to transport packets that do not require reliable delivery or are
 subject to their own congestion control scheme.
 
-Two application layer protocols have propose to manage the mapping
+Two application layer protocols proposed to manage the mapping
 between TCP connections and QUIC streams and the transmission of UDP
-datagrams. The MASQUE BOF proposed to use the HTTP/3 CONNECT method to
+datagrams. The MASQUE protocol uses the HTTP/3 CONNECT method to
 support TCP connections {{I-D.schinazi-masque-protocol}}
 and extend it with a UDPCONNECT method to
 support UDP {{I-D.schinazi-masque-connect-udp}}. A simpler protocol
 providing similar features is proposed in {{I-D.piraux-quic-tunnel}}{{I-D.piraux-quic-tunnel-tcp}}.
-
-
-Given that QUIC will be used between the UE and ATSSSv2, we now need to
-define how the QUIC sessions will be used. There are three possible
-approaches with their advantages and drawbacks.
-
-The first and simplest approach is to use QUIC version 1 {{I-D.ietf-quic-transport}} with the Unreliable Datagram Extension {{I-D.ietf-quic-datagram}}.
-In this case, there is one QUIC session between the UE and the ATSSS function.
-This QUIC session uses only one access network at a time. Thanks to the
-connection migration capability of QUIC, it is possible to support the
-switching function of ATSSS, but steering and splitting cannot be supported.
-
-A second possible solution is to also use QUIC version 1 with the Unreliable Datagram Extension, but with one QUIC session over each access network. By using
-two QUIC sessions, it becomes possible to support steering by selecting
-the session used to carry each UDP/TCP flow. It also becomes possible
-to support the switching function of ATSSS by moving flows from one QUIC
-session to the other. However, supporting splitting is more challenging
-since this would require transmitting data from the same flow over two
-different sessions. For unreliable flows, this would be possible but
-would result in some reordering among the datagrams that belong to
-a split flow. For TCP connections, this would require a more complex
-higher layer protocol that divides each bytestream in chunks are then
-reordered at the other end of the session. Furthermore, since the bandwidth
-available on each QUIC session varies in function of the congestion experienced
-over each access network, data sent over a congested session could delay the
-delivery of subsequent data over the other session. Another difficulty
-with the utilization of independent QUIC sessions is that when load balancers
-are used to implement the ATSSS UPF, two QUIC sessions addressed to the
-same ATSSS UPF will not necessarily be handled by the same server.
-
-A third solution is to leverage the ability of QUICv1 to support multiple
-streams and the Unreliable Datagram Extension but extend it with
-Multipath capabilities as described in {{I-D.deconinck-quic-multipath}}.
-With these Multipath extensions, there is a single (Multipath) QUIC session
-between the UE and the ATSSS. The Multipath extensions provide several
-benefits to support ATSSSv2. Splitting is directly supported. Data
-sent over one access network can be retransmitted over the other if
-the first becomes congested. Measurements and simulations have
-shown that Multipath QUIC provides similar performance as Multipath
-TCP with combining different access networks {{MPQUIC-Conext}}.
-Steering is also supported since UDP Datagrams
-and TCP connections can be mapped over any access network based on the
-ATSSS rules. Since splitting is supported, this choice can be revisited
-if one of the access networks fails or becomes congested. Switching
-is also supported with Multipath QUIC. Experience with Multipath TCP on
-smartphones has shown that handovers are not a binary process. When
-a smartphone performs handovers, there are frequently short periods
-of time during which both networks are imperfect {{MPTester}}. During
-these periods, it is important to be able to use both networks
-simultaneously.
-Since there is a single Multipath QUIC session between the UE and the
-ATSSS UPF load-balancers do not cause problems. 
-
---- OB: Not convinced by the last paragraphs
-
-Some ATSSS modes can be natively supported by the base QUIC specification. For example, the “Active-Standby” and “Smallest Delay” steering modes can be supported directly between an UE and a QUIC server without any assistance from the network other than the performance measurement information. 
-
-Nevertheless, blindly distributing packets among existing paths may lead to complications such as:
-
-- Aggressive use of user quota if one of the access networks is subject to volume-based quota. 
-
-- The steering policy as currently defined in ATSSS is local to the UE and the proxy. There are no means to signal that policy to an upstream server. 
-
-- Frequent connection migration if both access networks are used to forward data; each with a distinct source IP address.
 
 # Terms used in this document
 
