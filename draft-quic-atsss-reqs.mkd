@@ -236,7 +236,7 @@ The Proxy enables the UE to use a transport protocol that supports
 the different access networks even if the server does not support it (i.e., is not multipath-capable
 at transport layer).
 
-The 5G control plane provides the UE and the Proxy with ATSSS rules that specify
+The 5G control plane provides the UE and the Proxy with rules that specify
 which flows are eligible to the ATSSS service.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
