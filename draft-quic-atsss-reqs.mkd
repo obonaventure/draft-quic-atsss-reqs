@@ -54,6 +54,11 @@ author:
   name: Qing An
   organization: Alibaba Group
   email: anqing.aq@alibaba-inc.com
+ -
+  ins: N. Keukeleire
+  name: Nicolas Keukeleire
+  organization: Tessares
+  email: nicolas.keukeleire@tessares.net
 
 normative:
   RFC8174:
@@ -120,6 +125,13 @@ informative:
     title: MultipathTester - Comparing MPTCP and MPQUIC in Mobile Environments. In 2019 Network Traffic Measurement and Analysis Conference (TMA) 
     date: 2019
     target: https://multipath-quic.org/multipathtester/2019/06/18/mnm-paper.html
+  TR-348:
+    author:
+      - ins: Broadband Forum
+    title: Hybrid Access Broadband Network Architecture
+    issue: 1
+    date: 2016
+    target: https://www.broadband-forum.org/download/TR-348.pdf
     
 --- abstract
 
@@ -140,7 +152,7 @@ network interfaces). For simplicity, we consider a smartphone that
 is equipped with a WLAN interface and a cellular interface, but the discussion
 below can be generalized to any network interface that supports IP.
 
-Some users of these smartphones expect seamless handovers. For example, when
+Some users of these smartphones want to offload a maximum of their traffic onto the WLAN while expecting seamless handovers. For example, when
 they move out of the reach of their home WLAN, they expect that the established flows (e.g., TCP connections, UDP flows)
 will continue over the cellular interface without any interruption (called, session continuity). As the devices is assigned different IP addresses over
 WLAN and the cellular networks, this seamless
@@ -162,8 +174,9 @@ using Multipath TCP in South Korea in an example of this use case {{IETFJ16}}.
 To support these different use cases in 5G networks, 3GPP is working on the
 Access Traffic Steering, Switching and Splitting (ATSSS) service {{TS23501}}. This work is
 further adopted by BBF to provide similar capabilities to residential gateways
-equipped with multiple access interfaces. In this document, we abstract many of
-the technical details of future 5G networks to explain the capabilities ATSSS needs, which may impact decisions about future work on IETF protocols.
+equipped with multiple access interfaces, in the continuity of the Hybrid Access Networks {{TR-348}}.
+In this document, we abstract many of the technical details of future 5G networks 
+to explain the capabilities ATSSS needs, which may impact decisions about future work on IETF protocols.
 
 # Contribution and Discussion Venues for this draft. 
 
@@ -177,19 +190,19 @@ Substantial discussion of this document should take place on the QUIC working gr
 
 This document makes use of 3GPP specific terms defined in {{RFC6459}}, mainly the following ones: 
 
--    Packet Data Network (PDN): is a packet-based network that
+- Packet Data Network (PDN): is a packet-based network that
       either belongs to the operator or is external (such as
       the Internet or a corporate intranet).  The user eventually
       accesses services in one or more PDNs.  The operator's packet core
       networks are separated from packet data networks either by User Plane Functions (UPFs).
 
--     UE (User Equipment): refers to the devices that are hosts with the
-      ability to obtain Internet connectivity via a 3GPP network.    
+- UE (User Equipment): refers to the devices that are hosts with the
+      ability to obtain Internet connectivity via a 3GPP network.
 
 - Access Point Name (APN): is a Fully Qualified Domain Name
       (FQDN) and resolves to a set of gateways in an operator's network. Data Network Name (DNN) is the APN equivalent in 5GS. DNN is used for the selection of the UPF(s) for a PDU Session.
       
- -    User Plane: refers to data traffic and the required sessions for
+- User Plane: refers to data traffic and the required sessions for
       the data traffic.  In practice, IP is the only data traffic
       protocol used in the user plane.
 
@@ -214,13 +227,13 @@ using congestion control schemes.
 
 One of these access networks is managed by a 5G provider according to
 the 3GPP specifications. The second network is potentially managed by
-a different organization. It is important to note that in this case, there
+a different organization. It is important to note that in this second case, there
 is an IPSec tunnel between the UE and a dedicated device in the 5G network
 (not shown in {{fig-arch}}). A dedicated IP address is assigned by means of IKEv2 to the UE to access the 5GC via this second network. 
 
 The UE interacts with a distant server
 through a ATSSS specific User Plane Function further referred to as "Proxy"
-which supports ATSSS and is part of the 5G network.
+which supports ATSSS and is part of the 5G Core network.
 The Proxy enables the UE to use a transport protocol that supports
 the different access networks even if the server does not support it (i.e., is not multipath-capable
 at transport layer).
@@ -270,7 +283,9 @@ The traffic that matches an ATSSS rule can be distributed among available access
 - “Load-Balancing”: The traffic associated with the matching flow will be distributed among available access networks following a distribution ratio (e.g., 30% via a first access, 70% via a second access).
 - “Priority-based”: For this mode, accesses are assigned priority levels that indicate which access to be used first. Concretely, the traffic associated with the matching flow will be steered on the access with a high priority till congestion is detected, then the overflow will be forwarded over a low priority access. 
 
-These modes of operations were designed assuming that multipath protocols
+In order to provide the above-mentioned steering modes, the ATSSS service relies upon a dedicated protocol called Performance Measurement Function (PMF) protocol. This protocol is enabled between the UE and the UPF and is meant to provide RTT measurements and reporting access availability/unavailability by the UE to the UPF. PMF is not specific to a given ATSSS version. 
+
+Furthermore, these modes of operations were designed assuming that multipath protocols
 such as MPTCP {{RFC6824}} would be used over the different paths between
 the UE and the ATSSS. The implementations of these protocols include two
 types of mechanisms to control the utilization of the paths: (i) a
@@ -302,7 +317,7 @@ path manager and scheduler are similar to the ones used in
 deployed Hybrid Access networks {{Hybrid}}.
 
 We first describe the ATSSS as specified in Release 16 (called hereafter, ATSSS version 1) that uses
-Multipath TCP {{RFC6824}} and the 0-RTT convert protocol {{I-D.ietf-tcpm-converters}}. We then discuss the requirements for version 2 of the ATSSS specification that 3GPP plans for Release 17. More details about 3GPP releases can be found at: https://www.3gpp.org/specifications/Releases.
+Multipath TCP {{RFC6824}} and the 0-RTT convert protocol {{I-D.ietf-tcpm-converters}}. We then discuss the data plane requirements for version 2 of the ATSSS specification that 3GPP plans for Release 17. More details about 3GPP releases can be found at: https://www.3gpp.org/specifications/Releases.
 
 # ATSSS Version 1: Support for TCP
 
@@ -328,7 +343,7 @@ Also, both the MPTCP Client and MPTCP proxy are configured with ATSSS rules from
  |MPTCP |             | 3GPP Core Net +---|MPTCP|-/.../--|Server|
  |Client|              \             /    |Proxy|        +------+
  +--+---+               -------------     +-----+
-    |                          |    
+    |                          |
     |                          |
     |          ------------    |
     |         /            \   |
@@ -369,7 +384,7 @@ This approach provides 0-RTT (Zero Round-Trip Time) conversion service since no 
 The MPTCP-based ATSSS discussed in the previous section is specific to TCP,
 obviously. Therefore it does not support non-TCP traffic, such as
 UDP, RTP, QUIC {{QUIC-Deployment}} or IPSec and DTLS VPN services.
-A future ATSSS would lose its impact if its scope does not extend
+As the share of these protocols grows, mainly driven by QUIC deployment, and the seamless handover is particularly useful for real-time traffic (e.g. voice or video calls), a future ATSSS would lose its impact if its scope does not extend
 beyond supporting TCP only.
 
 ----- OB to be discussed, not convinced that this discussion is needed for IETF
