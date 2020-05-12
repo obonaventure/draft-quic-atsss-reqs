@@ -237,7 +237,7 @@ the different access networks even if the server does not support it (i.e., is n
 at transport layer).
 
 The 5G control plane provides the UE and the Proxy with rules that specify
-which flows are eligible to the ATSSS service.
+which flows are eligible to the ATSSS service. Additionally, a set of ATSSS rules are delivered to the UE and the Proxy that control how each flow is treated within the ATSSS service.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
