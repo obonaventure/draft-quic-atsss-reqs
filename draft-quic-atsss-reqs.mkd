@@ -140,6 +140,8 @@ informative:
 
 This document briefly presents the Access Traffic Steering, Switching, and Splitting (ATSSS) service being specified within the 3rd Generation Partnership Project (3GPP). 
 
+The document also assesses to what extent IETF specifications can be used to meet the ATSSS design goals; gaps (if any) will be documented.  
+
 --- middle
 
 # Introduction {#intro}
