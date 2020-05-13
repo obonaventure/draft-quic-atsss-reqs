@@ -185,8 +185,8 @@ This steering policy can be managed by the smartphone, but flows need to continu
 after a handover. 
 
 Other users may want to combine the resources provided by the cellular and the WLAN networks
-to improve the performance of individual flows. The GigaLTE service deployed
-using Multipath TCP in South Korea in an example of this use case {{IETFJ16}}.
+to improve the up and download throughput performance of individual flows. 
+The GiGA LTE and GiGA 5G service deployed using Multipath TCP in South Korea in an example of this use case {{IETFJ16}}.
 
 To support these different use cases in 5G networks, 3GPP is working on the
 Access Traffic Steering, Switching and Splitting (ATSSS) service {{TS23501}}. This work is
