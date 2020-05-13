@@ -138,19 +138,20 @@ informative:
     
 --- abstract
 
-This document briefly presents the Access Traffic Steering, Switching, and Splitting (ATSSS) service being specified within the 3rd Generation Partnership Project (3GPP). 
+This document briefly presents the Access Traffic Steering, Switching, and Splitting (ATSSS) service being specified within the 3rd Generation Partnership Project (3GPP).
 
 --- middle
 
 # Introduction {#intro}
 
-The 3rd Generation Partnership Project (3GPP) has described the Access Traffic Steering, Switching, and Splitting (ATSSS) service, used to direct TCP traffic between endpoints with multiple available paths, in their Release 16 {{TS23501}}. In Release 16, ATSSS uses the IETF MPTCP protocol {{RFC6824}}.
+The 3rd Generation Partnership Project (3GPP) has described the Access Traffic Steering, Switching, and Splitting (ATSSS) service, used to carry TCP traffic over multiple available paths, in their Release 16 {{TS23501}}. In Release 16, ATSSS uses two IETF protocols: MPTCP {{RFC6824}} and Convert Protocol {{I-D.ietf-tcpm-convert}}.
 
-As part of preparation for Release 17 studies, 3GPP has expressed an interest in other IETF protocols and protocol extensions that would remove some of the limits they experience with MPTCP. 
+As part of preparation for Release 17 studies, 3GPP has expressed an interest in other IETF protocols and protocol extensions that would enable ATSSS service of traffic not handled by MPTCP. To that aim, 
+3GPP has contacted the IETF through a formal liaison {{atsssliaison}}, letting the IETF know about this interest. An excerpt of the liaison document is provided below: 
 
-3GPP has contacted IETF through a formal liaison {{atsssliaison}}, letting the IETF know about this interest. From the liaison document: "The work on the study has not yet started in 3GPP, and there are thus no agreed conclusions. . The goal is to enable steering, switching and splitting of traffic (primarily UDP) across multiple accesses, including latency sensitive and real time traffic. Therefore 3GPP is interested to receive regular feedback on progress and prioritization on the multipath extensions to QUIC."
+"The work on the study has not yet started in 3GPP, and there are thus no agreed conclusions. The goal is to enable steering, switching and splitting of traffic (primarily UDP) across multiple accesses, including latency sensitive and real time traffic. Therefore 3GPP is interested to receive regular feedback on progress and prioritization on the multipath extensions to QUIC."
 
-Because "3GPP SA kindly requests IETF to take the above information into account when discussing future work in prioritizing the multipath work for QUIC", but the complete specification of ATSSS in the relevant 3GPP architecture documents reflects the complexity of 3GPP networks, the authors of this draft worked to provide a high level overview of the parts of ATSSS that would be impacted by IETF protocol design, in terminology that is more familiar to IETF participants. 
+Because "3GPP SA kindly requests IETF to take the above information into account when discussing future work in prioritizing the multipath work for QUIC", but the complete specification of ATSSS in the relevant 3GPP architecture documents reflects the complexity of 3GPP networks, the authors of this document worked to provide a high level overview of the parts of ATSSS that would be impacted by IETF protocol design, in terminology that is more familiar to IETF participants. 
 
 This document is an informational Internet-Draft from individuals, and does not carry any special status within the IETF.
 
