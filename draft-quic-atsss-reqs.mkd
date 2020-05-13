@@ -237,7 +237,7 @@ the different access networks even if the server does not support it (i.e., is n
 at transport layer).
 
 The 5G control plane provides the UE and the Proxy with rules that specify
-which flows are eligible to the ATSSS service (i.e. by mapping them to a Multi-Access PDU Session). Additionally, a set of ATSSS rules are delivered to the UE and the Proxy that control the treatment of each of these flows within this MA-PDU Session.
+which flows are eligible to the ATSSS service (i.e. by mapping them to a Multi-Access PDU Session). Once a Multi-Access PDU Session has been established, a set of ATSSS rules are then delivered to both the UE and the Proxy in order to control the treatment of the flows within the Session.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
