@@ -61,8 +61,6 @@ author:
   email: nicolas.keukeleire@tessares.net
 
 normative:
-  RFC8174:
-  RFC2119:
   TS23501:
     author:
       - ins: 3GPP (3rd Generation Partnership Project)
@@ -121,9 +119,9 @@ informative:
       - ins: B. Hesmans
       - ins: O. Bonaventure
     title: Increasing broadband reach with Hybrid Access Networks
-    seriesinfo: IEEE Communications and Standards Magazine
-    date: 2020
-    target: https://arxiv.org/abs/1907.04570
+    seriesinfo: IEEE Communications and Standards Magazine, Vol. 4, Issue 1
+    date: March 2020
+    target: https://doi.org/10.1109/MCOMSTD.001.1900036
   MPTester:
     author:
       - ins: Q. De Coninck
@@ -135,7 +133,6 @@ informative:
     author:
       - ins: Broadband Forum
     title: Hybrid Access Broadband Network Architecture
-    issue: 1
     date: 2016
     target: https://www.broadband-forum.org/download/TR-348.pdf
     
