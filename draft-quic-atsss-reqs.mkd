@@ -212,21 +212,24 @@ This document makes use of 3GPP specific terms defined in {{RFC6459}}, mainly th
 
 - UE (User Equipment): refers to the devices that are hosts with the
       ability to obtain Internet connectivity via a 3GPP network.
+     
+- Protocol Data Unit (PDU) Session: An association between the UE and the Data Network (DN) to carry the user data/traffic. 
 
-- Access Point Name (APN): is a Fully Qualified Domain Name
-      (FQDN) and resolves to a set of gateways in an operator's network. Data Network Name (DNN) is the APN equivalent in 5GS. DNN is used for the selection of the UPF(s) for a PDU Session.
-      
 - User Plane: refers to data traffic and the required sessions for
       the data traffic.  In practice, IP is the only data traffic
       protocol used in the user plane.
+      
+- User Plane Function (UPF): A logical function in the 5G core network that provides the interconnect point between the mobile infrastructure and the Data Network (DN) and anchor point for Protocol Data Unit (PDU) Sessions to enable mobility.
+
+- Data Network Name (DNN): is a Fully Qualified Domain Name (FQDN) and resolves to a set of gateways in an operator's network. DNN is used for the selection of the UPF(s) for a PDU Session.
 
 # High level Overview {#overview}
 
-The 5G Core (5GC) supports a service that provides exchange of data between a User Equipment (UE) and a data network (referred to as Packet Data Network (PDN)) identified by a Data Network Name (DNN). Such connectivity service, called PDU Connectivity Service, is supported via 'PDU Sessions' that are established upon request from the UE. The type of PDU Session can be IPv4, IPv6, IPv4v6, Ethernet or Unstructured.
+The 5G Core (5GC) supports a service that provides exchange of data between a User Equipment (UE) and a data network (referred to as Packet Data Network (PDN)) identified by a Data Network Name (DNN). This connectivity service, called PDU Connectivity Service, is realized via 'PDU Sessions' that are established upon request from the UE when the UE first connect to that network. The type of PDU Session can be IPv4, IPv6, IPv4v6, Ethernet or Unstructured.
 
 It is out of the scope of this document to provide a comprehensive overview of 5G System (5GS) architecture. In particular, this document does not describe how PDU Sessions are established, and thus how IP addresses/prefixes are assigned to requesting User Equipment (UEs). 
 
-An UE can be provided a multi-access PDU Connectivity Service. That is, an UE can exchange data with a PDN by using a "3GPP access network" and a "non-3GPP access network". Such service relies upon the ATSSS feature.
+An UE can be provided a multi-access PDU Connectivity Service. That is, an UE can exchange data with a PDN by using a "3GPP access network" and a "non-3GPP access network". This is realized by use of the ATSSS service provide in the 5G core network usually collocated with the User Plane Function (UPF) that manges the UE's PDU session.
 
 
 ## Reference Architecture
