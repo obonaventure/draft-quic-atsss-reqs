@@ -144,7 +144,7 @@ This document briefly presents the Access Traffic Steering, Switching, and Split
 
 # Introduction {#intro}
 
-The 3rd Generation Partnership Project (3GPP) has described the Access Traffic Steering, Switching, and Splitting (ATSSS) service, used to carry TCP traffic over multiple available paths, in their Release 16 {{TS23501}}. In Release 16, ATSSS uses two IETF protocols: MPTCP {{RFC6824}} and Convert Protocol {{I-D.ietf-tcpm-converters}}.
+The 3rd Generation Partnership Project (3GPP) has described the Access Traffic Steering, Switching, and Splitting (ATSSS) service, used to carry TCP traffic over multiple available paths, in their Release 16 {{TS23501}}. In Release 16, ATSSS only supports TCP traffic and is realised based on the use of two IETF protocols: MPTCP {{RFC6824}} and Convert Protocol {{I-D.ietf-tcpm-converters}}.
 
 As part of preparation for Release 17 studies, 3GPP has expressed an interest in other IETF protocols and protocol extensions that would enable ATSSS service of traffic not handled by MPTCP. To that aim, 
 3GPP has contacted the IETF through a formal liaison {{atsssliaison}}, letting the IETF know about this interest. An excerpt of the liaison document is provided below: 
@@ -656,4 +656,3 @@ This section will be completed.
 (Note to RFC Editor - if this document ever reaches you, please remove this section)
 
 Version -00: initial submission
-
