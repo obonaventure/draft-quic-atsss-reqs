@@ -181,22 +181,9 @@ to indicate their preferences when using available networks.
 This steering policy can be managed by the smartphone, but flows need to continue
 after a handover. 
 
-<<<<<<< HEAD
-Other smartphones users may want to combine the cellular and the Wi-Fi network
-to improve the up and download throughput performance of individual flows. 
-The GiGA LTE and GiGA 5G service deployed using Multipath TCP in South Korea in an example of this use case {{IETFJ16}}.
-
-To support these different use cases in 5G networks, 3GPP is working on
-the Access Traffic Steering, Switching and Splitting (ATSSS) service. In this
-document, we abstract many of the technical details of future 5G networks to
-explain the requirements of the ATSSS service on IETF protocols.
-
-This document is organized as follows.
-=======
 Other users may want to combine the resources provided by the cellular and the WLAN networks
 to improve the up and download throughput performance of individual flows. 
 The GiGA LTE and GiGA 5G service deployed using Multipath TCP in South Korea in an example of this use case {{IETFJ16}}.
->>>>>>> upstream/master
 
 To support these different use cases in 5G networks, 3GPP is working on the
 Access Traffic Steering, Switching and Splitting (ATSSS) service {{TS23501}}. This work is
@@ -221,26 +208,17 @@ This document makes use of 3GPP specific terms defined in {{RFC6459}}, mainly th
       either belongs to the operator or is external (such as
       the Internet or a corporate intranet).  The user eventually
       accesses services in one or more PDNs.  The operator's packet core
-      networks are separated from packet data networks either by User Plane Functions (UPFs) or by PDN Gateways (PGWs) depending on standalone or non-standalone mode of 5G.
+      networks are separated from packet data networks either by User Plane Functions (UPFs).
 
 - UE (User Equipment): refers to the devices that are hosts with the
       ability to obtain Internet connectivity via a 3GPP network.
 
 - Access Point Name (APN): is a Fully Qualified Domain Name
       (FQDN) and resolves to a set of gateways in an operator's network. Data Network Name (DNN) is the APN equivalent in 5GS. DNN is used for the selection of the UPF(s) for a PDU Session.
-      (SEO's comment : In broad range of meaning, don't we need to describe NSSAI (Network Slice Selection Assistance Inforamation)? 
       
 - User Plane: refers to data traffic and the required sessions for
       the data traffic.  In practice, IP is the only data traffic
       protocol used in the user plane.
-<<<<<<< HEAD
-      (SEO's comment : In 3GPP, 5G LAN is also one of the traffic protocol for the User Plane other than IP)
- 
- 
-
-
-=======
->>>>>>> upstream/master
 
 # High level Overview {#overview}
 
@@ -277,13 +255,6 @@ at transport layer).
 The 5G control plane provides the UE and the Proxy with ATSSS rules that specify
 which flows are eligible to the ATSSS service.
 
-<<<<<<< HEAD
-(SEO's comment : we should check the "ATSSS rules from network node" in Figure 1 can directly interact with and provision the rules to the Proxy denpending on the location of the Proxy. It's okay if the Proxy is inside the 3GPP CN (Core NW), but we need to implement exposure function e.g., SCEF and/or NEF to communicate the Proxy with other 3GPP nodes and UE.)
-
-A simplified reference architecture is shown in {{fig-arch}}.  
-
-=======
->>>>>>> upstream/master
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   ........(ATSSS Rules From Network)..........
@@ -470,31 +441,7 @@ version of ATSSS.
 
 ## QUIC as an ATSSS Data Plane Protocol 
 
-<<<<<<< HEAD
-ATSSS version 2 aims at providing the same service as ATSSS version 1, i.e.
-splitting, switching and steering, to non-TCP flows. Such flows include generic
-UDP flows, QUIC connections, DTLS or IPSec flows between the UE and a remote
-host. 3GPP discussed several proposals to carry non-TCP traffic, including
-using TCP as proposed earlier in {{I-D.boucadair-mptcp-plain-mode}},
-using multipath extensions to DCCP {{I-D.amend-tsvwg-multipath-dccp}}.
-The work within 3GPP now focuses on using Multipath extensions to QUIC
-{{I-D.deconinck-quic-multipath}}.
-
-It appears that Multipath QUIC brings several benefits to support the ATSSS
-service. First, Multipath QUIC is a multipath transport protocol which is
-capable of splitting data over different access networks as Multipath TCP.
-Measurements and simulations show that Multipath QUIC provides similar
-performance as Multipath TCP when carrying bytestreams over different
-access networks {{MPQUIC-Conext}}. Second, Multipath QUIC can be combined
-with the Unreliable Datagram Extension {{I-D.ietf-quic-datagram}} that
-provides the capability to transport unreliable messages such as UDP datagrams
-or IP packets inside a QUIC session. Third, the MASQUE BOF is currently
-discussing different solutions to provide proxy services over a QUIC
-connection {{I-D.schinazi-masque-protocol}},{{I-D.schinazi-masque-connect-udp}},
-{{I-D.piraux-quic-tunnel}},{{I-D.piraux-quic-tunnel-tcp}}.
-=======
 This section discusses to what extent QUIC can be used to provide an ATSSS service and whether gaps are found.
->>>>>>> upstream/master
 
 Some ATSSS modes can be natively supported by the base QUIC specification. For example, the “Active-Standby” and “Smallest Delay” steering modes can be supported directly between an UE and a QUIC server without any assistance from the network other than the performance measurement information. 
 
