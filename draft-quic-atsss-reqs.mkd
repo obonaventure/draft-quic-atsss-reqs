@@ -215,6 +215,8 @@ This document makes use of 3GPP specific terms defined in {{RFC6459}}, mainly th
      
 - Protocol Data Unit (PDU) Session: An association between the UE and the Data Network (DN) to carry the user data/traffic. 
 
+- Multi-access PDU (MA-PDU) Session: A PDU session that has simulaneously user plane resources assigned on 3GPP and non-3GPP access networks.
+
 - User Plane: refers to data traffic and the required sessions for
       the data traffic.  In practice, IP is the only data traffic
       protocol used in the user plane.
@@ -225,7 +227,7 @@ This document makes use of 3GPP specific terms defined in {{RFC6459}}, mainly th
 
 # High level Overview {#overview}
 
-The 5G Core (5GC) supports a service that provides exchange of data between a User Equipment (UE) and a data network (referred to as Packet Data Network (PDN)) identified by a Data Network Name (DNN). This connectivity service, called PDU Connectivity Service, is realized via 'PDU Sessions' that are established upon request from the UE when the UE first connect to that network. The type of PDU Session can be IPv4, IPv6, IPv4v6, Ethernet or Unstructured.
+The 5G Core (5GC) supports a service that provides exchange of data between a User Equipment (UE) and a data network (referred to as Packet Data Network (PDN)) identified by a Data Network Name (DNN). This connectivity service, called PDU Connectivity Service, is realized via 'PDU Sessions' that are established upon request from the UE when the UE first connects to that network. The type of PDU Session can be IPv4, IPv6, IPv4v6, Ethernet or Unstructured.
 
 It is out of the scope of this document to provide a comprehensive overview of 5G System (5GS) architecture. In particular, this document does not describe how PDU Sessions are established, and thus how IP addresses/prefixes are assigned to requesting User Equipment (UEs). 
 
