@@ -1,9 +1,9 @@
 ---
-title: ATSSS Requirements for QUIC
+title: 3GPPP Access Traffic Steering, Switching, and Splitting (ATSSS) Overview for IETF Participants
 abbrev: QUIC ATSSS
-docname: draft-bla-quic-atsss-reqss-00
-date: 2020-04-15
-category: exp
+docname: draft-bla-quic-atsss-overview-00
+date: 2020-05-15
+category: info
 
 ipr: trust200902
 area: transport
@@ -15,6 +15,15 @@ stand_alone: yes
 pi: [toc, sortrefs, symrefs]
 
 author:
+ -
+  ins: M. Boucadair
+  name: Mohamed Boucadair
+  organization: Orange
+  street: Clos Courtel
+  city: Rennes
+  code: 35000
+  country: France
+  email: mohamed.boucadair@orange.com
  -
   ins: O. Bonaventure
   name: Olivier Bonaventure
@@ -30,94 +39,252 @@ author:
   name: Quentin De Coninck
   organization: UCLouvain
   email: quentin.deconinck@uclouvain.be
-
+ -
+  ins: S. Dawkins
+  name: Spencer Dawkins
+  organization: Tencent America
+  email: spencerdawkins.ietf@gmail.com
+ -
+  ins: M. Amend
+  name: Markus Amend
+  organization: Deutsche Telekom
+  email: markus.amend@telekom.de
+ -
+  ins: Q. An
+  name: Qing An
+  organization: Alibaba Group
+  email: anqing.aq@alibaba-inc.com
+ -
+  ins: N. Keukeleire
+  name: Nicolas Keukeleire
+  organization: Tessares
+  email: nicolas.keukeleire@tessares.net
+ -
+  ins: S. Seo
+  name: SungHoon Seo
+  organization: Korea Telecom
+  email: sh.seo@kt.com
 
 normative:
-  RFC8174:
-  RFC2119:
-  
-informative:
-  I-D.deconinck-quic-multipath:
-  I-D.amend-tsvwg-multipath-dccp:
   TS23501:
     author:
       - ins: 3GPP (3rd Generation Partnership Project)
     title: Technical Specification Group Services and System Aspects; System Architecture for the 5G System; Stage 2 (Release 16)
     date: 2019
     target: https://www.3gpp.org/ftp/Specs/archive/23_series/23.501/
+informative:
+  atsssliaison:
+    author:
+      - ins: 3GPP (3rd Generation Partnership Project)
+    title: LS on need for Multi-Path QUIC for ATSSS
+    date: Apr 2020
+    target: https://datatracker.ietf.org/liaison/1678/
+  I-D.ietf-quic-transport:
+  I-D.deconinck-quic-multipath:
+  I-D.amend-tsvwg-multipath-dccp:
+  I-D.ietf-tcpm-converters:
+  I-D.ietf-quic-datagram:
+  I-D.schinazi-masque-protocol:
+  I-D.schinazi-masque-connect-udp:
+  I-D.piraux-quic-tunnel:
+  I-D.piraux-quic-tunnel-tcp:
+  I-D.boucadair-mptcp-plain-mode:
+  I-D.bonaventure-iccrg-schedulers:
+  RFC5533:
+  RFC6275:
+  RFC5213:
+  RFC6459:
+  RFC6824:
+  RFC8041:
   IETFJ16:
     author:
       - ins: O. Bonaventure
       - ins: S. Seo
     title: Multipath TCP Deployment
     seriesinfo: IETF Journal, Fall 2016
-
-
+    date: 2016
+    target: https://www.ietfjournal.org/multipath-tcp-deployments/
+  MPQUIC-Conext:
+    author:
+      - ins: Q. De Coninck
+      - ins: O. Bonaventure
+    title: Multipath QUIC - Design and evaluation 
+    seriesinfo: Proceedings of the 13th international conference on emerging networking experiments and technologies 2017 Nov 28 (pp. 160-166).
+    date: 2017
+    target: https://multipath-quic.org/
+  QUIC-Deployment:
+    author:
+      - ins: M. Kuehlewind
+    title: Some updates on QUIC deployment numbers
+    date: 2019
+    target: https://datatracker.ietf.org/meeting/106/materials/slides-106-maprg-quic-deployment-update-00
+  Hybrid:
+    author:
+      - ins: N. Keukeleire
+      - ins: B. Hesmans
+      - ins: O. Bonaventure
+    title: Increasing broadband reach with Hybrid Access Networks
+    seriesinfo: IEEE Communications and Standards Magazine, Vol. 4, Issue 1
+    date: March 2020
+    target: https://doi.org/10.1109/MCOMSTD.001.1900036
+  MPTester:
+    author:
+      - ins: Q. De Coninck
+      - ins: O. Bonaventure
+    title: MultipathTester - Comparing MPTCP and MPQUIC in Mobile Environments. In 2019 Network Traffic Measurement and Analysis Conference (TMA) 
+    date: 2019
+    target: https://multipath-quic.org/multipathtester/2019/06/18/mnm-paper.html
+  TR-348:
+    author:
+      - ins: Broadband Forum
+    title: Hybrid Access Broadband Network Architecture
+    date: 2016
+    target: https://www.broadband-forum.org/download/TR-348.pdf
+    
 --- abstract
 
-This document briefly presents the ATSSS service being specified within
-3GPPP and its requirements on the transport layer. 
+This document briefly presents the Access Traffic Steering, Switching, and Splitting (ATSSS) service being specified within the 3rd Generation Partnership Project (3GPP). 
 
 --- middle
 
+# Introduction {#intro}
 
-# Introduction  {#intro}
+The 3rd Generation Partnership Project (3GPP) has described the Access Traffic Steering, Switching, and Splitting (ATSSS) service, used to direct TCP traffic between endpoints with multiple available paths, in their Release 16 {{TS23501}}. In Release 16, ATSSS uses the IETF MPTCP protocol {{RFC6824}}.
 
+As part of preparation for Release 17 studies, 3GPP has expressed an interest in other IETF protocols and protocol extensions that would remove some of the limits they experience with MPTCP. 
 
-# Conventions and Definitions
+3GPP has contacted IETF through a formal liaison {{atsssliaison}}, letting the IETF know about this interest. From the liaison document: "The work on the study has not yet started in 3GPP, and there are thus no agreed conclusions. . The goal is to enable steering, switching and splitting of traffic (primarily UDP) across multiple accesses, including latency sensitive and real time traffic. Therefore 3GPP is interested to receive regular feedback on progress and prioritization on the multipath extensions to QUIC."
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-"SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-"OPTIONAL" in this document are to be interpreted as described in BCP 14
-{{RFC2119}}{{RFC8174}} when, and only when, they appear in all capitals,
-as shown here.
+Because "3GPP SA kindly requests IETF to take the above information into account when discussing future work in prioritizing the multipath work for QUIC", but the complete specification of ATSSS in the relevant 3GPP architecture documents reflects the complexity of 3GPP networks, the authors of this draft worked to provide a high level overview of the parts of ATSSS that would be impacted by IETF protocol design, in terminology that is more familiar to IETF participants. 
 
-[comment]: # (OB: not sure we need that section, we'll see later)
+This document is an informational Internet-Draft from individuals, and does not carry any special status within the IETF.
+
+# Introduction to Access Traffic Steering, Switching, and Splitting (ATSSS) {#intro2atsss}
+
+Mobile devices such as laptops, smartphones, tablets support multiple network
+interfaces that may attach to different networks. Over the years, various techniques
+have been proposed to support such multi-interfaced devices (e.g., {{RFC5533}},{{RFC6275}},{{RFC5213}}, or {{RFC6824}}). 
+
+Users of these devices
+have different expectations concerning the utilization of available network connectivity (and thus their different
+network interfaces). For simplicity, we consider a smartphone that
+is equipped with a WLAN interface and a cellular interface, but the discussion
+below can be generalized to any network interface that supports IP.
+
+Some users of these smartphones want to offload a maximum of their traffic onto the WLAN while expecting seamless handovers. For example, when
+they move out of the reach of their home WLAN, they expect that the established flows (e.g., TCP connections, UDP flows)
+will continue over the cellular interface without any interruption (called, session continuity). As the devices is assigned different IP addresses over
+WLAN and the cellular networks, this seamless
+handover requires some specific assistance from the network. The current
+utilization of Multipath TCP on Apple smartphones is an example of this use
+case {{IETFJ16}}.
+
+Some users want to load balance their flows over the
+different available networks, e.g., by sending a delay-sensitive flow over cellular and
+a long download over the WLAN network. Several smartphones enable applications
+to indicate their preferences when using available networks.
+This steering policy can be managed by the smartphone, but flows need to continue
+after a handover. 
+
+Other users may want to combine the resources provided by the cellular and the WLAN networks
+to improve the up and download throughput performance of individual flows. 
+The GiGA LTE and GiGA 5G service deployed using Multipath TCP in South Korea in an example of this use case {{IETFJ16}}.
+
+To support these different use cases in 5G networks, 3GPP is working on the
+Access Traffic Steering, Switching and Splitting (ATSSS) service {{TS23501}}. This work is
+further adopted by BBF to provide similar capabilities to residential gateways
+equipped with multiple access interfaces, in the continuity of the Hybrid Access Networks {{TR-348}}.
+In this document, we abstract many of the technical details of future 5G networks 
+to explain the capabilities ATSSS needs, which may impact decisions about future work on IETF protocols.
+
+# Contribution and Discussion Venues for this draft. 
+
+(Note to RFC Editor - if this document ever reaches you, please remove this section)
+
+This document is under development in the Github repository at https://github.com/obonaventure/draft-quic-atsss-reqs.  Readers are invited to open issues and send pull requests with contributed text for this document.
+
+Substantial discussion of this document should take place on the QUIC working group mailing list (quic@ietf.org). Subscription and archive details are at https://www.ietf.org/mailman/listinfo/quic.
+
+# Conventions, Terminology, and Definitions
+
+This document makes use of 3GPP specific terms defined in {{RFC6459}}, mainly the following ones: 
+
+- Packet Data Network (PDN): is a packet-based network that
+      either belongs to the operator or is external (such as
+      the Internet or a corporate intranet).  The user eventually
+      accesses services in one or more PDNs.  The operator's packet core
+      networks are separated from packet data networks either by User Plane Functions (UPFs).
+
+- UE (User Equipment): refers to the devices that are hosts with the
+      ability to obtain Internet connectivity via a 3GPP network.
+
+- Access Point Name (APN): is a Fully Qualified Domain Name
+      (FQDN) and resolves to a set of gateways in an operator's network. Data Network Name (DNN) is the APN equivalent in 5GS. DNN is used for the selection of the UPF(s) for a PDU Session.
+      
+- User Plane: refers to data traffic and the required sessions for
+      the data traffic.  In practice, IP is the only data traffic
+      protocol used in the user plane.
 
 # High level Overview {#overview}
 
-The ATSSS service is defined several 3GPP documents that reference several
-other documents. A detailed presentation of this service is outside the
-scope of this section.
+The 5G Core (5GC) supports a service that provides exchange of data between a User Equipment (UE) and a data network (referred to as Packet Data Network (PDN)) identified by a Data Network Name (DNN). Such connectivity service, called PDU Connectivity Service, is supported via 'PDU Sessions' that are established upon request from the UE. The type of PDU Session can be IPv4, IPv6, IPv4v6, Ethernet or Unstructured.
+
+It is out of the scope of this document to provide a comprehensive overview of 5G System (5GS) architecture. In particular, this document does not describe how PDU Sessions are established, and thus how IP addresses/prefixes are assigned to requesting User Equipment (UEs). 
+
+An UE can be provided a multi-access PDU Connectivity Service. That is, an UE can exchange data with a PDN by using a "3GPP access network" and a "non-3GPP access network". Such service relies upon the ATSSS feature.
+
+
+## Reference Architecture
+
 
 To understand the operation of the ATSSS service, it is useful to consider the
-reference environment shown in the figure below. A host, called A in the
-figure, is attached to two different access networks (Net1 and Net2).
-These networks can be managed by different organizations.
-A second host, called B in the figure, 
-is connected to the Internet. B does not use multipath transport protocols
-while A would like to be able to use its two access networks to reach B. To
-enable A to use its two paths efficiently, a possible solution is to use
-a midpoint node, called M in the figure, so that multipath transport is
-used between A and M while regular (single path) transport is used
-between A and B. 
+reference environment shown in {{fig-arch}}. An UE
+is attached to two different access networks (Access Net A and Access Net B).
+These two networks are potentially shared with other users and the available
+bandwidth varies over time. These fluctuations in bandwidth are managed by
+using congestion control schemes.
+
+One of these access networks is managed by a 5G provider according to
+the 3GPP specifications. The second network is potentially managed by
+a different organization. It is important to note that in this second case, there
+is an IPSec tunnel between the UE and a dedicated device in the 5G network
+(not shown in {{fig-arch}}). A dedicated IP address is assigned by means of IKEv2 to the UE to access the 5GC via this second network. 
+
+The UE interacts with a distant server
+through a ATSSS specific User Plane Function further referred to as "Proxy"
+which supports ATSSS and is part of the 5G Core network.
+The Proxy enables the UE to use a transport protocol that supports
+the different access networks even if the server does not support it (i.e., is not multipath-capable
+at transport layer).
+
+The 5G control plane provides the UE and the Proxy with ATSSS rules that specify
+which flows are eligible to the ATSSS service.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  +------ Net 1 ------+
-  |                   |
-+-+-+               +-+-+                     +---+
-| A |               | M |----- Internet  -----+ B |
-+-+-+               +-+-+                     +---+
-  |                   |
-  +------ Net 2 ------+
+  ........(ATSSS Rules From Network)..........
+  .                                          .
+  .            ------------                  .
+  .           /            \                 .
+  .  +-------| Access Net A |--+             .
+  .  |        \   (3GPP)   /   |             .
+  .  |         ------------    |             .
+  .  |                         |             .
+  .  |                         |             .
+  .  |                 -------------         .
+ +---+--+              /             \    +-----+        +------+
+ |  UE  |             | 3GPP Core Net +---|ATSSS|-/.../--|Server|
+ |      |              \             /    | UPF |        +------+
+ +--+---+               -------------     +-----+
+    |                          |          (Proxy)
+    |                          |
+    |          ------------    |
+    |         /            \   |
+    +--------| Access Net B |--+
+              \ (non 3GPP) /
+               ------------
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-{: #fig-env title="Reference environment"}
-
-
-Several use cases correspond to this environment. A first use case are the
-mobile devices like smartphones that are equipped with a cellular and
-a Wi-Fi interface.
-A second use case are the hybrid access networks where A is a CPE router that
-is attached to fixed (e.g. xDSL) and wireless (e.g. cellular) networks.
-
-In this document, we focus on the first use case, but most of the discussion
-applies to the second one as well.
-
-The two scenarios that we consider in this document are:
-- the failure of one access network that forces all data to switch to the other access network
-- the possibility of splitting the transmission of the data over the two access networks even if they have different characteristics (delay, bandwidth, congestion)
-
+{: #fig-arch title="Simplified Reference Architecture for ATSSS"}
 
 ## External IP Addresses Used by the ATSSS Proxy
 
@@ -127,24 +294,379 @@ Absent any coordination between the UE and the ATSSS proxy (e.g., assignment of 
 
 To avoid such issue, the ATSSS proxy may be configured with a pool of IP addresses that it can use in the External Realm instead of preserving the MA IP address assigned to the UE. How that pool is used is deployment- and implementation-specific.
 
+## ATSSS Modes
 
-# Carrying bytestreams over different access networks {#bytestreams}
+3GPP defines the following procedures {{TS23501}} that are applicable between "3GPP access" and "non-3GPP access" networks:
+ 
+- Access Traffic Steering: selection of an access network for a new data flow and the transfer of the traffic of that data flow over the selected access network. 
+- Access Traffic Switching: migration of all packets of an ongoing data flow from one access network to another access network while ensuring session continuity. 
+- Access Traffic Splitting: split of the packets of a data flow across multiple access networks.
+
+Techniques to provide ATSSS are classified by the 3GPP into two flavors: (1) high-layer techniques which operate above the IP layer (e.g., MPTCP), and (2) low-layer techniques which operate below the IP layer. Only high-layer steering techniques are discussed in this document.
+
+The traffic that matches an ATSSS rule can be distributed among available access networks following one of these modes:
+
+- “Active-Standby”: The traffic associated with the matching flow will be forwarded via a specific access (called 'active access') and switched to another access (called 'standby access') when the active access is unavailable. 
+- “Smallest Delay”: The traffic associated with the matching flow will be forwarded via the access that presents the smallest Round-Trip Time (RTT). To that aim, specific measurements are conducted by the UE and a dedicated function co-located with the Proxy. 
+- “Load-Balancing”: The traffic associated with the matching flow will be distributed among available access networks following a distribution ratio (e.g., 30% via a first access, 70% via a second access).
+- “Priority-based”: For this mode, accesses are assigned priority levels that indicate which access to be used first. Concretely, the traffic associated with the matching flow will be steered on the access with a high priority till congestion is detected, then the overflow will be forwarded over a low priority access. 
+
+In order to provide the above-mentioned steering modes, the ATSSS service relies upon a dedicated protocol called Performance Measurement Function (PMF) protocol. This protocol is enabled between the UE and the UPF and is meant to provide RTT measurements and reporting access availability/unavailability by the UE to the UPF. PMF is not specific to a given ATSSS version. 
+
+Furthermore, these modes of operations were designed assuming that multipath protocols
+such as MPTCP {{RFC6824}} would be used over the different paths between
+the UE and the ATSSS. The implementations of these protocols include two
+types of mechanisms to control the utilization of the paths: (i) a
+path manager and (ii) a packet scheduler {{RFC8041}}.
+The path manager decides when a
+new subflow needs to be established over a path while the packet scheduler
+selects the subflow over which the next packet will be sent. A more detailed
+description of several packet schedulers may be found in
+{{I-D.bonaventure-iccrg-schedulers}}.
+
+The "Active-Standby" mode can be implemented using a path manager that tries to
+use the active access and switches to the standby one after a certain number
+of retransmissions. This mode of operation is similar to the utilization of
+Multipath TCP on iOS smartphones {{RFC8041}}.
+
+The "Smallest Delay" mode can be implemented using a path manager that
+establishes a subflow over both paths and a packet scheduler that measures
+their round-trip-times and prefers the one having the lowest round-trip-time.
+These
+path manager and scheduler are similar to the default packet
+scheduler used by Multipath TCP on Linux {{RFC8041}}.
+The "Load-Balancing" mode would use the same path manager with a weighted
+round-robin scheduler.
+
+The "Priority-based" mode can be implemented using a path manager that is
+similar to the one used by the "Active-Standby" one, but which reacts faster
+and a packet scheduler that prefers the high priority path. These
+path manager and scheduler are similar to the ones used in
+deployed Hybrid Access networks {{Hybrid}}.
+
+We first describe the ATSSS as specified in Release 16 (called hereafter, ATSSS version 1) that uses
+Multipath TCP {{RFC6824}} and the 0-RTT convert protocol {{I-D.ietf-tcpm-converters}}. We then discuss the data plane requirements for version 2 of the ATSSS specification that 3GPP plans for Release 17. More details about 3GPP releases can be found at: https://www.3gpp.org/specifications/Releases.
+
+# ATSSS Version 1: Support for TCP
+
+For ATSSS with Multipath TCP functionality, a client with two interfaces connected to two disjoint access networks (in this case, Access Net A and Access Net B), uses MPTCP to reach an MPTCP proxy over either, or both, of the access networks. This allows the client to communicate with a server which does not terminate MPTCP connections.
+
+During the attachment of an ATSSS-capable UE to the network, the UE retrieves the MPTCP proxy information: an IP address, a port number, and the type of the MPTCP proxy. In the current release, the mandatory MPTCP proxy type is the "Transport Converter" {{I-D.ietf-tcpm-converters}}.
+
+Also, both the MPTCP Client and MPTCP proxy are configured with ATSSS rules from the network that govern how the multiple network paths between the MPTCP Client and MPTCP Proxy are used. This relationship is shown using "." between the MPTCP Client and MPTCP Proxy. 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  ........(ATSSS Rules From Network)..........
+  .                                          .
+  .            ------------                  .
+  .           /            \                 .
+  .  +-------| Access Net A |--+             .
+  .  |        \   (3GPP)   /   |             .
+  .  |         ------------    |             .
+  .  |                         |             .
+  .  |                         |             .
+  .  |                  -------------        .
+ +---+--+              /             \    +-----+        +------+
+ |MPTCP |             | 3GPP Core Net +---|MPTCP|-/.../--|Server|
+ |Client|              \             /    |Proxy|        +------+
+ +--+---+               -------------     +-----+
+    |                          |
+    |                          |
+    |          ------------    |
+    |         /            \   |
+    +--------| Access Net B |--+
+              \ (non 3GPP) /
+               ------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{: #fig-mptcp-arch title="Simplified Reference Architecture for ATSSS with Multipath TCP"}
 
 
-# Carrying packets over different access networks {#packets}
+An ATSSS-capable UE can make use of the MPTCP functionality by establishing MPTCP-assisted connections via the MPTCP proxy relying upon the Convert Protocol {{I-D.ietf-tcpm-converters}}. The UE behaves as a “Client”, while the MPTCP proxy behaves as a Transport Converter {{I-D.ietf-tcpm-converters}}. 
 
+The ATSSS-capable UE sends packets bound to connections matching an ATSSS rule to the provisioned Transport Converter and destination port number. Concretely, the UE initiates the MPTCP connection towards the Transport Converter and indicates the IP address and port number of the Server within the connection establishment packet (i.e., in the payload of the SYN sent to the Transport Converter).  Doing so enables the Transport Converter to immediately initiate a connection towards that Server, without experiencing an extra delay. The Transport Converter waits until the receipt of the confirmation that the Server agrees to establish the connection before confirming it to the Client.
+
+A flow example of an MPTCP-proxied connection is show in {{fig-example}}. This example assumes that the Server is not MPTCP-aware. The instructions included in the matching ATSSS rule will be followed for the management of the MPTCP connection (including the selection of the access network to establish the first subflow). 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          UE                   MPTCP Proxy               Server
+          |                        |                        |
+          |SYN, MPC [->Server:port]|         SYN, MPC       |
+          |----------------------->|----------------------->|
+          |<-----------------------|<-----------------------|
+          |  SYN+ACK, MPC [...]    |        SYN+ACK         |
+          |----------------------->|----------------------->|
+          |        ACK, MPC        |          ACK           |
+          |          ...           |           ...          |
+
+Legend:
+     []: Convert Protocol TLVs
+    MPC: MP_CAPABLE option [RFC8684] 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{: #fig-example title="An Example of MPTCP-proxied Connection Matching an ATSSS Rule."}
+
+This approach provides 0-RTT (Zero Round-Trip Time) conversion service since no extra delay is induced by the Convert protocol compared to connections that are not proxied. Also, the Convert Protocol does not require any encapsulation (no tunnels, whatsoever).
+
+# ATSSS Version 2: Adding Non-TCP Support 
+
+## Motivation 
+
+The MPTCP-based ATSSS discussed in the previous section is specific to TCP,
+obviously. Therefore it does not support non-TCP traffic, such as
+UDP, RTP, QUIC {{QUIC-Deployment}} or IPSec and DTLS VPN services.
+As the share of these protocols grows, mainly driven by QUIC deployment, and the seamless handover is particularly useful for real-time traffic (e.g. voice or video calls), a future ATSSS would lose its impact if its scope does not extend
+beyond supporting TCP only.
+
+----- OB to be discussed, not convinced that this discussion is needed for IETF
+
+However, UDP compared to TCP has different dimensions to be considered in
+respect to the ATSSS high-layer approach.
+
+1. UDP consists of a mix of traffic with different demands on transport
+2. UDP is stateless and non-reliable
+
+That does not allow a simple definition of a multipath transport protocol for UDP
+like it was done for TCP purposes. Even if one would limit to support the QUIC,
+as dominating part of the UDP share only, this raises issues by its nature of
+an end-to-end encrypted protocol including its connection control signals. A
+QUIC connection as defined in {{I-D.ietf-quic-transport}} cannot be intercepted
+and converted like it is done in the ATSSS architecture for (MP)TCP
+({{fig-mptcp-arch}}). Also a potentially upcoming Multipath QUIC
+{{I-D.deconinck-quic-multipath}} cannot change this, as it inherits the
+encryption features from {{I-D.ietf-quic-transport}}. A (MP)QUIC connection
+initiated between UE and a service outside the ATSSS UPF evades therefore any
+direct application of the ATSSS steering methods inside the (MP)QUIC connection
+itself.
+
+In consequence it is very likely that such traffic (UDP or a subset like QUIC)
+has to be encapsulated in a multipath capable protocol between UE and UPF, which
+meets the ATSSS demands on higher-layer steering. One of the key capabilities
+which has to be provided by such a multipath capable protocol is its ability to
+further ensure the transport characteristics of the piggy backed data exchanged
+along the path between UE and the remote endpoint.
+
+-------
+
+Several proposals to carry non-TCP traffic were discussed, including
+using TCP {{I-D.boucadair-mptcp-plain-mode}} or
+defining multipath extensions to DCCP {{I-D.amend-tsvwg-multipath-dccp}}.
+The work within 3GPP now focuses on using QUIC as the baseline for the second
+version of ATSSS.
+
+## QUIC as an ATSSS Data Plane Protocol 
+
+This section discusses to what extent QUIC can be used to provide an ATSSS service and whether gaps are found.
+
+Some ATSSS modes can be natively supported by the base QUIC specification. For example, the “Active-Standby” and “Smallest Delay” steering modes can be supported directly between an UE and a QUIC server without any assistance from the network other than the performance measurement information. 
+
+Nevertheless, blindly distributing packets among existing paths may lead to complications such as:
+
+- Aggressive use of user quota if one of the access networks is subject to volume-based quota. 
+
+- The steering policy as currently defined in ATSSS is local to the UE and the proxy. There are no means to signal that policy to an upstream server. 
+
+- Frequent connection migration if both access networks are used to forward data; each with a distinct source IP address.
+
+Let's assess in more details how QUIC can be used to provide ATSSS for any kind of traffic.
+
+A first approach is to use QUIC version 1 {{I-D.ietf-quic-transport}} with the Unreliable Datagram Extension {{I-D.ietf-quic-datagram}}.
+In this case, there is one QUIC session between the UE and the ATSSS proxy function.
+This QUIC session uses only one access network at a time. Thanks to the
+connection migration capability of QUIC, it is possible to support the
+switching and steering functions of ATSSS, but splitting cannot be supported.  
+
+A second candidate solution is to also use QUIC version 1 with the Unreliable Datagram Extension, but with one QUIC session over each access network. By using
+two QUIC sessions, it becomes possible to support steering by selecting
+the session used to carry each flow. It also becomes possible
+to support the switching function of ATSSS by moving flows from one QUIC
+session to the other. However, supporting splitting is more challenging
+since this would require transmitting data from the same flow over two
+different sessions. For unreliable flows, this would be possible but
+would result in some reordering among the datagrams that belong to
+a split flow. For TCP connections, this would require a more complex
+higher layer protocol that divides each bytestream in chunks are then
+reordered at the other end of the session. Furthermore, since the bandwidth
+available for each QUIC session varies as a function of the congestion experienced
+over each access network, data sent over a congested session could delay the
+delivery of subsequent data over the other session. Another difficulty
+with the utilization of independent QUIC sessions is that when load balancers
+are used to implement the ATSSS UPF, two QUIC sessions addressed to the
+same ATSSS UPF will not necessarily be handled by the same server.
+
+-- Med: I don't parse the sentence with laod-balancers implementing the ATSSS UPF. 
+
+A third candidate solution is to leverage the ability of QUIC to support multiple
+streams and the Unreliable Datagram Extension but extend it with
+Multipath capabilities as described in {{I-D.deconinck-quic-multipath}}.
+With these Multipath extensions, there is a single (Multipath) QUIC session
+between the UE and the ATSSS. The Multipath extensions provide several
+benefits to support ATSSSv2. Splitting is naturally supported. Data
+sent over one access network can be retransmitted over the other if
+the first becomes congested. Some measurements and simulations have
+shown that Multipath QUIC provides similar performance as Multipath
+TCP with combining different access networks {{MPQUIC-Conext}}.
+Steering is also supported since UDP Datagrams
+and TCP connections can be mapped over any access network based on the
+ATSSS rules. Since splitting is supported, this choice can be revisited
+if one of the access networks fails or becomes congested. Switching
+is also supported with Multipath QUIC. Experience with Multipath TCP on
+smartphones has shown that handovers are not a binary process. When
+a smartphone performs handovers, there are frequently short periods
+of time during which both networks are imperfect {{MPTester}}. During
+these periods, it is important to be able to use both networks
+simultaneously.
+Since there is a single Multipath QUIC session between the UE and the
+ATSSS UPF, load-balancers do not cause problems. 
+
+
+## Handling both TCP and Non-TCP using QUIC
+
+In ATSSSv1, each TCP connection originated by the UE corresponds to
+an MPTCP connection that is terminated on the ATSSS function. ATSSSv2 may
+leverage the multi-stream capability of QUIC to carry the bytestreams
+of multiple TCP connections over a single QUIC session.
+Consider an UE that is currently attached to
+only one access network. This UE maintains one QUIC session with its
+ATSSS proxy function. Every TCP connection that it creates results in the
+creation of a stream on the QUIC session with the ATSSSv2 function.
+The ATSSSv2 function maps each bytestream of the QUIC session onto a
+TCP connection with a remote host. This is illustrated in {{fig-atssv2-tcp}}.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                               AAAAAA
+                                            ===========> +-------+
+                                           //  +---------|Server2|
+                                           ||  |         +-------+   
+                QUIC session               \/  | 
+ +---+--+ <------------------------------>+-----+        +-------+
+ |  U E |  Stream1  AAAAAAAAAAAAA...AAA   |ATSSS|-/.../--|Server1|
+ |      |  Stream2  BBBBBBBBBBBBB...BBB   | UPF | <=====>+-------+
+ +--+---+ ------------------------------- +-----+  BBBBB
+                                         
+
+<----> QUIC session
+<====> TCP connection
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{: #fig-atssv2-tcp title="ATSSSv2 maps each TCP connection on a stream of the QUIC session between UE and ATSSS"}
+
+This solution cannot be used to support other protocols than TCP. Each non-TCP
+packet (e.g. UDP, plain IP) will be transported unreliably as a datagram
+over the QUIC session by using the Unreliable Datagram Extension
+{{I-D.ietf-quic-datagram}}. Transporting these datagrams unreliably as
+in IPSec or DTLS tunnels prevents problems that arise when a reliable protocol
+is used to transport packets that do not require reliable delivery or are
+subject to their own congestion control scheme.
+
+Two application layer protocols proposed to manage the mapping
+between TCP connections and QUIC streams and the transmission of UDP
+datagrams. The MASQUE protocol uses the HTTP/3 CONNECT method to
+support TCP connections {{I-D.schinazi-masque-protocol}}
+and extend it with a UDPCONNECT method to
+support UDP {{I-D.schinazi-masque-connect-udp}}. A simpler protocol
+providing similar features is proposed in {{I-D.piraux-quic-tunnel}}{{I-D.piraux-quic-tunnel-tcp}}.
+
+# Terms used in this document
+
+Access Traffic Steering, Switching, and Splitting (ATSSS) service - PR8
+
+MPTCP Client - PR10
+
+Access Net - PR10
+
+3GPP Core Net - PR10
+
+ATSSS Rules - PR10
+
+MPTCP Proxy - PR10
+
+UE - PR10 (Med's diagram)
+
+AMF - PR10 (Med's diagram)
+
+SMF - PR10 (Med's diagram)
+
+PCF - PR10 (Med's diagram)
+
+UPF - PR10 (Med's diagram)
+
+DN - PR10 (Med's diagram)
+
+ATSSS-LL PR10 (Med's diagram)
+
+PMF PR10 (Med's diagram)
+
+Packet Data Network (PDN) - PR11
+
+UE (User Equipment) - PR11
+
+Access Point Name (APN) - PR11
+
+User Plane - PR11
+
+The 5G Core (5GC) - PR11
+
+Data Network Name (DNN) - PR11
+
+PDU Connectivity Service - PR11
+
+PDU Sessions - PR11
+
+3GPP access network - PR11
+
+Access Traffic Steering - PR11
+
+Access Traffic Switching - PR11
+
+Access Traffic Splitting - PR11
+
+Transport Converter - PR11
+
+link-specific multipath" addresses/prefixes - PR12
+
+Multi-Access (MA) PDU session IP address - PR14
+
+External Realm - PR14
+
+Active-Standby - PR15
+
+“Smallest Delay” - PR15
+
+“Load-Balancing” - PR15
+
+Priority-Based" - PR15
+
+SYN - PR16
+
+ACK - PR16
+
+MPC - PR16
+
+0-RTT (Zero Round-Trip Time) - PR16
+
+GPRS Tunneling Protocol for the user plane (GTP-U) - PR17
 
 # Conclusion {#conclusion}
 
 Based on the two above questions, it should be clear that MPQUIC could
 cover both cases.
 
+# IANA Considerations
 
+(Note to RFC Editor - if this document ever reaches you, please remove this section)
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This document makes no requests of IANA.
 
-ASCII figure
+# Security Considerations
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-{: #fig-ascii title="A simple figure"}
+This section will be completed. 
+
+# Acknowledgements
+
+(Reviewers and commenters - your name goes here!)
+
+# Document History
+
+(Note to RFC Editor - if this document ever reaches you, please remove this section)
+
+Version -00: initial submission
 
