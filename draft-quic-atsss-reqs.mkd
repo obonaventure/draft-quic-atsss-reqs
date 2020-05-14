@@ -287,6 +287,15 @@ which flows are eligible to the ATSSS service.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {: #fig-arch title="Simplified Reference Architecture for ATSSS"}
 
+## External IP Addresses Used by the ATSSS Proxy
+
+The proxy translates the access network specific addresses into an address called Multi-Access (MA) IP address and vice versa. Such address is also directly assigned to the UE (that is, packets that are not eligible to the ATSSS service are sourced by the UE with that IP address).
+
+Absent any coordination between the UE and the ATSSS proxy (e.g., assignment of port ranges), the same port number may be used simultaneously by the ATSSS proxy and the UE; which is problematic.
+
+To avoid such issue, the ATSSS proxy may be configured with a pool of IP addresses that it can use in the External Realm instead of preserving the MA IP address assigned to the UE. How that pool is used is deployment- and implementation-specific.
+
+## ATSSS Modes
 
 3GPP defines the following procedures {{TS23501}} that are applicable between "3GPP access" and "non-3GPP access" networks:
  
