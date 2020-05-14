@@ -59,6 +59,11 @@ author:
   name: Nicolas Keukeleire
   organization: Tessares
   email: nicolas.keukeleire@tessares.net
+ -
+  ins: S. Seo
+  name: SungHoon Seo
+  organization: Korea Telecom
+  email: sh.seo@kt.com
 
 normative:
   TS23501:
