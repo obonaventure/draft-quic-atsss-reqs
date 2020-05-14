@@ -413,8 +413,8 @@ For non-TCP traffic, QUIC is already the dominating part of the UDP share. A sol
 
 Some ATSSS modes can be natively supported by the base QUIC specification. For example, the “Active-Standby” and “Smallest Delay” steering modes can be supported directly between an UE and a QUIC server without any assistance from the network other than the performance measurement information. 
 
-Further, QUIC as defined in {{I-D.ietf-quic-transport}} does provide a new feature called path migration that makes it possible to move a QUIC connection from one path/IP address to another without terminating and reestablishing the connection.
-Path migration can further enable traffic switching but does not support traffic splitting as only one path can be used simultaneously. 
+Further, QUIC as defined in {{I-D.ietf-quic-transport}} does provide a new feature called connection migration that makes it possible to move a QUIC connection from one path/IP address to another without terminating and reestablishing the connection.
+Connection migration can further enable traffic switching but does not support traffic splitting as only one path can be used simultaneously. 
 
 An extension to QUIC to support simultaneous use of multiple path has been proposed {{I-D.deconinck-quic-multipath}}.
 However, simlar as a native MPTCP connection, a (MP)QUIC connection initiated between the UE and a service outside the ATSSS UPF can not benefit from any direct application of the ATSSS steering methods based on network input as the steering policy as currently defined in ATSSS is local to the UE and the proxy and there are no means to signal that policy to an upstream server. 
@@ -433,19 +433,19 @@ This document discusses three approaches:
 
 - Use of QUIC version 1 {{I-D.ietf-quic-transport}} with the Unreliable Datagram Extension {{I-D.ietf-quic-datagram}}
 - Use of QUIC version 1 with the Unreliable Datagram Extension, but with one QUIC connection over each access network
-- Use of a single Multipath QUIC connection over multiple paths on each access network
+- Use of a single Multipath QUIC connection, with the Unreliable Datagram Extension, over all access networks
 
-### QUICv1 tunnel with Unreliable Datagram Extension and Path Migration
+### Single QUICv1 tunnel with Unreliable Datagram Extension and Connection Migration
 
 In this case, there is one QUIC session between the UE and the ATSSS proxy function.
 This QUIC session uses only one access network at a time. Thanks to the
 connection migration capability of QUIC, it is possible to support the
 switching and steering functions of ATSSS, but splitting cannot be supported.  
 
-### Multiple QUICv1 tunnels per paths
+### Multiple QUICv1 tunnels with Unreliable Datagram Extension and Connection Migration
 
 By using
-multiple QUIC connections, it becomes possible to support steering by selecting
+one QUIC connection over each access network, it becomes possible to support steering by selecting
 the session used to carry each flow. It also becomes possible
 to support the switching function of ATSSS by moving flows from one QUIC
 session to the other. However, supporting splitting is more challenging
@@ -640,4 +640,3 @@ This section will be completed.
 (Note to RFC Editor - if this document ever reaches you, please remove this section)
 
 Version -00: initial submission
-
