@@ -295,6 +295,8 @@ which flows are eligible to the ATSSS service.
 
 Techniques to provide ATSSS are classified by the 3GPP into two flavors: (1) high-layer techniques which operate above the IP layer (e.g., MPTCP), and (2) low-layer techniques which operate below the IP layer. Only high-layer steering techniques are discussed in this document.
 
+## ATSSS Rules 
+
 The traffic that matches an ATSSS rule can be distributed among available access networks following one of these modes:
 
 - “Active-Standby”: The traffic associated with the matching flow will be forwarded via a specific access (called 'active access') and switched to another access (called 'standby access') when the active access is unavailable. 
