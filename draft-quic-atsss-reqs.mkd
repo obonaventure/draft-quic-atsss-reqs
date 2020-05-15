@@ -463,11 +463,21 @@ Network input can be especially beneficial for cases such as:
 
 This section elaborates how non-TCP traffic (UDP or a subset like QUIC) can to be encapsulated into a tunnel between the UE and the ATSSS UPF to enable so called ATSSS higher-layer steering for all traffic, not only TCP or QUIC. This section discusses to what extent QUIC can be used as a tunneling protocol for the ATSSS service and whether gaps are found.
 
+When tunneling non-TCP (e.g., UDP, plain IP) over QUIC the Unreliable Datagram Extension
+{{I-D.ietf-quic-datagram}} can be used. Each data packet would  transported unreliably as a datagram
+over the QUIC connection. Transporting these datagrams unreliably as
+in IPSec or DTLS tunnels is especially important for flows that do not require reliable delivery 
+and suffer from unnecessary delay when reliability is added. QUIC datagram are conngestion controlled, 
+however as the latency between the UE and the ATSSS proxy is small compared to the end-to-end latency
+this should not impact the end-to-end congestion control negative.
+
 This document discusses three approaches:
 
-- Use of QUIC version 1 {{I-D.ietf-quic-transport}} with the Unreliable Datagram Extension {{I-D.ietf-quic-datagram}}
-- Use of QUIC version 1 with the Unreliable Datagram Extension, but with one QUIC connection over each access network
-- Use of a single Multipath QUIC connection {{I-D.deconinck-quic-multipath}}, with the Unreliable Datagram Extension, over all access networks
+- Use of QUIC version 1 with the Unreliable Datagram Extension,
+- Use of QUIC version 1 with the Unreliable Datagram Extension but with one QUIC connection over each access network, and
+- Use of a single Multipath QUIC connection {{I-D.deconinck-quic-multipath}}, with the Unreliable Datagram Extension, over all access networks.
+
+
 
 ### Single QUICv1 Tunnel with Unreliable Datagram Extension and Connection Migration
 
@@ -505,45 +515,45 @@ A third candidate solution is to leverage the ability of QUIC to support multipl
 streams and the Unreliable Datagram Extension but extends it with
 Multipath capabilities as described in {{I-D.deconinck-quic-multipath}}.
 
-With these Multipath extensions, there is a single (Multipath) QUIC session
-between the UE and the ATSSS proxy. The Multipath extensions provide several
-benefits to support ATSSSv2:
-- Splitting is naturally supported. Data
+In this case, there is a single (Multipath) QUIC connection
+between the UE and the ATSSS proxy. With a multipath extensions splitting is naturally supported.
 
-sent over one access network can be retransmitted over the other if
+Data sent over one access network can be retransmitted over the other if
 the first becomes congested. Some measurements and simulations have
 shown that Multipath QUIC provides similar performance as Multipath
-TCP with combining different access networks {{MPQUIC-Conext}}.
+TCP when combining different access networks {{MPQUIC-Conext}}.
 
-- Steering is also supported since flows can be mapped over any access network based on the
-ATSSS rules. Since splitting is supported, this choice can be revisited
-if one of the access networks fails or becomes congested. 
+Steering can be also supported similar as for MPTCP. The path scheduler can
+map datagrams carrying an entire flows to one or another access network based on the
+ATSSS rules. 
 
-- Switching
-is also supported with Multipath QUIC. Experience with Multipath TCP on
+Switching can be improved by splitting traffic simulaneously over
+both link first such that the congestion window of the new path can be open before
+the old path goes aways. This makes handovers more smooth as experience with Multipath TCP on
 smartphones has shown that handovers are not a binary process. When
 a smartphone performs handovers, there are frequently short periods
-of time during which both networks are imperfect {{MPTester}}. During
-these periods, it is important to be able to use both networks
-simultaneously.
+of time during which both networks are imperfect {{MPTester}}. Using use both networks
+simultaneously during these periods, improves the user experience.
 
-Since there is a single Multipath QUIC session between the UE and the
-ATSSS UPF, load-balancers do not cause problems. 
+Further with splitting traffic can be better distributed based on available ressources 
+if one of the access networks fails or becomes congested.
 
 
-## Handling both TCP and Non-TCP using QUIC
+## Mapping of both TCP and Non-TCP to QUIC streams and datagrams
 
 In ATSSSv1, each TCP connection originated by the UE corresponds to
-an MPTCP connection that is terminated on the ATSSS proxy. ATSSSv2 may
-leverage the multi-stream capability of QUIC to carry the bytestreams
+one MPTCP connection that is terminated on the ATSSS proxy. With ATSSSv2
+using QUIC as a tunneling protocol, one can leverage the multi-stream capability of QUIC to carry the bytestreams
 of multiple TCP connections over a single QUIC session.
 
-Consider an UE that is currently attached to
-only one access network. This UE maintains one QUIC session with its
-ATSSS proxy. Every TCP connection that it creates results in the
-creation of a stream on the QUIC session with the ATSSSv2 proxy.
-The ATSSSv2 proxy maps each bytestream of the QUIC session onto a
-TCP connection with a remote host. This is illustrated in {{fig-atssv2-tcp}}.
+Focusing on the case where the UE maintains one QUIC connection with its
+ATSSS proxy, every TCP connection that it creates results in the
+creation of a new stream of the QUIC connection with the ATSSSv2 proxy.
+Similarly the ATSSSv2 proxy can map each incoming TCP connection from a remote host 
+onto a stream of the QUIC connection. This is illustrated in {{fig-atssv2-tcp}}.
+Stream mapping is most beneficial for TCP, as it avoids reordering and TCP anyway requires
+in-order delivery. Respectively it is usually more approriate to use QUIC datagram for all other
+traffic.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
                                                AAAAAA
@@ -562,21 +572,13 @@ TCP connection with a remote host. This is illustrated in {{fig-atssv2-tcp}}.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {: #fig-atssv2-tcp title="ATSSSv2 could map each TCP connection on a stream of the QUIC session between UE and ATSSS"}
 
-This solution cannot be used to support other protocols than TCP. Each non-TCP
-packet (e.g., UDP, plain IP) will be transported unreliably as a datagram
-over the QUIC session by using the Unreliable Datagram Extension
-{{I-D.ietf-quic-datagram}}. Transporting these datagrams unreliably as
-in IPSec or DTLS tunnels prevents problems that arise when a reliable protocol
-is used to transport packets that do not require reliable delivery or are
-subject to their own congestion control scheme.
-
-Two application layer protocols proposed to manage the mapping
-between TCP connections and QUIC streams and the transmission of UDP
-datagrams. The MASQUE protocol uses the HTTP/3 CONNECT method to
-support TCP connections {{I-D.schinazi-masque-protocol}}
-and extend it with a UDPCONNECT method to
-support UDP {{I-D.schinazi-masque-connect-udp}}. A simpler protocol
-providing similar features is proposed in {{I-D.piraux-quic-tunnel}}{{I-D.piraux-quic-tunnel-tcp}}.
+Two application layer protocols are proposed to manage the mapping
+of TCP connections to QUIC streams as well as the transmission of UDP
+datagrams over QUIC datagrams. The to-be MASQUE working groups extends the HTTP/3 CONNECT method 
+with a UDPCONNECT method to use QUIC as a tunnel to proxy UDP traffic {{I-D.schinazi-masque-connect-udp}}.
+Another use case in scope for the groups is IP proxying which can be used for tunneling and forwarding of TCP connections.
+{{I-D.piraux-quic-tunnel}}{{I-D.piraux-quic-tunnel-tcp}} is a proposal focusing on
+the ATTSS use case providing a similar functionality based on a new bit-oriented protocol (instead of HTTP).
 
 # Terms used in this document
 
