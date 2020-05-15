@@ -59,6 +59,11 @@ author:
   name: Nicolas Keukeleire
   organization: Tessares
   email: nicolas.keukeleire@tessares.net
+ -
+  ins: S. Seo
+  name: SungHoon Seo
+  organization: Korea Telecom
+  email: sh.seo@kt.com
 
 normative:
   TS23501:
@@ -138,19 +143,21 @@ informative:
     
 --- abstract
 
-This document briefly presents the Access Traffic Steering, Switching, and Splitting (ATSSS) service being specified within the 3rd Generation Partnership Project (3GPP). ATSSS provides network support for multihomed devices to select a path for transmission (steer), move traffic from one path to another (switch), or use multiple paths simutaneously (split). TS 23.501 specifies an ATSSS for TCP traffic only. This document presents a snap-shot of the on-going discussion in 3GPP to enable ATSSS for non-TCP traffic, based on the use of QUIC.
+This document briefly presents the Access Traffic Steering, Switching, and Splitting (ATSSS) service being specified within the 3rd Generation Partnership Project (3GPP). ATSSS provides network support for multihomed devices to select a path for transmission (steer), move traffic from one path to another (switch), or use multiple paths simutaneously (split). TS 23.501 specifies an ATSSS for TCP traffic only. 
+This document presents a snap-shot of the on-going discussion in 3GPP to enable ATSSS for non-TCP traffic, based on the use of QUIC, and assesses to what extent IETF specifications can be used to meet the ATSSS design goals; gaps (if any) will be documented.  
 
 --- middle
 
 # Introduction {#intro}
 
-The 3rd Generation Partnership Project (3GPP) has described the Access Traffic Steering, Switching, and Splitting (ATSSS) service, used to direct TCP traffic between endpoints with multiple available paths, in their Release 16 {{TS23501}}. In Release 16, ATSSS uses the IETF MPTCP protocol {{RFC6824}}.
+The 3rd Generation Partnership Project (3GPP) has described the Access Traffic Steering, Switching, and Splitting (ATSSS) service, used to carry TCP traffic over multiple available paths, in their Release 16 {{TS23501}}. In Release 16, ATSSS only supports TCP traffic and relies upon two IETF protocols: MPTCP {{RFC6824}} and Convert Protocol {{I-D.ietf-tcpm-converters}}.
 
-As part of preparation for Release 17 studies, 3GPP has expressed an interest in other IETF protocols and protocol extensions that would remove some of the limits they experience with MPTCP. 
+As part of preparation for Release 17 studies, 3GPP has expressed an interest in other IETF protocols and protocol extensions that would enable ATSSS service of traffic not supported by the Convert Protocol nor based on the use of MPTCP. To that aim, 
+3GPP has contacted the IETF through a formal liaison {{atsssliaison}}, letting the IETF know about this interest. An excerpt of the liaison document is provided below: 
 
-3GPP has contacted IETF through a formal liaison {{atsssliaison}}, letting the IETF know about this interest. From the liaison document: "The work on the study has not yet started in 3GPP, and there are thus no agreed conclusions. . The goal is to enable steering, switching and splitting of traffic (primarily UDP) across multiple accesses, including latency sensitive and real time traffic. Therefore 3GPP is interested to receive regular feedback on progress and prioritization on the multipath extensions to QUIC."
+"The work on the study has not yet started in 3GPP, and there are thus no agreed conclusions. The goal is to enable steering, switching and splitting of traffic (primarily UDP) across multiple accesses, including latency sensitive and real time traffic. Therefore 3GPP is interested to receive regular feedback on progress and prioritization on the multipath extensions to QUIC."
 
-Because "3GPP SA kindly requests IETF to take the above information into account when discussing future work in prioritizing the multipath work for QUIC", but the complete specification of ATSSS in the relevant 3GPP architecture documents reflects the complexity of 3GPP networks, the authors of this draft worked to provide a high level overview of the parts of ATSSS that would be impacted by IETF protocol design, in terminology that is more familiar to IETF participants. 
+Because "3GPP SA kindly requests IETF to take the above information into account when discussing future work in prioritizing the multipath work for QUIC", but the complete specification of ATSSS in the relevant 3GPP architecture documents reflects the complexity of 3GPP networks, the authors of this document worked to provide a high level overview of the parts of ATSSS that would be impacted by IETF protocol design, in terminology that is more familiar to IETF participants. 
 
 This document is an informational Internet-Draft from individuals, and does not carry any special status within the IETF.
 
@@ -281,6 +288,15 @@ which flows are eligible to the ATSSS service.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {: #fig-arch title="Simplified Reference Architecture for ATSSS"}
 
+## External IP Addresses Used by the ATSSS Proxy
+
+The proxy translates the access network specific addresses into an address called Multi-Access (MA) IP address and vice versa. Such address is also directly assigned to the UE (that is, packets that are not eligible to the ATSSS service are sourced by the UE with that IP address).
+
+Absent any coordination between the UE and the ATSSS proxy (e.g., assignment of port ranges), the same port number may be used simultaneously by the ATSSS proxy and the UE; which is problematic.
+
+To avoid such issue, the ATSSS proxy may be configured with a pool of IP addresses that it can use in the External Realm instead of preserving the MA IP address assigned to the UE. How that pool is used is deployment- and implementation-specific.
+
+## ATSSS Modes
 
 3GPP defines the following procedures {{TS23501}} that are applicable between "3GPP access" and "non-3GPP access" networks:
  
@@ -289,6 +305,8 @@ which flows are eligible to the ATSSS service.
 - Access Traffic Splitting: split of the packets of a data flow across multiple access networks.
 
 Techniques to provide ATSSS are classified by the 3GPP into two flavors: (1) high-layer techniques which operate above the IP layer (e.g., MPTCP), and (2) low-layer techniques which operate below the IP layer. Only high-layer steering techniques are discussed in this document.
+
+## ATSSS Rules 
 
 The traffic that matches an ATSSS rule can be distributed among available access networks following one of these modes:
 
