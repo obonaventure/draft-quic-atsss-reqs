@@ -463,22 +463,22 @@ This document discusses three approaches:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
                ------------
-              /            \
-     +-------| Access Net A |--+
-     |        \   (3GPP)   /   |
-     |         ------------    |
-     v                         |
- +------+               ------------+     +------+
- |QUIC  |              /             \--->|QUIC  |        +------+
- |      |             | 3GPP Core Net |   |      |=/.../==|Server|
+    *---------/            \----*
+    |........| Access Net A |...|
+    |:*-------\   (3GPP)   /--+:|
+    |:|        ------------   |:|
+    |v|                  -----+-+---
+ +--+-+-+               /           \-----+------+
+ |QUIC  |              /             \....|QUIC  |        +------+
+ |      |             | 3GPP Core Net |---+      |.......>|Server|
  |Client|              \             /    |Proxy |        +------+
- +------+               -------------     +------+
-
+ +------+               \           /     +------+
+                         -----------
                ------------
               /            \
              | Access Net B |           Legend:
               \ (non 3GPP) /               --- QUIC tunnel connection
-               ------------                === Tunneled non-TCP flow
+               ------------                ... Tunneled non-TCP flow
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {: #fig-single-quic title="Single QUICv1 tunnel"}
 
