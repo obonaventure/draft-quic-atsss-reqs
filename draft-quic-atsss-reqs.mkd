@@ -367,7 +367,6 @@ During the attachment of an ATSSS-capable UE to the network, the UE retrieves th
 Also, both the MPTCP Client and MPTCP proxy are configured with ATSSS rules from the network that govern how the multiple network paths between the MPTCP Client and MPTCP Proxy are used. This relationship is shown using "." between the MPTCP Client and MPTCP Proxy. 
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
   ........(ATSSS Rules From Network)..........
   .                                          .
   .            ------------                  .
@@ -376,19 +375,17 @@ Also, both the MPTCP Client and MPTCP proxy are configured with ATSSS rules from
   .  |        \   (3GPP)   /   |             .
   .  |         ------------    |             .
   .  |                         |             .
-  .  |                         |             .
-  .  |                  -------------        .
- +---+--+              /             \    +-----+        +------+
- |MPTCP |             | 3GPP Core Net +---|MPTCP|-/.../--|Server|
- |Client|              \             /    |Proxy|        +------+
+ +------+               -------------     +-----+
+ |MPTCP |              /             \----|MPTCP|        +------+
+ |      |             | 3GPP Core Net |   |     |=/.../==|Server|
+ |Client|              \             /----|Proxy|        +------+
  +--+---+               -------------     +-----+
-    |                          |
     |                          |
     |          ------------    |
     |         /            \   |
-    +--------| Access Net B |--+
-              \ (non 3GPP) /
-               ------------
+    +--------| Access Net B |--+        Legend:
+              \ (non 3GPP) /               --- MPTCP subflow
+               ------------                === Proxied TCP flow
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {: #fig-mptcp-arch title="Simplified Reference Architecture for ATSSS with Multipath TCP"}
 
@@ -470,10 +467,10 @@ This document discusses three approaches:
      +-------| Access Net A |--+
      |        \   (3GPP)   /   |
      |         ------------    |
-     |                         |
-     |                  -------------
- +------+              /             \    +------+        +------+
- |QUIC  |             | 3GPP Core Net |---|QUIC  |=/.../==|Server|
+     v                         |
+ +------+               ------------+     +------+
+ |QUIC  |              /             \--->|QUIC  |        +------+
+ |      |             | 3GPP Core Net |   |      |=/.../==|Server|
  |Client|              \             /    |Proxy |        +------+
  +------+               -------------     +------+
 
@@ -481,7 +478,7 @@ This document discusses three approaches:
               /            \
              | Access Net B |           Legend:
               \ (non 3GPP) /               --- QUIC tunnel connection
-               ------------                === non-TCP flow
+               ------------                === Tunneled non-TCP flow
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {: #fig-single-quic title="Single QUICv1 tunnel"}
 
@@ -498,18 +495,18 @@ switching and steering functions of ATSSS, but splitting cannot be supported.
      +-------| Access Net A |--+
      |        \   (3GPP)   /   |
      |         ------------    |
-     |                         |
-     |                  -------------
- +------+              /             \    +------+        +------+
- |QUIC  |             | 3GPP Core Net |---|QUIC  |=/.../==|Server|
- |Client|              \             /----|Proxy |        +------+
+     v                         |
  +------+               -------------     +------+
-     |                         |
+ |QUIC  |              /             \--->|QUIC  |        +------+
+ |      |             | 3GPP Core Net |   |      |=/.../==|Server|
+ |Client|              \             /--->|Proxy |        +------+
+ +------+               -------------     +------+
+     ^                         |
      |         ------------    |
      |        /            \   |
      +-------| Access Net B |--+        Legend:
               \ (non 3GPP) /               --- QUIC tunnel connection
-               ------------                === non-TCP flow
+               ------------                === Tunneled non-TCP flow
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {: #fig-multiple-quic title="Multiple QUICv1 tunnels"}
 
@@ -539,18 +536,18 @@ same ATSSS UPF will not necessarily be handled by the same server.
      +-------| Access Net A |--+
      |        \   (3GPP)   /   |
      |         ------------    |
-     |                         |
-     |                  -------------
- +------+              /             \    +------+        +------+
- |MPQUIC|             | 3GPP Core Net |---|MPQUIC|=/.../==|Server|
- |Client|              \             /----|Proxy |        +------+
+     v                         |
  +------+               -------------     +------+
-     |                         |
+ |QUIC  |              /             \--->|QUIC  |        +------+
+ |      |             | 3GPP Core Net |   |      |=/.../==|Server|
+ |Client|              \             /--->|Proxy |        +------+
+ +------+               -------------     +------+
+     ^                         |
      |         ------------    |
      |        /            \   |
      +-------| Access Net B |--+        Legend:
-              \ (non 3GPP) /               --- MP-QUIC subflow
-               ------------                === non-TCP flow
+              \ (non 3GPP) /               --- MPQUIC subflow
+               ------------                === Tunneled non-TCP flow
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {: #fig-mp-quic title="Multipath QUIC tunnel"}
 
