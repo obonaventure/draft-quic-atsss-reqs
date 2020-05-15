@@ -462,12 +462,54 @@ This document discusses three approaches:
 
 ### Single QUICv1 tunnel with Unreliable Datagram Extension and Connection Migration
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               ------------
+              /            \
+     +-------| Access Net A |--+
+     |        \   (3GPP)   /   |
+     |         ------------    |
+     |                         |
+     |                  -------------
+ +------+              /             \    +------+        +------+
+ |QUIC  |             | 3GPP Core Net |---|QUIC  |=/.../==|Server|
+ |Client|              \             /    |Proxy |        +------+
+ +------+               -------------     +------+
+
+               ------------
+              /            \
+             | Access Net B |           Legend:
+              \ (non 3GPP) /               --- QUIC tunnel connection
+               ------------                === non-TCP flow
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{: #fig-single-quic title="Single QUICv1 tunnel"}
+
 In this case, there is one QUIC session between the UE and the ATSSS proxy function.
 This QUIC session uses only one access network at a time. Thanks to the
 connection migration capability of QUIC, it is possible to support the
 switching and steering functions of ATSSS, but splitting cannot be supported.  
 
 ### Multiple QUICv1 tunnels with Unreliable Datagram Extension and Connection Migration
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               ------------
+              /            \
+     +-------| Access Net A |--+
+     |        \   (3GPP)   /   |
+     |         ------------    |
+     |                         |
+     |                  -------------
+ +------+              /             \    +------+        +------+
+ |QUIC  |             | 3GPP Core Net |---|QUIC  |=/.../==|Server|
+ |Client|              \             /----|Proxy |        +------+
+ +------+               -------------     +------+
+     |                         |
+     |         ------------    |
+     |        /            \   |
+     +-------| Access Net B |--+        Legend:
+              \ (non 3GPP) /               --- QUIC tunnel connection
+               ------------                === non-TCP flow
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{: #fig-multiple-quic title="Multiple QUICv1 tunnels"}
 
 By using
 one QUIC connection over each access network, it becomes possible to support steering by selecting
@@ -487,9 +529,30 @@ with the utilization of independent QUIC sessions is that when load balancers
 are used to implement the ATSSS UPF, two QUIC sessions addressed to the
 same ATSSS UPF will not necessarily be handled by the same server.
 
--- Med: I don't parse the sentence with laod-balancers implementing the ATSSS UPF. 
+-- Med: I don't parse the sentence with laod-balancers implementing the ATSSS UPF.
 
 ### MP-QUIC tunneling
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               ------------
+              /            \
+     +-------| Access Net A |--+
+     |        \   (3GPP)   /   |
+     |         ------------    |
+     |                         |
+     |                  -------------
+ +------+              /             \    +------+        +------+
+ |MPQUIC|             | 3GPP Core Net |---|MPQUIC|=/.../==|Server|
+ |Client|              \             /----|Proxy |        +------+
+ +------+               -------------     +------+
+     |                         |
+     |         ------------    |
+     |        /            \   |
+     +-------| Access Net B |--+        Legend:
+              \ (non 3GPP) /               --- MP-QUIC subflow
+               ------------                === non-TCP flow
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{: #fig-mp-quic title="Multipath QUIC tunnel"}
 
 A third candidate solution is to leverage the ability of QUIC to support multiple
 streams and the Unreliable Datagram Extension but extend it with
