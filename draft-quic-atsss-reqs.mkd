@@ -241,7 +241,7 @@ It is out of the scope of this document to provide a comprehensive overview of 5
 An UE can be provided a multi-access PDU Connectivity Service. That is, an UE can exchange data with a PDN by using a "3GPP access network" and a "non-3GPP access network". This is realized by use of the ATSSS service that is provided in the 5G core network usually collocated with the User Plane Function (UPF) that manages the UE's PDU session.
 
 
-## Reference Architecture
+## Reference Architecture {#ref-arch}
 
 
 To understand the operation of the ATSSS service, it is useful to consider the
@@ -264,6 +264,8 @@ The Proxy enables the UE to use a transport protocol that supports
 the different access networks even if the server does not support it (i.e., is not multipath-capable
 at transport layer).
 
+The 5G control plane provides the UE and the Proxy with ATSSS rules that specify
+which flows are eligible to the ATSSS service.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -311,8 +313,7 @@ Techniques to provide ATSSS are classified by the 3GPP into two flavors: (1) hig
 
 ## ATSSS Rules 
 
-The 5G control plane provides the UE and the Proxy with ATSSS rules that specify
-which flows are eligible to the ATSSS service.
+The 5G control plane provides the UE and the Proxy with ATSSS rules as discussed in {{ref-arch}}.
 
 The traffic that matches an ATSSS rule can be distributed among available access networks following one of these modes:
 
