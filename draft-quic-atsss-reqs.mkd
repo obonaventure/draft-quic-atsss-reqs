@@ -465,9 +465,9 @@ This document discusses three approaches:
                ------------
     *---------/            \----*
     |........| Access Net A |...|
-    |:*-------\   (3GPP)   /--+:|
+    |:*-------\   (3GPP)   /--*:|
     |:|        ------------   |:|
-    |v|                  -----+-+---
+    |v|                  -----------
  +--+-+-+               /           \-----+------+
  |QUIC  |              /             \....|QUIC  |        +------+
  |      |             | 3GPP Core Net |---+      |.......>|Server|
@@ -538,7 +538,7 @@ same ATSSS UPF will not necessarily be handled by the same server.
      |         ------------    |
      v                         |
  +------+               -------------     +------+
- |QUIC  |              /             \--->|QUIC  |        +------+
+ |MPQUIC|              /             \--->|MPQUIC|        +------+
  |      |             | 3GPP Core Net |   |      |=/.../==|Server|
  |Client|              \             /--->|Proxy |        +------+
  +------+               -------------     +------+
