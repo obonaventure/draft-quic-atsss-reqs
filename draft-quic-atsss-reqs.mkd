@@ -464,10 +464,10 @@ Network input can be especially beneficial for cases such as:
 This section elaborates how non-TCP traffic (UDP or a subset like QUIC) can to be encapsulated into a tunnel between the UE and the ATSSS UPF to enable so called ATSSS higher-layer steering for all traffic, not only TCP or QUIC. This section discusses to what extent QUIC can be used as a tunneling protocol for the ATSSS service and whether gaps are found.
 
 When tunneling non-TCP (e.g., UDP, plain IP) over QUIC the Unreliable Datagram Extension
-{{I-D.ietf-quic-datagram}} can be used. Each data packet would  transported unreliably as a datagram
-over the QUIC connection. Transporting these datagrams unreliably as
-in IPSec or DTLS tunnels is especially important for flows that do not require reliable delivery 
-and suffer from unnecessary delay when reliability is added. QUIC datagram are conngestion controlled, 
+{{I-D.ietf-quic-datagram}} can be used. Each data packet would be transported unreliably as a datagram
+over a QUIC connection. Transporting these datagrams unreliably as
+in IPsec or DTLS-based tunnels is especially important for flows that do not require reliable delivery 
+and suffer from unnecessary delay when reliability is added. QUIC datagrams are congestion-controlled, 
 however as the latency between the UE and the ATSSS proxy is small compared to the end-to-end latency
 this should not impact the end-to-end congestion control negative.
 
@@ -535,7 +535,7 @@ a smartphone performs handovers, there are frequently short periods
 of time during which both networks are imperfect {{MPTester}}. Using use both networks
 simultaneously during these periods, improves the user experience.
 
-Further with splitting traffic can be better distributed based on available ressources 
+Furthermore, traffic can be better distributed among available paths based on available resources 
 if one of the access networks fails or becomes congested.
 
 
