@@ -426,11 +426,10 @@ If the server is supporting MPTCP natively, the Convert Protocol provides an opt
 
 # ATSSS Version 2: Adding Non-TCP Support 
 
-The MPTCP-based ATSSS discussed in the previous section is specific to TCP,
+The MPTCP-based ATSSS approach discussed in the previous section is specific to TCP,
 obviously. Therefore it does not support non-TCP traffic, such as
 UDP, QUIC {{QUIC-Deployment}} or IPsec and DTLS VPN services.
-As the share of these protocols grows, mainly driven by QUIC deployment, and the seamless handover is particularly useful for real-time traffic (e.g., voice or video calls), a future ATSSS would lose its impact if its scope does not extend
-beyond supporting TCP only.
+As the share of these protocols grows, mainly driven by QUIC deployment, and the seamless handover is particularly useful for real-time traffic (e.g., voice or video calls), a future ATSSS needs to extend beyond supporting TCP only.
 
 Several proposals to carry non-TCP traffic were discussed, including
 using TCP {{I-D.boucadair-mptcp-plain-mode}} or
