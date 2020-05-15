@@ -264,8 +264,7 @@ The Proxy enables the UE to use a transport protocol that supports
 the different access networks even if the server does not support it (i.e., is not multipath-capable
 at transport layer).
 
-The 5G control plane provides the UE and the Proxy with ATSSS rules that specify
-which flows are eligible to the ATSSS service.
+The 5G control plane provides the UE and the Proxy with ATSSS rules as discussed in {{sec-rules}}.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -311,9 +310,10 @@ To avoid such issue, the ATSSS proxy may be configured with a pool of IP address
 
 Techniques to provide ATSSS are classified by the 3GPP into two flavors: (1) high-layer techniques which operate above the IP layer (e.g., MPTCP), and (2) low-layer techniques which operate below the IP layer. Only high-layer steering techniques are discussed in this document.
 
-## ATSSS Rules 
+## ATSSS Rules {#sec-rules}
 
-The 5G control plane provides the UE and the Proxy with ATSSS rules as discussed in {{ref-arch}}.
+The 5G control plane provides the UE and the Proxy with ATSSS rules that specify
+which flows are eligible to the ATSSS service.
 
 The traffic that matches an ATSSS rule can be distributed among available access networks following one of these modes:
 
