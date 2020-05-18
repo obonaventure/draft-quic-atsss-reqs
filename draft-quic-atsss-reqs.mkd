@@ -422,7 +422,7 @@ Legend:
 
 This approach provides 0-RTT (Zero Round-Trip Time) conversion service since no extra delay is induced by the Convert protocol compared to connections that are not proxied. Also, the Convert Protocol does not require any encapsulation (no tunnels, whatsoever).
 
-If the server is supporting MPTCP natively, the Convert Protocol provides an option to "opt-out" and directly establish a connection between the UE and server. In this case the server can directly make use of multiple paths but does not have the network input to utilize the multiconnectivity more efficiently as provided by ATSSS rules. Today, only a few servers, however, support MPTCP and as such for most TCP connections relying on the ATSSS service is the only option to make use of multiple simultaneous avalilable networks.
+If the server supports MPTCP, the Convert Protocol provides an option for clients to "opt-out". In such case, an MPTCP connection is directly established between the client and the server. Given that few servers are MPTCP capable, relying on the ATSSS service is the only option for UEs to make use of available multiple paths simultaneously.
 
 # ATSSS Version 2: Adding Non-TCP Support 
 
