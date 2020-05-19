@@ -161,7 +161,13 @@ As part of preparation for Release 17 studies, 3GPP has expressed an interest in
 
 Because "3GPP SA kindly requests IETF to take the above information into account when discussing future work in prioritizing the multipath work for QUIC", but the complete specification of ATSSS in the relevant 3GPP architecture documents reflects the complexity of 3GPP networks, the authors of this document worked to provide a high level overview of the parts of ATSSS that would be impacted by IETF protocol design, in terminology that is more familiar to IETF participants. 
 
+## Notes for Readers
+
 This document is an informational Internet-Draft from individuals, and does not carry any special status within the IETF.
+
+This document abstracts considerable architectural detail that is available in 3GPP specifications. The goal is to make this overview more accessible for IETF readers who are not familiar with 3GPP 5G architecture. 
+
+This document makes references to Internet-Drafts that are not as mature as the core QUIC Internet-Drafts, and in some cases, have not been adapted as Working Group drafts yet, although all are within existing and proposed IETF working group charters. The goal is to give 3GPP readers the most up-to-date understanding of what is possible.
 
 # Introduction to Access Traffic Steering, Switching, and Splitting (ATSSS) {#intro2atsss}
 
