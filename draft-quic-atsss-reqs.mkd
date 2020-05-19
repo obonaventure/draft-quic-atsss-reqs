@@ -497,25 +497,31 @@ This option is not a valid approach for the ATSSSv2 discussed within the 3GPP.
 
 ### Multiple QUICv1 Tunnels with Unreliable Datagram Extension and Connection Migration
 
-By using
-one QUIC connection over each access network, it is possible to support steering by selecting
-the session used to carry each flow. It is also possible
-to support the switching function of ATSSS by moving flows from one QUIC
-session to the other. 
+Another approach is to use one QUIC connection over each access network.
+In this case, there are multiple QUIC connections that are used as tunnels from the UE
+to the ATSSS proxy to transport traffic that belongs to one or multiple flows. The UE and ATSSS
+proxy need to select for each application data packet one tunnel QUIC connection to forward,
+based on the ATSSS rules. 
 
-However, supporting splitting is more challenging
-since this would require transmitting data from the same flow over two
-different sessions. For unreliable flows, this would be possible but
-would result in some reordering among the datagrams that belong to
-a split flow. For TCP connections, this would require a more complex
-higher layer protocol that divides each bytestream in chunks are then
-reordered at the other end of the session. Furthermore, since the bandwidth
+This approach can support steering (by selecting just one connection for each flow), switching 
+(by moving flows from one QUIC connection to the other) as well as splitting when both
+tunnels are used simultaneously for different packets of the same flow. 
+
+However, this approach for splitting is challenging
+since data from the same flow are sent over different connections,
+again using unreliable datagram to minimise head-of-line blocking.
+Because both (tunnel) QUIC connections are completely independent of each other and the paths on the
+different access networks may have different latency, this approach would
+results in reordering of packets that belong to
+a split flow. If reordering should be avoided, this would require additional signaling
+between the UE and the ATSSS proxy, e.g., adding sequence numbers, and a reordering buffer and logic.
+
+Furthermore, since the bandwidth
 available for each QUIC session varies as a function of the congestion experienced
 over each access network, data sent over a congested session could delay the
 delivery of subsequent data over the other session. 
 
 ### MP-QUIC Tunneling
-
 
 A third candidate solution is to leverage the ability of QUIC to support multiple
 streams and the Unreliable Datagram Extension but extends it with
