@@ -580,83 +580,125 @@ providing similar features is proposed in {{I-D.piraux-quic-tunnel}}{{I-D.piraux
 
 # Terms used in this document
 
-Access Traffic Steering, Switching, and Splitting (ATSSS) service - PR8
+Note for the authors - This is the list of terms used in the document as of 05-18, in the Master branch, in alphabetical order. It would be helpful for us to review them, to see (1) if there are multiple terms being used to describe the same thing, and (2) which of the filtered set of terms should have definitions in the Terminology section. 
 
-MPTCP Client - PR10
+It seems likely that we should group some of these related terms, rather than present an alphabetical list to the reader. 
 
-Access Net - PR10
+0-RTT (Zero Round-Trip Time)
 
-3GPP Core Net - PR10
+0-RTT convert protocol
 
-ATSSS Rules - PR10
+3rd Generation Partnership Project (3GPP)
 
-MPTCP Proxy - PR10
+3GPP access network
 
-UE - PR10 (Med's diagram)
+5G control plane
 
-AMF - PR10 (Med's diagram)
+5G Core (5GC)
 
-SMF - PR10 (Med's diagram)
+Access Network
 
-PCF - PR10 (Med's diagram)
+Access Traffic Steering
 
-UPF - PR10 (Med's diagram)
+Access Traffic Switching
 
-DN - PR10 (Med's diagram)
+Access Traffic Splitting
 
-ATSSS-LL PR10 (Med's diagram)
+Access Traffic Steering, Switching, and Splitting (ATSSS) service 
 
-PMF PR10 (Med's diagram)
+ACK
 
-Packet Data Network (PDN) - PR11
+ATSSS Rules
 
-UE (User Equipment) - PR11
+ATSSS proxy
 
-Access Point Name (APN) - PR11
+ATSSS UPF
 
-User Plane - PR11
+Active-Standby steering mode
 
-The 5G Core (5GC) - PR11
+BroadBand Forum (BBF)
 
-Data Network Name (DNN) - PR11
+Connection Migration
 
-PDU Connectivity Service - PR11
+Convert Protocol
 
-PDU Sessions - PR11
+Conversion Service
 
-3GPP access network - PR11
+Data Network (DN)
 
-Access Traffic Steering - PR11
+Data Network Name (DNN)
 
-Access Traffic Switching - PR11
+Datagram Transport Layer Security (DTLS)
 
-Access Traffic Splitting - PR11
+External Realm
 
-Transport Converter - PR11
+GiGA LTE and GiGA 5G
 
-link-specific multipath" addresses/prefixes - PR12
+Hybrid Access Networks
 
-Multi-Access (MA) PDU session IP address - PR14
+Internet Key Exchange version 2 (IKEv2)
 
-External Realm - PR14
+Load-Balancing steering mode
 
-Active-Standby - PR15
+MASQUE
 
-“Smallest Delay” - PR15
+MPC
 
-“Load-Balancing” - PR15
+MPTCP Client
 
-Priority-Based" - PR15
+MPTCP Proxy
 
-SYN - PR16
+Multi-Access (MA) IP address
 
-ACK - PR16
+Multi-access PDU (MA-PDU) Session
 
-MPC - PR16
+Multipath TCP (MPTCP)
 
-0-RTT (Zero Round-Trip Time) - PR16
+Non-3GPP access network
 
-GPRS Tunneling Protocol for the user plane (GTP-U) - PR17
+Packet Data Network (PDN)
+
+Packet scheduler
+
+Path manager 
+
+PDU Connectivity Service
+
+Performance Measurement Function (PMF) protocol
+
+Protocol Data Unit (PDU) Session
+
+Proxy
+
+Priority-Based steering mode
+
+Smallest-Delay steering mode
+
+Round-Trip Time (RTT)
+
+SYN
+
+Transport Converter
+
+Transport Layer Security (TLS)
+
+UDPCONNECT
+
+Unreliable Datagram Extension
+
+User Plan Function (UPF)
+
+User Equipment (UE)
+
+User Plane (UP)
+
+User Quota
+
+Virtual Private Network (VPN)
+
+Volume-based Quota
+
+Wireless LAN (WLAN)
 
 # Conclusion {#conclusion}
 
