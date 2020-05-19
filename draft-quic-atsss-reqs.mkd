@@ -479,8 +479,8 @@ In this case, there is (only) one QUIC connection between the UE and the ATSSS p
 And as such, that QUIC connection uses only one access network at a time. 
 However, given the connection migration capability of QUIC, the QUIC connection could be
 moved over to another access network, e.g. when the network indicates that the currently used 
-access network would go away or that its capacity becomes limited. Depending of the current flow of traffic 
-either the UE or the ATSSS proxy could initiate the connection migration to start the path
+access network would go away or that its capacity becomes limited. The UE can then initiate 
+the connection migration to start the path
 validation process as specified in the QUIC protocol {{I-D.ietf-quic-transport}}. When and how to decide to switch over
 depends on the ATSSS rules that are accessible to both the UE and ATSSS proxy.
 
