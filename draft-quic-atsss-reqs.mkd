@@ -472,12 +472,28 @@ This document discusses three approaches:
 ### Single QUICv1 Tunnel with Unreliable Datagram Extension and Connection Migration
 
 
-In this case, there is one QUIC session between the UE and the ATSSS proxy.
-This QUIC session uses only one access network at a time. Thanks to the
-connection migration capability of QUIC, it is possible to support the
-switching and steering functions of ATSSS, but splitting cannot be supported. 
+QUIC can be used as a tunneling protocol between the UE and the ATSSS proxy. Use of the Unreliable 
+Datagram Extension avoids unnecessary delays due to local retransmissions and, more important, subsequently 
+head-of-line blocking.
 
-This is not an option for ATSSSv2.
+In this case, there is (only) one QUIC connection between the UE and the ATSSS proxy for a given flow.
+And as such, that QUIC connection uses only one access network at a time. 
+However, given the connection migration capability of QUIC, the QUIC connection could be
+moved over to another access network, e.g. when the network indicates that the currently used 
+access network would go away or that its capacity becomes limited. The UE can then initiate 
+the connection migration to start the path
+validation process as specified in the QUIC protocol {{I-D.ietf-quic-transport}}. When and how to decide to switch over
+depends on the ATSSS rules that are accessible to both the UE and ATSSS proxy.
+
+That means it is possible to support the switching and steering functions of ATSSS, 
+but splitting cannot be supported. Path validation
+induces a delay when switching as packets have to be buffered. Further congestion control state is
+reset on a new path and needs to wrap up slowly. When frequent handovers happen, 
+splitting traffic over multiple paths simulaneously can be beneficial for a smooth user experience.
+Further, of course, the ability to use multiple paths simultaneously also increases the 
+maximum capacity available, which can also be benefical in some cases.
+
+This option is not a valid approach for the ATSSSv2 discussed within the 3GPP.
 
 ### Multiple QUICv1 Tunnels with Unreliable Datagram Extension and Connection Migration
 
