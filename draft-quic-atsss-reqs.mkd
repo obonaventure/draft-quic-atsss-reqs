@@ -430,7 +430,7 @@ Legend:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {: #fig-example title="An Example of MPTCP-proxied Connection Matching an ATSSS Rule."}
 
-This approach provides 0-RTT (Zero Round-Trip Time) conversion service since no extra delay is induced by the Convert protocol compared to connections that are not proxied. Also, the Convert Protocol does not require any encapsulation (no tunnels, whatsoever).
+This approach provides 0-RTT (Zero Round-Trip Time) conversion service since no extra delay is induced by the Convert protocol compared to connections that are not proxied. Also, the Convert Protocol does not require any encapsulation (no tunnels, whatsoever). The UE and the MPTCP proxy track the performance of the access networks by leveraging MPTCP's internal mechanisms including congestion control and round-trip-time measurements. MPTCP uses this performance information to support splitting and switching.
 
 If the server supports MPTCP, the Convert Protocol provides an option for clients to "opt-out". In such case, an MPTCP connection is directly established between the client and the server. Given that few servers are MPTCP capable, relying on the ATSSS service is the only option for UEs to make use of available multiple paths simultaneously.
 
