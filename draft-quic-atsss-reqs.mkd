@@ -118,53 +118,17 @@ The two scenarios that we consider in this document are:
 - the failure of one access network that forces all data to switch to the other access network
 - the possibility of splitting the transmission of the data over the two access networks even if they have different characteristics (delay, bandwidth, congestion)
 
-## Data Plane Encapsulations
+## Encapsulation Overhead {#sec-overhead}
 
-A variety of encapsulation schemes are used in 5GS. It is out of the scope of this document to provide a comprehensive description of the usage of such encapsulations. This section focuses exclusively on highlighting 5GS encapsulation designs that are important to take into account for the design of an efficient ATSSS solution.
+In 3GPP architectures, a variety of encapsulations are already used to convey user data. The use of QUIC as a tunneling method for ATSSS purposes will thus add an extra overhead. This overhead is even exacerbated when the user data is forwarded over a non-3GPP network access given than an IPsec tunnel is used to graft the UE to the 5G Core Network. For example, the overhead without taking into account the QUIC tunnel is at least 142 octets for an IPv6 packet forwarded over a non-3GPP network access. As a reminder, ATSSSv1 does not add any overhead. 
 
-In particular, GPRS Tunneling Protocol for the user plane (GTP-U) is used between RAN and UPF to support tunneling user data (see {{fig-encap-1}}).
+More investigation is required to assess whether the ATSSSv2 overhead is an issue. Solutions to optimize that overhead might be considered, if needed. 
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+--------+
-|Payload | 
-+--------+  
-|Inner IP| 
-+--------+  
-| GTP-U  |   
-+--------+ 
-|  UDP   | 
-+--------+ 
-|Outer IP| 
-+--------+ 
-|   L2   | 
-+--------+ 
-|   L1   | 
-+--------+ 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-{: #fig-encap-1 title="User Plane Protocol Stack"}
+## Multiple/Redundant Encryptions
 
-When the UE is connected to the 5GC via a non-3GPP access network, the following figure ({{fig-encap-2}}) depicts a typical protocol stack that should be used by the UE. In particular, IKEv2/IPsec are used to connect to a 5GC via a dedicated interconnection node. 
+QUIC data that matches an ATSSS rule will be subject to two encryptions (i.e., the one required with the remote peer and the one used to steer data via an ATSSS Proxy) when forwarded via a 3GPP network access. Three encryptions will be imposed on the same data when forwarded over a non-3GPP network access (see {{sec-overhead}}). Some of these encryptions are redundant (e.g., ATSSS encryption vs. IP Encapsulating Security Payload (ESP)).
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+--------+===========================
-|Payload |    Exchange data with a PDN 
-+--------+              via a non-3GPP 
-|  IP    |              access network 
-+--------+=====================  
-|  GRE   |   Establish a secure
-+--------+     association with
-|Inner IP|  a dedicated gateway
-+--------+ to graft to a 5GC by 
-|  IPsec | means of IKEv2/IPsec               
-+--------+=============
-|   IP   |   Connect to 
-+--------+    an access
-|   L2   |      network
-+--------+ 
-|   L1   | 
-+--------+ 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-{: #fig-encap-2 title="User Plane Protocol Stack via a non-3GPP Access"}
+Such multiple encryptions may have performance implications on the UE, in particular. Means to optimize the various redundant encryptions are for further investigation. 
 
 
 # Carrying bytestreams over different access networks {#bytestreams}
