@@ -499,13 +499,11 @@ head-of-line blocking.
 In this case, there is (only) one QUIC connection between the UE and the ATSSS proxy for a given flow.
 And as such, that QUIC connection uses only one access network at a time. 
 However, given the connection migration capability of QUIC, the QUIC connection could be
-moved over to another access network, e.g. when the network indicates that the currently used 
+moved over to another access network, e.g., when the network indicates that the currently used 
 access network would go away or that its capacity becomes limited. The UE can then initiate 
-the connection migration to start the path
-validation process as specified in the QUIC protocol {{I-D.ietf-quic-transport}}. When and how to decide to switch over
-depends on the ATSSS rules that are accessible to both the UE and ATSSS proxy.
+the connection migration to start the path validation process as specified in Section 9 of {{I-D.ietf-quic-transport}}. When and how to decide to switch over depends on the ATSSS rules ({{sec-rules}}) and the performance measurement that are accessible to both the UE and the ATSSS proxy. Note that connection migration can only be at the initiative of the UE as per Section 9 of {{I-D.ietf-quic-transport}}. This means particularly that the proxy cannot make use of a second access network upon failure or degradation observed on a first access network.  
 
-That means it is possible to support the switching and steering functions of ATSSS, 
+It is thus possible to support the switching and steering functions of ATSSS, 
 but splitting cannot be supported. Path validation
 induces a delay when switching as packets have to be buffered. Further congestion control state is
 reset on a new path and needs to wrap up slowly. When frequent handovers happen, 
