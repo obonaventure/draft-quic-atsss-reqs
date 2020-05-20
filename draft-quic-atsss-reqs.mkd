@@ -748,7 +748,7 @@ This document makes no requests of IANA.
 # Security Considerations
 
 Section 9 of {{rfc6459}} provides an overview of security considerations in 3GPP networks.
-ATSSSv1 data plane security considerations are documented in Section 9 of {{I-D. ietf-tcpm-converters}}. 
+ATSSSv1 data plane security considerations are documented in Section 9 of {{I-D.ietf-tcpm-converters}}. 
 
 This document discusses the use of QUIC (including Multipath QUIC) as an additional ATSSS steering method. QUIC-specific security considerations are discussed in Section 21 of {{I-D.ietf-quic-transport}}. Multipath QUIC-specific security considerations can be found in Section 8 of {{I-D.deconinck-quic-multipath}}. 
 
