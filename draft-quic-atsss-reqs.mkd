@@ -268,7 +268,7 @@ is an IPSec tunnel between the UE and a dedicated device in the 5G network
 (not shown in {{fig-arch}}). A dedicated IP address is assigned by means of Internet Key Exchange version 2 (IKEv2) to the UE to access the 5GC via this second network. 
 
 The UE interacts with a distant server
-through a ATSSS specific User Plane Function (ATSSS UPF) part of the 5G Core network.
+through a User Plane Function hosting the ATSSS functionality. This UPF is called hereafter ATSSS UPF.
 The ATSSS UPF enables the UE to use a transport protocol that supports
 the different access networks even if the server does not support it (i.e., is not multipath-capable
 at transport layer).
@@ -322,14 +322,14 @@ Techniques to provide ATSSS are classified by the 3GPP into two flavors: (1) hig
 
 ## ATSSS Rules {#sec-rules}
 
-The 5G control plane provides the UE and the UPF with rules that specify
-which flows are eligible to the ATSSS service (i.e., by mapping them to a Multi-Access PDU Session). Once a Multi-Access PDU Session has been established, a set of ATSSS rules are then delivered to both the UE and the UPF in order to enable unified treatment of the flows by both the UE and the UPF within the Session.
+The 5G control plane provides the UE and the ATSSS UPF with rules that specify
+which flows are eligible to the ATSSS service (i.e., by mapping them to a Multi-Access PDU Session). Once a Multi-Access PDU Session has been established, a set of ATSSS rules are then delivered to both the UE and the ATSSS UPF in order to enable unified treatment of the flows by both the UE and the ATSSS UPF within the Session.
 
 
 The traffic that matches an ATSSS rule can be distributed among available access networks following one of these modes:
 
 - “Active-Standby”: The traffic associated with the matching flow will be forwarded via a specific access (called 'active access') and switched to another access (called 'standby access') when the active access is unavailable. 
-- “Smallest Delay”: The traffic associated with the matching flow will be forwarded via the access that presents the smallest RTT. To that aim, specific measurements are conducted by the UE and a dedicated function co-located with the UPF. 
+- “Smallest Delay”: The traffic associated with the matching flow will be forwarded via the access that presents the smallest RTT. To that aim, specific measurements are conducted by the UE and a dedicated function co-located with the ATSSS UPF. 
 - “Load-Balancing”: The traffic associated with the matching flow will be distributed among available access networks following a distribution ratio (e.g., 30% via a first access, 70% via a second access).
 - “Priority-based”: For this mode, accesses are assigned priority levels that indicate which access to be used first. Concretely, the traffic associated with the matching flow will be steered on the access with a high priority till congestion is detected, then the overflow will be forwarded over a low priority access. 
 
@@ -459,7 +459,7 @@ Further, QUIC provides a feature called connection migration (Section 9 of {{I-D
 Connection migration can further enable traffic switching but does not support traffic splitting as only one path can be used simultaneously. 
 
 An extension to QUIC to support simultaneous use of multiple paths is proposed in {{I-D.deconinck-quic-multipath}}.
-However, similar as a native MPTCP connection, a (MP)QUIC connection initiated between the UE and a server without the ATSSS UPF assistance cannot benefit from any direct application of the ATSSS steering methods based on network input given that the steering policy as currently defined in ATSSS is local to the UE and the UPF and there are no means to signal that policy to a remote server. 
+However, similar as a native MPTCP connection, a (MP)QUIC connection initiated between the UE and a server without the ATSSS UPF assistance cannot benefit from any direct application of the ATSSS steering methods based on network input given that the steering policy as currently defined in ATSSS is local to the UE and the ATSSS UPF and there are no means to signal that policy to a remote server. 
 
 
 Network input can be especially beneficial for cases such as:
@@ -577,8 +577,8 @@ of multiple TCP connections over a single MPQUIC session.
 
 Focusing on the case where the UE maintains one QUIC connection with its
 ATSSS UPF, every TCP connection that it creates results in the
-creation of a new stream of the MPQUIC connection with the ATSSSv2 UPF.
-Similarly the ATSSSv2 UPF can map each incoming TCP connection from a remote host 
+creation of a new stream of the MPQUIC connection with the ATSSS UPF.
+Similarly the ATSSS UPF can map each incoming TCP connection from a remote host 
 onto a stream of the QUIC connection. This is illustrated in {{fig-atssv2-tcp}}.
 Stream mapping is most beneficial for TCP, as it avoids reordering and TCP anyway requires
 in-order delivery. Respectively it is usually more approriate to use QUIC datagram for all other
