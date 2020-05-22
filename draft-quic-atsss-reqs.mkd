@@ -557,7 +557,11 @@ available for each QUIC session varies as a function of the congestion experienc
 over each access network, data sent over a congested session could delay the
 delivery of subsequent data over the other session. 
 
-Experience with MPTCP on smartphones shows that its internal mechanisms (congestion control, round-trip-time estimation, packet scheduler, ...) are well suited to support splitting and switching. Providing a similar service over independant QUIC sessions would require a complex application that would need to track the congestion window, round-trip-time and loss characteristics of the underlying QUIC connections as well as some specific application layer signalling to glue the QUIC sessions together. An application-layer approach was also discussed while designing MPTCP {{I-D.scharf-mptcp-mctcp}} but it suffered form several problems {{NSDI12}}. For these reasons, this option is not a valid approach for the ATSSSv2 discussed within the 3GPP. 
+Experience with MPTCP on smartphones shows that its integrated mechanisms (e.g., congestion control, round-trip-time estimation, packet scheduler) are well suited to support splitting and switching. Providing a similar service over independent QUIC connections would require a complex application that would need to track the congestion window, round-trip-time, and loss characteristics of the underlying QUIC connections as well as some specific application layer signalling to glue the various QUIC connections together. 
+
+As a reminder, an application-layer approach was also discussed while designing MPTCP {{I-D.scharf-mptcp-mctcp}} but it was abandoned because it suffers from several problems {{NSDI12}}. 
+
+For these reasons, this option is not a valid approach for the ATSSSv2 discussed within the 3GPP. 
 
 ### MP-QUIC Tunneling
 
