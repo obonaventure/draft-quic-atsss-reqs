@@ -573,12 +573,12 @@ if one of the access networks fails or becomes congested.
 
 In ATSSSv1, each TCP connection originated by the UE corresponds to
 one MPTCP connection that is terminated on the ATSSS proxy. With ATSSSv2
-using QUIC as a tunneling protocol, one can leverage the multi-stream capability of QUIC to carry the bytestreams
-of multiple TCP connections over a single QUIC session.
+using MPQUIC as a tunneling protocol, one can leverage the multi-stream capability of QUIC to carry the bytestreams
+of multiple TCP connections over a single MPQUIC session.
 
 Focusing on the case where the UE maintains one QUIC connection with its
 ATSSS proxy, every TCP connection that it creates results in the
-creation of a new stream of the QUIC connection with the ATSSSv2 proxy.
+creation of a new stream of the MPQUIC connection with the ATSSSv2 proxy.
 Similarly the ATSSSv2 proxy can map each incoming TCP connection from a remote host 
 onto a stream of the QUIC connection. This is illustrated in {{fig-atssv2-tcp}}.
 Stream mapping is most beneficial for TCP, as it avoids reordering and TCP anyway requires
@@ -593,14 +593,14 @@ traffic.
                 QUIC session               \/  | 
  +---+--+ <------------------------------>+-----+        +-------+
  |  U E |  Stream1  AAAAAAAAAAAAA...AAA   |ATSSS|-/.../--|Server1|
- |      |  Stream2  BBBBBBBBBBBBB...BBB   | UPF | <=====>+-------+
- +--+---+ ------------------------------- +-----+  BBBBB
+ |      |  Stream2  BBBBBBBBBBBBB...BBB   | UPF |<======>+-------+
+ +--+---+ ------------------------------- +-----+ BBBBBB
                                          
 
-<----> QUIC session
+<----> MPQUIC session
 <====> TCP connection
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-{: #fig-atssv2-tcp title="ATSSSv2 could map each TCP connection on a stream of the QUIC session between UE and ATSSS"}
+{: #fig-atssv2-tcp title="ATSSSv2 could map each TCP connection on a stream of the MPQUIC session between UE and ATSSS"}
 
 Two application layer protocols are proposed to manage the mapping
 of TCP connections to QUIC streams as well as the transmission of UDP
