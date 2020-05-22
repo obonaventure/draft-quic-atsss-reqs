@@ -463,17 +463,17 @@ This document discusses three approaches:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
                ------------
-    *---------/            \----*
-    |........| Access Net A |...|
-    |:*-------\   (3GPP)   /--*:|
-    |:|        ------------   |:|
-    |v|                  -----------
- +--+-+-+               /           \-----+------+
- |QUIC  |              /             \....|QUIC  |        +------+
- |      |             | 3GPP Core Net |---+      |.......>|Server|
- |Client|              \             /    |Proxy |        +------+
- +------+               \           /     +------+
-                         -----------
+    *---------/            \---------*
+    |........| Access Net A |........|
+    |:*-------\   (3GPP)   /-------*:|
+    |:|        ------------        |:|
+    |v|                            |:|
+ +--+-+-+                       +--+-+-+
+ |QUIC  |                       |QUIC  |        +------+
+ |      |                       |      |.......>|Server|
+ |Client|                       |Proxy |        +------+
+ +------+                       +------+
+
                ------------
               /            \
              | Access Net B |           Legend:
@@ -485,28 +485,28 @@ This document discusses three approaches:
 In this case, there is one QUIC session between the UE and the UPF.
 This QUIC session uses only one access network at a time. Thanks to the
 connection migration capability of QUIC, it is possible to support the
-switching and steering functions of ATSSS, but splitting cannot be supported. 
+switching and steering functions of ATSSS, but splitting cannot be supported.
 
 ### Multiple QUICv1 tunnels with Unreliable Datagram Extension and Connection Migration
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
                ------------
-              /            \
-     +-------| Access Net A |--+
-     |        \   (3GPP)   /   |
-     |         ------------    |
-     v                         |
- +------+               -------------     +------+
- |QUIC  |              /             \--->|QUIC  |        +------+
- |      |             | 3GPP Core Net |   |      |=/.../==|Server|
- |Client|              \             /--->|Proxy |        +------+
- +------+               -------------     +------+
-     ^                         |
-     |         ------------    |
-     |        /            \   |
-     +-------| Access Net B |--+        Legend:
-              \ (non 3GPP) /               --- QUIC tunnel connection
-               ------------                === Tunneled non-TCP flow
+    *---------/            \---------*
+    |........| Access Net A |........|
+    |:*-------\   (3GPP)   /-------*:|
+    |:|        ------------        |:|
+    |v|                            |:|
+ +--+-+-+                       +--+-+-+       +------+
+ |QUIC  |                       |QUIC  |......>|      |
+ |      |                       |      |       |Server|
+ |Client|                       |Proxy |......>|      |
+ +--+-+-+                       +--+-+-+       +------+
+    |^|                            |:|
+    |:|        ------------        |:|
+    |:*-------/            \-------*:|
+    |........| Access Net B |.......:|  Legend:
+    *---------\ (non 3GPP) /---------*     --- QUIC tunnel connection
+               ------------                ... Tunneled non-TCP flow
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {: #fig-multiple-quic title="Multiple QUICv1 tunnels"}
 
@@ -532,22 +532,22 @@ same ATSSS UPF will not necessarily be handled by the same server.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
                ------------
-              /            \
-     +-------| Access Net A |--+
-     |        \   (3GPP)   /   |
-     |         ------------    |
-     v                         |
- +------+               -------------     +------+
- |MPQUIC|              /             \--->|MPQUIC|        +------+
- |      |             | 3GPP Core Net |   |      |=/.../==|Server|
- |Client|              \             /--->|Proxy |        +------+
- +------+               -------------     +------+
-     ^                         |
-     |         ------------    |
-     |        /            \   |
-     +-------| Access Net B |--+        Legend:
-              \ (non 3GPP) /               --- MPQUIC subflow
-               ------------                === Tunneled non-TCP flow
+    *---------/            \---------*
+    |        | Access Net A |        |
+    | *-------\   (3GPP)   /-------* |
+    | |        ------------        | |
+    | |                            | |
+ +--+-+-+                       +--+-+-+       +------+
+ |MPQUIC|                       |MPQUIC|......>|      |
+ |      |                       |      |       |Server|
+ |Client|                       |Proxy |......>|      |
+ +--+-+-+                       +--+-+-+       +------+
+    | |                            | |
+    | |        ------------        | |
+    | *-------/            \-------* |
+    |        | Access Net B |        |  Legend:
+    *---------\ (non 3GPP) /---------*     --- MPQUIC subflow
+               ------------                ... Tunneled non-TCP flow
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {: #fig-mp-quic title="Multipath QUIC tunnel"}
 
