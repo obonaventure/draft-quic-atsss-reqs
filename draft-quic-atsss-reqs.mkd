@@ -604,11 +604,11 @@ traffic.
 
 Two application layer protocols are proposed to manage the mapping
 of TCP connections to QUIC streams as well as the transmission of UDP
-datagrams over QUIC datagrams. The to-be MASQUE working groups extends the HTTP/3 CONNECT method 
-with a UDPCONNECT method to use QUIC as a tunnel to proxy UDP traffic {{I-D.schinazi-masque-connect-udp}}.
+datagrams over QUIC datagrams. The to-be MASQUE working group extends the HTTP/3 CONNECT method
+with a UDPCONNECT method to use QUIC as a tunnel for UDP traffic {{I-D.schinazi-masque-connect-udp}}.
 Another use case in scope for the MASQUE group is IP proxying which can be used for tunneling and forwarding of TCP connections.
-{{I-D.piraux-quic-tunnel}}{{I-D.piraux-quic-tunnel-tcp}} is a proposal focusing on
-the ATTSS use case providing a similar functionality based on a new bit-oriented protocol (instead of HTTP).
+QUIC Tunnel is a close proposal providing similar
+functionalities based on an binary protocol {{I-D.piraux-quic-tunnel}}{{I-D.piraux-quic-tunnel-tcp}}, and focusing on the ATSSS use case.
 
 # Terms used in this document
 
