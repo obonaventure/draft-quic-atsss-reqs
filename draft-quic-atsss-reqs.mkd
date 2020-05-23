@@ -611,9 +611,9 @@ with a UDPCONNECT method to use QUIC as a tunnel for UDP traffic {{I-D.schinazi-
 Another use case in scope for the MASQUE group is IP proxying which can be used for tunneling and forwarding of TCP connections. 
 
 (2) QUIC Tunnel is a close proposal providing similar
-functionalities to MASQUE based on an binary protocol {{I-D.piraux-quic-tunnel}}{{I-D.piraux-quic-tunnel-tcp}}, and focusing on the ATSSS use case. 
+functionalities to MASQUE based on a binary protocol {{I-D.piraux-quic-tunnel}}{{I-D.piraux-quic-tunnel-tcp}}, and focusing on the ATSSS use case. 
 
-Both proposals rely upon single QUIC connections and inherit thus the same issues discussed in {{sec-quic-data}}. Note that {{I-D.piraux-quic-tunnel}}. 
+Both proposals rely upon single QUIC connections and inherit thus the same issues discussed in {{sec-quic-data}}.
 
 # Terms used in this document
 
