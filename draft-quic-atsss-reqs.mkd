@@ -518,7 +518,7 @@ This is not an option for ATSSSv2.
     *---------\ (non 3GPP) /---------*     --- QUIC tunnel connection
                ------------                ... Tunneled non-TCP flow
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-{: #fig-multiple-quic title="Multiple QUICv1 tunnels"}
+{: #fig-multiple-quic title="Traffic steering of two end-to-end flows using multiple QUICv1 tunnels"}
 
 By using
 one QUIC connection over each access network, it is possible to support steering by selecting
@@ -543,23 +543,23 @@ delivery of subsequent data over the other session.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
                ------------
     *---------/            \---------*
-    |        | Access Net A |        |
-    | *-------\   (3GPP)   /-------* |
+    | . . . .| Access Net A |. . . . |
+    |.*-------\   (3GPP)   /-------*.|
     | |        ------------        | |
-    | |                            | |
+    |.|                            |.|
  +--+-+-+                       +--+-+-+       +------+
- |MPQUIC|                       |MPQUIC|......>|      |
- |      |                       |      |       |Server|
- |Client|                       |Proxy |......>|      |
+ |MPQUIC|                       |MPQUIC|       |      |
+ |      |                       |      |......>|Server|
+ |Client|                       |Proxy |       |      |
  +--+-+-+                       +--+-+-+       +------+
-    | |                            | |
+    |.|                            |.|
     | |        ------------        | |
-    | *-------/            \-------* |
-    |        | Access Net B |        |  Legend:
+    |.*-------/            \-------*.|
+    | . . . .| Access Net B |. . . . |  Legend:
     *---------\ (non 3GPP) /---------*     --- MPQUIC subflow
                ------------                ... Tunneled non-TCP flow
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-{: #fig-mp-quic title="Multipath QUIC tunnel"}
+{: #fig-mp-quic title="Traffic splitting using a Multipath QUIC tunnel"}
 
 A third candidate solution is to leverage the ability of QUIC to support multiple
 streams and the Unreliable Datagram Extension but extends it with
