@@ -466,7 +466,7 @@ Network input can be especially beneficial for cases such as:
 
 - to avoid frequent connection migration if both access networks could be used to forward data (each with a distinct source IP address).
 
-## QUIC as an ATSSS Data Plane Protocol 
+## QUIC as an ATSSS Data Plane Protocol {#sec-quic-data}
 
 This section elaborates how non-TCP traffic (UDP or a subset like QUIC) can to be encapsulated into a tunnel between the UE and the ATSSS UPF to enable so called ATSSS higher-layer steering for all traffic, not only TCP or QUIC. This section discusses to what extent QUIC can be used as a tunneling protocol for the ATSSS service and whether gaps are found.
 
@@ -568,7 +568,7 @@ Furthermore, traffic can be better distributed among available paths based on av
 if one of the access networks fails or becomes congested.
 
 
-## Mapping of both TCP and Non-TCP to QUIC streams and datagrams
+## Mapping of Both TCP and Non-TCP to QUIC Streams and Datagrams
 
 In ATSSSv1, each TCP connection originated by the UE corresponds to
 one MPTCP connection that is terminated on the ATSSS UPF. With ATSSSv2
@@ -579,35 +579,41 @@ Focusing on the case where the UE maintains one QUIC connection with its
 ATSSS UPF, every TCP connection that it creates results in the
 creation of a new stream of the MPQUIC connection with the ATSSS UPF.
 Similarly the ATSSS UPF can map each incoming TCP connection from a remote host 
-onto a stream of the QUIC connection. This is illustrated in {{fig-atssv2-tcp}}.
+onto a stream of the MPQUIC connection. This is illustrated in {{fig-atssv2-tcp}}.
 Stream mapping is most beneficial for TCP, as it avoids reordering and TCP anyway requires
-in-order delivery. Respectively it is usually more approriate to use QUIC datagram for all other
-traffic.
+in-order delivery. It is more appropriate to use QUIC with the Unreliable Datagram Extension for all other traffic.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
                                                AAAAAA
                                             ===========> +-------+
                                            //  +---------|Server2|
-                                           ||  |         +-------+   
-                QUIC session               \/  | 
- +---+--+ <------------------------------>+-----+        +-------+
+                                           ||  |         |       |   
+                                           \/  |         +-------+
+ +------+        MPQUIC session           +-----+         
+ |      | <------------------------------>|     |        +-------+
  |  U E |  Stream1  AAAAAAAAAAAAA...AAA   |ATSSS|-/.../--|Server1|
- |      |  Stream2  BBBBBBBBBBBBB...BBB   | UPF |<======>+-------+
- +--+---+ ------------------------------- +-----+ BBBBBB
+ |      |  Stream2  BBBBBBBBBBBBB...BBB   | UPF |<======>|       |
+ |      | <------------------------------>|     | BBBBBB +-------+
+ +------+                                 +-----+                                        
                                          
 
 <----> MPQUIC session
 <====> TCP connection
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-{: #fig-atssv2-tcp title="ATSSSv2 could map each TCP connection on a stream of the MPQUIC session between UE and ATSSS"}
+{: #fig-atssv2-tcp title="ATSSSv2 Maps Each TCP Connection on a Stream of the MPQUIC Connection Between the UE and the ATSSS UPF"}
 
 Two application layer protocols are proposed to manage the mapping
 of TCP connections to QUIC streams as well as the transmission of UDP
-datagrams over QUIC datagrams. The to-be MASQUE working group extends the HTTP/3 CONNECT method
+datagrams over QUIC datagrams: 
+
+(1) The to-be MASQUE working group extends the HTTP/3 CONNECT method
 with a UDPCONNECT method to use QUIC as a tunnel for UDP traffic {{I-D.schinazi-masque-connect-udp}}.
-Another use case in scope for the MASQUE group is IP proxying which can be used for tunneling and forwarding of TCP connections.
-QUIC Tunnel is a close proposal providing similar
-functionalities based on an binary protocol {{I-D.piraux-quic-tunnel}}{{I-D.piraux-quic-tunnel-tcp}}, and focusing on the ATSSS use case.
+Another use case in scope for the MASQUE group is IP proxying which can be used for tunneling and forwarding of TCP connections. 
+
+(2) QUIC Tunnel is a close proposal providing similar
+functionalities to MASQUE based on a binary protocol {{I-D.piraux-quic-tunnel}}{{I-D.piraux-quic-tunnel-tcp}}, and focusing on the ATSSS use case. 
+
+Both proposals rely upon single QUIC connections and inherit thus the same issues discussed in {{sec-quic-data}}.
 
 ## Encapsulation Overhead {#sec-overhead}
 
