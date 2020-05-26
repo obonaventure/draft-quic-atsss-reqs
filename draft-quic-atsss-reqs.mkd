@@ -546,7 +546,7 @@ This option is not a valid approach for the ATSSSv2 discussed within the 3GPP.
     |^|                            |:|
     |:|        ------------        |:|
     |:*-------/            \-------*:|
-    |........| Access Net B |.......:|  Legend:
+    |........| Access Net B |........|  Legend:
     *---------\ (non 3GPP) /---------*     --- QUIC tunnel connection
                ------------                ... Tunneled non-TCP flow
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
