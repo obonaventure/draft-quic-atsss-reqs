@@ -278,25 +278,25 @@ The 5G control plane provides the UE and the UPF with ATSSS rules as discussed i
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  ........(ATSSS Rules From Network)..........
-  .                                          .
-  .            ------------                  .
-  .           /            \                 .
-  .  +-------| Access Net A |--+             .
-  .  |        \   (3GPP)   /   |             .
-  .  |         ------------    |             .
-  .  |                         |             .
-  .  |                         |             .
-  .  |                 -------------         .
- +---+--+              /             \    +-----+        +------+
- |  UE  |             | 3GPP Core Net +---|ATSSS|-/.../--|Server|
- |      |              \             /    | UPF |        +------+
- +--+---+               -------------     +-----+
-    |                          |                  
-    |                          |
-    |          ------------    |
-    |         /            \   |
-    +--------| Access Net B |--+
+  ........(ATSSS Rules From Network)........
+  .                                        .
+  .            ------------                .
+  .           /            \               .
+  .  +-------| Access Net A |--+           .
+  .  |        \   (3GPP)   /   |           .
+  .  |         ------------    |           .
+  .  |                         |           .
+  .  |                         |           .
+ +---+--+                      |        +-----+
+ |      |                      +--------|ATSSS|        +------+
+ |  UE  |                               |     |-/.../--|Server|
+ |      |                      +--------| UPF |        +------+
+ +---+--+                      |        +-----+
+     |                         |
+     |                         |
+     |         ------------    |
+     |        /            \   |
+     +-------| Access Net B |--+
               \ (non 3GPP) /
                ------------
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -380,21 +380,19 @@ During the attachment of an ATSSS-capable UE to the network, the UE retrieves th
 Also, both the MPTCP Client and MPTCP proxy are configured with ATSSS rules from the network that govern how the multiple network paths between the MPTCP Client and MPTCP proxy are used. This relationship is shown using "." between the MPTCP Client and MPTCP Proxy. 
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-  ........(ATSSS Rules From Network)..........
-  .                                          .
-  .            ------------                  .
-  .           /            \                 .
-  .  +-------| Access Net A |--+             .
-  .  |        \   (3GPP)   /   |             .
-  .  |         ------------    |             .
-  .  |                         |             .
-  .  |                         |             .
-  .  |                  -------------        .
- +---+--+              /             \    +-----+        +------+
- |MPTCP |             | 3GPP Core Net +---|MPTCP|-/.../--|Server|
- |Client|              \             /    |Proxy|        +------+
- +--+---+               -------------     +-----+
+  ........(ATSSS Rules From Network)........
+  .                                        .
+  .            ------------                .
+  .           /            \               .
+  .  +-------| Access Net A |--+           .
+  .  |        \   (3GPP)   /   |           .
+  .  |         ------------    |           .
+  .  |                         |           .
+ +------+                      |        +-----+
+ |MPTCP |                      +--------|MPTCP|        +------+
+ |      |                               |     |=/.../==|Server|
+ |Client|                      +--------|Proxy|        +------+
+ +--+---+                      |        +-----+
     |                          |
     |                          |
     |          ------------    |
