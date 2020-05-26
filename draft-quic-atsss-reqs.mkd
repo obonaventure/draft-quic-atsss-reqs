@@ -1,7 +1,7 @@
 ---
 title: 3GPPP Access Traffic Steering, Switching, and Splitting (ATSSS) Overview for IETF Participants
 abbrev: QUIC ATSSS
-docname: draft-bla-quic-atsss-overview-00
+docname: draft-bonaventure-quic-atsss-overview-00
 date: 2020-05-15
 category: info
 
@@ -161,7 +161,13 @@ As part of preparation for Release 17 studies, 3GPP has expressed an interest in
 
 Because "3GPP SA kindly requests IETF to take the above information into account when discussing future work in prioritizing the multipath work for QUIC", but the complete specification of ATSSS in the relevant 3GPP architecture documents reflects the complexity of 3GPP networks, the authors of this document worked to provide a high level overview of the parts of ATSSS that would be impacted by IETF protocol design, in terminology that is more familiar to IETF participants. 
 
+## Notes for Readers
+
 This document is an informational Internet-Draft from individuals, and does not carry any special status within the IETF.
+
+This document abstracts considerable architectural detail that is available in 3GPP specifications. The goal is to make this overview more accessible for IETF readers who are not familiar with 3GPP 5G architecture. 
+
+This document makes references to Internet-Drafts that are not as mature as the core QUIC Internet-Drafts, and in some cases, have not been adapted as Working Group drafts yet, although all are within existing and proposed IETF working group charters. The goal is to give 3GPP readers the most up-to-date understanding of what is possible.
 
 # Introduction to Access Traffic Steering, Switching, and Splitting (ATSSS) {#intro2atsss}
 
@@ -172,7 +178,7 @@ have been proposed to support such multi-interfaced devices (e.g., {{RFC5533}},{
 Users of these devices
 have different expectations concerning the utilization of available network connectivity (and thus their different
 network interfaces). For simplicity, we consider a smartphone that
-is equipped with a WLAN interface and a cellular interface, but the discussion
+is equipped with a Wireless LAN (WLAN) interface and a cellular interface, but the discussion
 below can be generalized to any network interface that supports IP.
 
 Some users of these smartphones want to offload a maximum of their traffic onto the WLAN while expecting seamless handovers. For example, when
@@ -192,7 +198,7 @@ after a handover.
 
 Other users may want to combine the resources provided by the cellular and the WLAN networks
 to improve the up and download throughput performance of individual flows. 
-The GiGA LTE and GiGA 5G service deployed using Multipath TCP in South Korea in an example of this use case {{IETFJ16}}.
+The GiGA LTE and GiGA 5G services deployed using Multipath TCP in South Korea are an example of this use case {{IETFJ16}}.
 
 To support these different use cases in 5G networks, 3GPP is working on the
 Access Traffic Steering, Switching and Splitting (ATSSS) service {{TS23501}}. This work is
@@ -222,14 +228,16 @@ This document makes use of 3GPP specific terms defined in {{RFC6459}}, mainly th
 - UE (User Equipment): refers to the devices that are hosts with the
       ability to obtain Internet connectivity via a 3GPP network.
      
-- Protocol Data Unit (PDU) Session: An association between the UE and the Data Network (DN) to carry the user data/traffic. 
-
-- Multi-access PDU (MA-PDU) Session: A PDU session that has simultaneously user plane resources assigned on 3GPP and non-3GPP access networks.
-
 - User Plane: refers to data traffic and the required sessions for
       the data traffic.  In practice, IP is the only data traffic
       protocol used in the user plane.
       
+Also, the document uses the following additional terms: 
+
+- Protocol Data Unit (PDU) Session: An association between the UE and the Data Network (DN) to carry the user data/traffic. 
+
+- Multi-access PDU (MA-PDU) Session: A PDU session that has simultaneously user plane resources assigned on 3GPP and non-3GPP access networks.
+     
 - User Plane Function (UPF): A logical function in the 5G core network that provides the interconnect point between the mobile infrastructure and the Data Network (DN) and anchor point for Protocol Data Unit (PDU) Sessions to enable mobility.
 
 - Data Network Name (DNN): is a Fully Qualified Domain Name (FQDN) and resolves to a set of gateways in an operator's network. DNN is used for the selection of the UPF(s) for a PDU Session.
@@ -257,7 +265,7 @@ One of these access networks is managed by a 5G provider according to
 the 3GPP specifications. The second network is potentially managed by
 a different organization. It is important to note that in this second case, there
 is an IPSec tunnel between the UE and a dedicated device in the 5G network
-(not shown in {{fig-arch}}). A dedicated IP address is assigned by means of IKEv2 to the UE to access the 5GC via this second network. 
+(not shown in {{fig-arch}}). A dedicated IP address is assigned by means of Internet Key Exchange version 2 (IKEv2) to the UE to access the 5GC via this second network. 
 
 The UE interacts with a distant server
 through a ATSSS specific User Plane Function further referred to as "Proxy"
@@ -301,7 +309,7 @@ The proxy translates the access network specific addresses into an address calle
 
 Absent any coordination between the UE and the ATSSS proxy (e.g., assignment of port ranges), the same port number may be used simultaneously by the ATSSS proxy and the UE; which is problematic.
 
-To avoid such issue, the ATSSS proxy may be configured with a pool of IP addresses that it can use in the External Realm instead of preserving the MA IP address assigned to the UE. How that pool is used is deployment- and implementation-specific.
+To avoid such issue, the ATSSS proxy may be configured with a pool of IP addresses that it can use in the Internet-facing interfaces instead of preserving the MA IP address assigned to the UE. How that pool is used is deployment- and implementation-specific.
 
 ## ATSSS Modes
 
@@ -322,7 +330,7 @@ which flows are eligible to the ATSSS service (i.e., by mapping them to a Multi-
 The traffic that matches an ATSSS rule can be distributed among available access networks following one of these modes:
 
 - “Active-Standby”: The traffic associated with the matching flow will be forwarded via a specific access (called 'active access') and switched to another access (called 'standby access') when the active access is unavailable. 
-- “Smallest Delay”: The traffic associated with the matching flow will be forwarded via the access that presents the smallest Round-Trip Time (RTT). To that aim, specific measurements are conducted by the UE and a dedicated function co-located with the Proxy. 
+- “Smallest Delay”: The traffic associated with the matching flow will be forwarded via the access that presents the smallest RTT. To that aim, specific measurements are conducted by the UE and a dedicated function co-located with the Proxy. 
 - “Load-Balancing”: The traffic associated with the matching flow will be distributed among available access networks following a distribution ratio (e.g., 30% via a first access, 70% via a second access).
 - “Priority-based”: For this mode, accesses are assigned priority levels that indicate which access to be used first. Concretely, the traffic associated with the matching flow will be steered on the access with a high priority till congestion is detected, then the overflow will be forwarded over a low priority access. 
 
@@ -346,7 +354,7 @@ Multipath TCP on iOS smartphones {{RFC8041}}.
 
 The "Smallest Delay" mode can be implemented using a path manager that
 establishes a subflow over both paths and a packet scheduler that measures
-their round-trip-times and prefers the one having the lowest round-trip-time.
+their RTTs and prefers the one having the lowest RTT.
 These
 path manager and scheduler are similar to the default packet
 scheduler used by Multipath TCP on Linux {{RFC8041}}.
@@ -359,10 +367,12 @@ and a packet scheduler that prefers the high priority path. These
 path manager and scheduler are similar to the ones used in
 deployed Hybrid Access networks {{Hybrid}}.
 
-We first describe the ATSSS as specified in Release 16 (called hereafter, ATSSS version 1) that uses
-Multipath TCP {{RFC6824}} and the 0-RTT convert protocol {{I-D.ietf-tcpm-converters}}. We then discuss the data plane requirements for version 2 of the ATSSS specification that 3GPP plans for Release 17. More details about 3GPP releases can be found at: https://www.3gpp.org/specifications/Releases.
+## ATSSS Versions
 
-# ATSSS Version 1: Support for TCP
+We first describe in {{sec-ver1}} the ATSSS as specified in Release 16 (called hereafter, ATSSS version 1) that uses
+Multipath TCP {{RFC6824}} and the Convert Protocol {{I-D.ietf-tcpm-converters}}. We then discuss in {{sec-ver2}} the data plane requirements for version 2 of the ATSSS specification that 3GPP plans for Release 17. More details about 3GPP releases can be found at: https://www.3gpp.org/specifications/Releases.
+
+# ATSSS Version 1: Support for TCP {#sec-ver1}
 
 For ATSSS with Multipath TCP functionality, a client with two interfaces connected to two disjoint access networks (in this case, Access Net A and Access Net B), uses MPTCP to reach an MPTCP proxy over either, or both, of the access networks. This allows the client to communicate with a server which does not terminate MPTCP connections.
 
@@ -419,13 +429,13 @@ Legend:
 
 This approach provides 0-RTT (Zero Round-Trip Time) conversion service since no extra delay is induced by the Convert protocol compared to connections that are not proxied. Also, the Convert Protocol does not require any encapsulation (no tunnels, whatsoever).
 
-If the server is supporting MPTCP natively, the Convert Protocol provides an option to "opt-out" and directly establish a connection between the UE and server. In this case the server can directly make use of multiple paths but does not have the network input to utilize the multiconnectivity more efficiently as provided by ATSSS rules. Today, only a few servers, however, support MPTCP and as such for most TCP connections relying on the ATSSS service is the only option to make use of multiple simultaneous avalilable networks.
+If the server supports MPTCP, the Convert Protocol provides an option for clients to "opt-out". In such case, an MPTCP connection is directly established between the client and the server. Given that few servers are MPTCP capable, relying on the ATSSS service is the only option for UEs to make use of available multiple paths simultaneously.
 
-# ATSSS Version 2: Adding Non-TCP Support 
+# ATSSS Version 2: Adding Non-TCP Support {#sec-ver2}
 
 The MPTCP-based ATSSS approach discussed in the previous section is specific to TCP,
 obviously. Therefore it does not support non-TCP traffic, such as
-UDP, QUIC {{QUIC-Deployment}} or IPsec and DTLS VPN services.
+UDP, QUIC {{QUIC-Deployment}} or IPsec and Datagram Transport Layer Security (DTLS) Virtual Private Network (VPN) services.
 As the share of these protocols grows, mainly driven by QUIC deployment, and the seamless handover is particularly useful for real-time traffic (e.g., voice or video calls), a future ATSSS needs to extend beyond supporting TCP only.
 
 Several proposals to carry non-TCP traffic were discussed, including
@@ -437,7 +447,7 @@ version of ATSSS.
 ## QUIC and Multihoming
 
 
-For non-TCP traffic, QUIC is already the dominating part of the UDP share. A solution as realized with the Convert Protocol for (MP)TCP is not possible for QUIC as a QUIC connection cannot be intercepted and converted like it is done in the ATSSS architecture for (MP)TCP ({{fig-mptcp-arch}}). For (MP)TCP only the transport protocol (TCP) is intercepted, while transport security provided by TLS on top of TCP stays in tact. For QUIC transport, security is integrated into the transport protocol directly and should not be intercepted.
+For non-TCP traffic, QUIC is already the dominating part of the UDP share. A solution as realized with the Convert Protocol for (MP)TCP is not possible for QUIC as a QUIC connection cannot be intercepted and converted like it is done in the ATSSS architecture for (MP)TCP ({{fig-mptcp-arch}}). For (MP)TCP only the transport protocol (TCP) is intercepted, while transport security provided by Transport Layer Security (TLS) on top of TCP stays in tact. For QUIC transport, security is integrated into the transport protocol directly and should not be intercepted.
 
 
 Some ATSSS modes can be natively supported by the base QUIC specification for QUIC flows. For example, the “Active-Standby” and “Smallest Delay” steering modes can be supported directly between an UE and a QUIC server without any assistance from the network other than the performance measurement information. 
@@ -447,7 +457,7 @@ Further, QUIC provides a feature called connection migration (Section 9 of {{I-D
 Connection migration can further enable traffic switching but does not support traffic splitting as only one path can be used simultaneously. 
 
 An extension to QUIC to support simultaneous use of multiple paths is proposed in {{I-D.deconinck-quic-multipath}}.
-However, similar as a native MPTCP connection, a (MP)QUIC connection initiated between the UE and a server without the ATSSS UPF assistance cannot benefit from any direct application of the ATSSS steering methods based on network input given that the steering policy as currently defined in ATSSS is local to the UE and the proxy and there are no means to signal that policy to a remote server. 
+However, similar as a native MPTCP connection, a (MP)QUIC connection initiated between the UE and a server without the ATSSS Proxy assistance cannot benefit from any direct application of the ATSSS steering methods based on network input given that the steering policy as currently defined in ATSSS is local to the UE and the proxy and there are no means to signal that policy to a remote server. 
 
 
 Network input can be especially beneficial for cases such as:
@@ -458,13 +468,23 @@ Network input can be especially beneficial for cases such as:
 
 ## QUIC as an ATSSS Data Plane Protocol 
 
-This section elaborates how non-TCP traffic (UDP or a subset like QUIC) can to be encapsulated into a tunnel between the UE and the ATSSS UPF to enable so called ATSSS higher-layer steering for all traffic, not only TCP or QUIC. This section discusses to what extent QUIC can be used as a tunneling protocol for the ATSSS service and whether gaps are found.
+This section elaborates how non-TCP traffic (UDP or a subset like QUIC) can to be encapsulated into a tunnel between the UE and the ATSSS Proxy to enable so called ATSSS higher-layer steering for all traffic, not only TCP or QUIC. This section discusses to what extent QUIC can be used as a tunneling protocol for the ATSSS service and whether gaps are found.
+
+When tunneling non-TCP (e.g., UDP, plain IP) over QUIC the Unreliable Datagram Extension
+{{I-D.ietf-quic-datagram}} can be used. Each data packet would be transported unreliably as a datagram
+over a QUIC connection. Transporting these datagrams unreliably as
+in IPsec or DTLS-based tunnels is especially important for flows that do not require reliable delivery 
+and suffer from unnecessary delay when reliability is added. QUIC datagrams are congestion-controlled, 
+however, as the latency between the UE and the ATSSS proxy is small compared to the end-to-end latency,
+having another local congestion control loops should not impact the end-to-end congestion control negatively.
 
 This document discusses three approaches:
 
-- Use of QUIC version 1 {{I-D.ietf-quic-transport}} with the Unreliable Datagram Extension {{I-D.ietf-quic-datagram}}
-- Use of QUIC version 1 with the Unreliable Datagram Extension, but with one QUIC connection over each access network
-- Use of a single Multipath QUIC connection {{I-D.deconinck-quic-multipath}}, with the Unreliable Datagram Extension, over all access networks
+- Use of QUIC version 1 with the Unreliable Datagram Extension,
+- Use of QUIC version 1 with the Unreliable Datagram Extension but with one QUIC connection over each access network, and
+- Use of a single Multipath QUIC connection {{I-D.deconinck-quic-multipath}}, with the Unreliable Datagram Extension, over all access networks.
+
+
 
 ### Single QUICv1 Tunnel with Unreliable Datagram Extension and Connection Migration
 
@@ -489,13 +509,26 @@ This document discusses three approaches:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {: #fig-single-quic title="Single QUICv1 tunnel"}
 
+QUIC can be used as a tunneling protocol between the UE and the ATSSS proxy. Use of the Unreliable 
+Datagram Extension avoids unnecessary delays due to local retransmissions and, more important, subsequently 
+head-of-line blocking.
 
-In this case, there is one QUIC session between the UE and the ATSSS proxy.
-This QUIC session uses only one access network at a time. Thanks to the
-connection migration capability of QUIC, it is possible to support the
-switching and steering functions of ATSSS, but splitting cannot be supported.
+In this case, there is (only) one QUIC connection between the UE and the ATSSS proxy for a given flow.
+And as such, that QUIC connection uses only one access network at a time. 
+However, given the connection migration capability of QUIC, the QUIC connection could be
+moved over to another access network, e.g., when the network indicates that the currently used 
+access network would go away or that its capacity becomes limited. The UE can then initiate 
+the connection migration to start the path validation process as specified in Section 9 of {{I-D.ietf-quic-transport}}. When and how to decide to switch over depends on the ATSSS rules ({{sec-rules}}) and the performance measurement that are accessible to both the UE and the ATSSS proxy. Note that connection migration can only be at the initiative of the UE as per Section 9 of {{I-D.ietf-quic-transport}}. This means particularly that the proxy cannot make use of a second access network upon failure or degradation observed on a first access network.  
 
-This is not an option for ATSSSv2.
+It is thus possible to support the switching and steering functions of ATSSS, 
+but splitting cannot be supported. Path validation
+induces a delay when switching as packets have to be buffered. Further congestion control state is
+reset on a new path and needs to wrap up slowly. When frequent handovers happen, 
+splitting traffic over multiple paths simulaneously can be beneficial for a smooth user experience.
+Further, of course, the ability to use multiple paths simultaneously also increases the 
+maximum capacity available, which can also be benefical in some cases.
+
+This option is not a valid approach for the ATSSSv2 discussed within the 3GPP.
 
 ### Multiple QUICv1 Tunnels with Unreliable Datagram Extension and Connection Migration
 
@@ -520,25 +553,31 @@ This is not an option for ATSSSv2.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {: #fig-multiple-quic title="Traffic steering of two end-to-end flows using multiple QUICv1 tunnels"}
 
-By using
-one QUIC connection over each access network, it is possible to support steering by selecting
-the session used to carry each flow. It is also possible
-to support the switching function of ATSSS by moving flows from one QUIC
-session to the other. 
+Another approach is to use one QUIC connection over each access network.
+In this case, there are multiple QUIC connections that are used as tunnels from the UE
+to the ATSSS proxy to transport traffic that belongs to one or multiple flows. The UE and ATSSS
+proxy need to select for each application data packet one tunnel QUIC connection to forward,
+based on the ATSSS rules. 
 
-However, supporting splitting is more challenging
-since this would require transmitting data from the same flow over two
-different sessions. For unreliable flows, this would be possible but
-would result in some reordering among the datagrams that belong to
-a split flow. For TCP connections, this would require a more complex
-higher layer protocol that divides each bytestream in chunks are then
-reordered at the other end of the session. Furthermore, since the bandwidth
+This approach can support steering (by selecting just one connection for each flow), switching 
+(by moving flows from one QUIC connection to the other) as well as splitting when both
+tunnels are used simultaneously for different packets of the same flow. 
+
+However, this approach for splitting is challenging
+since data from the same flow are sent over different connections,
+again using unreliable datagram to minimise head-of-line blocking.
+Because both (tunnel) QUIC connections are completely independent of each other and the paths on the
+different access networks may have different latency, this approach would
+results in reordering of packets that belong to
+a split flow. If reordering should be avoided, this would require additional signaling
+between the UE and the ATSSS proxy, e.g., adding sequence numbers, and a reordering buffer and logic.
+
+Furthermore, since the bandwidth
 available for each QUIC session varies as a function of the congestion experienced
 over each access network, data sent over a congested session could delay the
 delivery of subsequent data over the other session. 
 
 ### MP-QUIC Tunneling
-
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
                ------------
@@ -565,45 +604,45 @@ A third candidate solution is to leverage the ability of QUIC to support multipl
 streams and the Unreliable Datagram Extension but extends it with
 Multipath capabilities as described in {{I-D.deconinck-quic-multipath}}.
 
-With these Multipath extensions, there is a single (Multipath) QUIC session
-between the UE and the ATSSS proxy. The Multipath extensions provide several
-benefits to support ATSSSv2:
-- Splitting is naturally supported. Data
+In this case, there is a single (Multipath) QUIC connection
+between the UE and the ATSSS proxy. With a multipath extensions splitting is naturally supported.
 
-sent over one access network can be retransmitted over the other if
+Data sent over one access network can be retransmitted over the other if
 the first becomes congested. Some measurements and simulations have
 shown that Multipath QUIC provides similar performance as Multipath
-TCP with combining different access networks {{MPQUIC-Conext}}.
+TCP when combining different access networks {{MPQUIC-Conext}}.
 
-- Steering is also supported since flows can be mapped over any access network based on the
-ATSSS rules. Since splitting is supported, this choice can be revisited
-if one of the access networks fails or becomes congested. 
+Steering can be also supported similar as for MPTCP. The path scheduler can
+map datagrams carrying an entire flows to one or another access network based on the
+ATSSS rules. 
 
-- Switching
-is also supported with Multipath QUIC. Experience with Multipath TCP on
+Switching can be improved by splitting traffic simulaneously over
+both link first such that the congestion window of the new path can be open before
+the old path goes aways. This makes handovers more smooth as experience with Multipath TCP on
 smartphones has shown that handovers are not a binary process. When
 a smartphone performs handovers, there are frequently short periods
-of time during which both networks are imperfect {{MPTester}}. During
-these periods, it is important to be able to use both networks
-simultaneously.
+of time during which both networks are imperfect {{MPTester}}. Using use both networks
+simultaneously during these periods, improves the user experience.
 
-Since there is a single Multipath QUIC session between the UE and the
-ATSSS UPF, load-balancers do not cause problems. 
+Furthermore, traffic can be better distributed among available paths based on available resources 
+if one of the access networks fails or becomes congested.
 
 
-## Handling both TCP and Non-TCP using QUIC
+## Mapping of both TCP and Non-TCP to QUIC streams and datagrams
 
 In ATSSSv1, each TCP connection originated by the UE corresponds to
-an MPTCP connection that is terminated on the ATSSS proxy. ATSSSv2 may
-leverage the multi-stream capability of QUIC to carry the bytestreams
-of multiple TCP connections over a single QUIC session.
+one MPTCP connection that is terminated on the ATSSS proxy. With ATSSSv2
+using MPQUIC as a tunneling protocol, one can leverage the multi-stream capability of QUIC to carry the bytestreams
+of multiple TCP connections over a single MPQUIC session.
 
-Consider an UE that is currently attached to
-only one access network. This UE maintains one QUIC session with its
-ATSSS proxy. Every TCP connection that it creates results in the
-creation of a stream on the QUIC session with the ATSSSv2 proxy.
-The ATSSSv2 proxy maps each bytestream of the QUIC session onto a
-TCP connection with a remote host. This is illustrated in {{fig-atssv2-tcp}}.
+Focusing on the case where the UE maintains one QUIC connection with its
+ATSSS proxy, every TCP connection that it creates results in the
+creation of a new stream of the MPQUIC connection with the ATSSSv2 proxy.
+Similarly the ATSSSv2 proxy can map each incoming TCP connection from a remote host 
+onto a stream of the QUIC connection. This is illustrated in {{fig-atssv2-tcp}}.
+Stream mapping is most beneficial for TCP, as it avoids reordering and TCP anyway requires
+in-order delivery. Respectively it is usually more approriate to use QUIC datagram for all other
+traffic.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
                                                AAAAAA
@@ -613,110 +652,101 @@ TCP connection with a remote host. This is illustrated in {{fig-atssv2-tcp}}.
                 QUIC session               \/  | 
  +---+--+ <------------------------------>+-----+        +-------+
  |  U E |  Stream1  AAAAAAAAAAAAA...AAA   |ATSSS|-/.../--|Server1|
- |      |  Stream2  BBBBBBBBBBBBB...BBB   | UPF | <=====>+-------+
- +--+---+ ------------------------------- +-----+  BBBBB
+ |      |  Stream2  BBBBBBBBBBBBB...BBB   | UPF |<======>+-------+
+ +--+---+ ------------------------------- +-----+ BBBBBB
                                          
 
-<----> QUIC session
+<----> MPQUIC session
 <====> TCP connection
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-{: #fig-atssv2-tcp title="ATSSSv2 could map each TCP connection on a stream of the QUIC session between UE and ATSSS"}
+{: #fig-atssv2-tcp title="ATSSSv2 could map each TCP connection on a stream of the MPQUIC session between UE and ATSSS"}
 
-This solution cannot be used to support other protocols than TCP. Each non-TCP
-packet (e.g., UDP, plain IP) will be transported unreliably as a datagram
-over the QUIC session by using the Unreliable Datagram Extension
-{{I-D.ietf-quic-datagram}}. Transporting these datagrams unreliably as
-in IPSec or DTLS tunnels prevents problems that arise when a reliable protocol
-is used to transport packets that do not require reliable delivery or are
-subject to their own congestion control scheme.
-
-Two application layer protocols proposed to manage the mapping
-between TCP connections and QUIC streams and the transmission of UDP
-datagrams. The MASQUE protocol uses the HTTP/3 CONNECT method to
-support TCP connections {{I-D.schinazi-masque-protocol}}
-and extend it with a UDPCONNECT method to
-support UDP {{I-D.schinazi-masque-connect-udp}}. A simpler protocol
-providing similar features is proposed in {{I-D.piraux-quic-tunnel}}{{I-D.piraux-quic-tunnel-tcp}}.
+Two application layer protocols are proposed to manage the mapping
+of TCP connections to QUIC streams as well as the transmission of UDP
+datagrams over QUIC datagrams. The to-be MASQUE working group extends the HTTP/3 CONNECT method
+with a UDPCONNECT method to use QUIC as a tunnel for UDP traffic {{I-D.schinazi-masque-connect-udp}}.
+Another use case in scope for the MASQUE group is IP proxying which can be used for tunneling and forwarding of TCP connections.
+QUIC Tunnel is a close proposal providing similar
+functionalities based on an binary protocol {{I-D.piraux-quic-tunnel}}{{I-D.piraux-quic-tunnel-tcp}}, and focusing on the ATSSS use case.
 
 # Terms used in this document
 
-Access Traffic Steering, Switching, and Splitting (ATSSS) service - PR8
+Note for the authors - This is the list of terms used in the document as of 05-18, in the Master branch, in alphabetical order. It would be helpful for us to review them, to see (1) if there are multiple terms being used to describe the same thing, and (2) which of the filtered set of terms should have definitions in the Terminology section. 
 
-MPTCP Client - PR10
+It seems likely that we should group some of these related terms, rather than present an alphabetical list to the reader. 
 
-Access Net - PR10
 
-3GPP Core Net - PR10
+3rd Generation Partnership Project (3GPP)
 
-ATSSS Rules - PR10
+3GPP access network
 
-MPTCP Proxy - PR10
+5G control plane
 
-UE - PR10 (Med's diagram)
+5G Core (5GC)
 
-AMF - PR10 (Med's diagram)
+Access Network
 
-SMF - PR10 (Med's diagram)
+Access Traffic Steering
 
-PCF - PR10 (Med's diagram)
+Access Traffic Switching
 
-UPF - PR10 (Med's diagram)
+Access Traffic Splitting
 
-DN - PR10 (Med's diagram)
+Access Traffic Steering, Switching, and Splitting (ATSSS) service 
 
-ATSSS-LL PR10 (Med's diagram)
+ATSSS Rules
 
-PMF PR10 (Med's diagram)
+ATSSS proxy
 
-Packet Data Network (PDN) - PR11
+Active-Standby steering mode
 
-UE (User Equipment) - PR11
+BroadBand Forum (BBF)
 
-Access Point Name (APN) - PR11
+Convert Protocol
 
-User Plane - PR11
+Load-Balancing steering mode
 
-The 5G Core (5GC) - PR11
+MASQUE
 
-Data Network Name (DNN) - PR11
+MPTCP Client
 
-PDU Connectivity Service - PR11
+MPTCP Proxy
 
-PDU Sessions - PR11
+Multi-Access (MA) IP address
 
-3GPP access network - PR11
+Multi-access PDU (MA-PDU) Session
 
-Access Traffic Steering - PR11
+Multipath TCP (MPTCP)
 
-Access Traffic Switching - PR11
+Non-3GPP access network
 
-Access Traffic Splitting - PR11
+Packet scheduler
 
-Transport Converter - PR11
+Path manager 
 
-link-specific multipath" addresses/prefixes - PR12
+PDU Connectivity Service
 
-Multi-Access (MA) PDU session IP address - PR14
+Performance Measurement Function (PMF) protocol
 
-External Realm - PR14
+Protocol Data Unit (PDU) Session
 
-Active-Standby - PR15
+Proxy
 
-“Smallest Delay” - PR15
+Priority-Based steering mode
 
-“Load-Balancing” - PR15
+Smallest-Delay steering mode
 
-Priority-Based" - PR15
+Transport Converter
 
-SYN - PR16
+UDPCONNECT
 
-ACK - PR16
+Unreliable Datagram Extension
 
-MPC - PR16
+User Quota
 
-0-RTT (Zero Round-Trip Time) - PR16
+Volume-based Quota
 
-GPRS Tunneling Protocol for the user plane (GTP-U) - PR17
+Wireless LAN (WLAN)
 
 # Conclusion {#conclusion}
 
