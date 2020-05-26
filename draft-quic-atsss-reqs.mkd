@@ -620,7 +620,7 @@ More investigation is required to assess whether the ATSSSv2 overhead is an issu
 
 ## Multiple/Redundant Encryptions
 
-QUIC data that matches an ATSSS rule will be subject to two encryptions (i.e., the one required with the remote peer and the one used to steer data via an ATSSS Proxy) when forwarded via a 3GPP network access. Three encryptions will be imposed on the same data when forwarded over a non-3GPP network access (see {{sec-overhead}}). Some of these encryptions are redundant (e.g., ATSSS encryption vs. IP Encapsulating Security Payload (ESP)).
+QUIC data that matches an ATSSS rule will be subject to two encryptions (i.e., the one required with the remote peer and the one used to steer data via an ATSSS UPF) when forwarded via a 3GPP network access. Three encryptions will be imposed on the same data when forwarded over a non-3GPP network access (see {{sec-overhead}}). Some of these encryptions are redundant (e.g., ATSSS encryption vs. IP Encapsulating Security Payload (ESP)).
 
 Such multiple encryptions may have performance implications on the UE, in particular. Means to optimize the various redundant encryptions are for further investigation. 
 
