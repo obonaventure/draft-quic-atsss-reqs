@@ -90,6 +90,7 @@ informative:
   I-D.piraux-quic-tunnel-tcp:
   I-D.boucadair-mptcp-plain-mode:
   I-D.bonaventure-iccrg-schedulers:
+  RFC0793:
   RFC5533:
   RFC6275:
   RFC5213:
@@ -651,7 +652,9 @@ without any multipath extension, packet reordering can be assumed to be very
 limited. Therefore most piggybacked services on top of a Unreliable Datagrame
 Extension QUIC tunnel which is splitted as in {{sec-quic-tunnel}} and
 {{sec-mpquic-tunnel}} are not expecting massive packet reordering and degrades
-their performance if it happens anyway.
+their performance if it happens anyway. These potentially are all those services
+which rely on {{RFC0793}} and {{I-D.ietf-quic-transport}} transportation or
+applications which are sensitiv due to real-time demand.
 
 It is assumed that this is a solvable task similar to {{MPDCCP-paper}}, but is
 probably left to the implementer, to take care. Even if re-assembly does not
