@@ -236,11 +236,21 @@ Also, the document uses the following additional terms:
 
 - Protocol Data Unit (PDU) Session: An association between the UE and the Data Network (DN) to carry the user data/traffic. 
 
+- PDU Connectivity Service: A service that provides exchange of PDUs between an UE and a Data Network. 
+
 - Multi-access PDU (MA-PDU) Session: A PDU session that has simultaneously user plane resources assigned on 3GPP and non-3GPP access networks.
      
 - User Plane Function (UPF): A logical function in the 5G core network that provides the interconnect point between the mobile infrastructure and the Data Network (DN) and anchor point for Protocol Data Unit (PDU) Sessions to enable mobility.
 
 - Data Network Name (DNN): is a Fully Qualified Domain Name (FQDN) and resolves to a set of gateways in an operator's network. DNN is used for the selection of the UPF(s) for a PDU Session.
+
+- 5G Core (5GC) network: Refers the part of the 5G System which is independent of the access technology used by an UE (e.g., cellular, WLAN) {{TS23501}}. A 5G Core network can be reached via one or more access networks. 
+
+- 3GPP access network: Refers to a radio access network used by an UE to reach a 5G Core network. In such case, the UE uses an access technology that is specified by the 3GPP.
+
+- Non-3GPP access network: Refers to an access network (e.g., WLAN) that is not a 3GPP access network and which is used by an UE to connect to a 5G Core network. 
+
+- 5G control plane: Denotes the 5G control management component of use plane resources (e.g., forwarding policies).
 
 # High level Overview {#overview}
 
@@ -626,85 +636,6 @@ More investigation is required to assess whether the ATSSSv2 overhead is an issu
 QUIC data that matches an ATSSS rule will be subject to two encryptions (i.e., the one required with the remote peer and the one used to steer data via an ATSSS UPF) when forwarded via a 3GPP network access. Three encryptions will be imposed on the same data when forwarded over a non-3GPP network access (see {{sec-overhead}}). Some of these encryptions are redundant (e.g., ATSSS encryption vs. IP Encapsulating Security Payload (ESP)).
 
 Such multiple encryptions may have performance implications on the UE, in particular. Means to optimize the various redundant encryptions are for further investigation. 
-
-# Terms used in this document
-
-Note for the authors - This is the list of terms used in the document as of 05-18, in the Master branch, in alphabetical order. It would be helpful for us to review them, to see (1) if there are multiple terms being used to describe the same thing, and (2) which of the filtered set of terms should have definitions in the Terminology section. 
-
-It seems likely that we should group some of these related terms, rather than present an alphabetical list to the reader. 
-
-
-3rd Generation Partnership Project (3GPP)
-
-3GPP access network
-
-5G control plane
-
-5G Core (5GC)
-
-Access Network
-
-Access Traffic Steering
-
-Access Traffic Switching
-
-
-Access Traffic Splitting
-
-
-Access Traffic Steering, Switching, and Splitting (ATSSS) service 
-
-ATSSS Rules
-
-ATSSS UPF
-
-Active-Standby steering mode
-
-BroadBand Forum (BBF)
-
-Convert Protocol
-
-Load-Balancing steering mode
-
-MASQUE
-
-MPTCP Client
-
-MPTCP Proxy
-
-Multi-Access (MA) IP address
-
-Multi-access PDU (MA-PDU) Session
-
-Multipath TCP (MPTCP)
-
-Non-3GPP access network
-
-Packet scheduler
-
-Path manager 
-
-PDU Connectivity Service
-
-Performance Measurement Function (PMF) protocol
-
-Protocol Data Unit (PDU) Session
-
-Priority-Based steering mode
-
-Smallest-Delay steering mode
-
-Transport Converter
-
-UDPCONNECT
-
-Unreliable Datagram Extension
-
-User Quota
-
-Volume-based Quota
-
-Wireless LAN (WLAN)
 
 # Conclusion {#conclusion}
 
