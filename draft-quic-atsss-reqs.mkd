@@ -96,6 +96,7 @@ informative:
   RFC6459:
   RFC6824:
   RFC8041:
+  RFC8684:
   IETFJ16:
     author:
       - ins: O. Bonaventure
@@ -606,9 +607,9 @@ Two application layer protocols are proposed to manage the mapping
 of TCP connections to QUIC streams as well as the transmission of UDP
 datagrams over QUIC datagrams: 
 
-(1) The to-be MASQUE working group extends the HTTP/3 CONNECT method
+(1) The proposed MASQUE working group extends the HTTP/3 CONNECT method
 with a UDPCONNECT method to use QUIC as a tunnel for UDP traffic {{I-D.schinazi-masque-connect-udp}}.
-Another use case in scope for the MASQUE group is IP proxying which can be used for tunneling and forwarding of TCP connections. 
+Another use case in scope for MASQUE is IP proxying which can be used for tunneling and forwarding of TCP connections {{I-D.schinazi-masque-protocol}}. 
 
 (2) QUIC Tunnel is a close proposal providing similar
 functionalities to MASQUE based on a binary protocol {{I-D.piraux-quic-tunnel}}{{I-D.piraux-quic-tunnel-tcp}}, and focusing on the ATSSS use case. 
