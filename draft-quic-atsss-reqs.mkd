@@ -645,7 +645,7 @@ nature and has just to wait for missing segments, such re-assembly mechanisms
 have to account that packet loss may occur for any of the paths
 within the QUIC tunnel. Another issue is the packet reordering introduced when a
 QUIC tunnel communication is split across paths exposing very distinct latencies. In
-theory, most applications or transport protocols certainly have to deal with
+theory, applications have to deal with
 packet reordering, since for example typical best effort Internet traffic has no
 mechanism to prevent it.  However, in practice, without any multipath extension,
 packet reordering can be assumed to be very limited.  Therefore most services on
