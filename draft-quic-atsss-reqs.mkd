@@ -163,6 +163,8 @@ Because "3GPP SA kindly requests IETF to take the above information into account
 
 ## Notes for Readers
 
+We provide a high-level overview of ATSSS in {{overview}}, describe the current ATSSS version in {{sec-ver1}}, describe our thoughts about a QUIC-based version of ATSSS in {{sec-ver2}}, and conclude with our understanding of the gaps between QUIC version 1 and what a QUIC-based version of ATSSS will require in {{gap-analysis}}.
+
 This document is an informational Internet-Draft from individuals, and does not carry any special status within the IETF.
 
 This document abstracts considerable architectural detail that is available in 3GPP specifications. The goal is to make this overview more accessible for IETF readers who are not familiar with 3GPP 5G architecture. 
@@ -706,10 +708,17 @@ Volume-based Quota
 
 Wireless LAN (WLAN)
 
-# Conclusion {#conclusion}
+# QUIC Version 1 Gap Analysis for ATSSS Version 2 {#gap-analysis}
 
-Based on the two above questions, it should be clear that MPQUIC could
-cover both cases.
+These are additional QUIC protocol capabilities that would be useful for ATSSS Phase 2, as described in {{sec-ver2}}, along with our understanding of their maturity level.
+
+1. ATSSS Version 2 will need transport services for Ethernet frames and IP packets, with the intention of supporting TCP, UDP, and UDP-encapsulated transport protocols such as QUIC and RTP. QUIC Version 1 provides transport services for HTTP/3 but does not yet provide support for tunnelling Ethernet or IP directly over QUIC, as envisioned in ATSSS Version 2. QUIC Version 1. The QUIC working group is not chartered to provide this capability, although proposals exist.
+
+1. QUIC Version 1 does not yet provide a multipath transport capability similar to Multipath TCP, as used in ATSSS Phase 1. The QUIC working group is chartered to produce a multipath extension document by December 2021. Proposals exist, although the working group has not yet adopted a draft as the basis for its work. 
+
+1. For Multipath QUIC, we envision the ability to select paths (steering), detect path failures and reroute traffic (switching), and forward packets on multiple active paths simultaneously (splitting), based on external policies, including active-standby, smallest delay, weighted load-balancing, and path selection based on assigned priorities. 
+
+1. QUIC Version 1 does not yet provide support for unreliable datagrams, needed for the additional user-plane protocols as envisioned in ATSSS Version 2, although the QUIC working group is chartered to produce this capability by March 2021, and has adopted a proposal as a working group draft.
 
 # IANA Considerations
 
