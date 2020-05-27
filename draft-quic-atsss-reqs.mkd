@@ -647,7 +647,7 @@ within the QUIC tunnel. Another issue is the packet reordering introduced when a
 QUIC tunnel communication is split across paths exposing very distinct latencies. In
 theory, applications have to deal with
 packet reordering, since for example typical best effort Internet traffic has no
-mechanism to prevent it.  However, in practice, without any multipath extension,
+mechanism to prevent it.  However, in practice, some applications are sensitive to reordering. Without any multipath extension,
 packet reordering can be assumed to be very limited.  Therefore most services on
 top of the Unreliable Datagrame Extension QUIC tunnel are not expecting massive
 packet reordering and degrades their performance if it happens anyway.
