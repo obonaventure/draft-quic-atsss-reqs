@@ -636,7 +636,7 @@ More investigation is required to assess whether the ATSSSv2 overhead is an issu
 ## Reordering Support for (MP-)QUIC Splitting Mode
 
 Both tunnel solutions in {{sec-quic-tunnel}} and {{sec-mpquic-tunnel}} allow the
-splitting mode for simultaneously send data over multiple paths. The respective
+splitting mode for simultaneously sending data over multiple paths. The respective
 receiver side of the tunnel termination points has to deal with the unreliable
 transport character of the Unreliable Datagram Extension for QUIC and a possible
 re-assembly of the data stream. In practice, it is assumed that some sort of
