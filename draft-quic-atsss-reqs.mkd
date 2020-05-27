@@ -640,20 +640,22 @@ splitting mode for simultaneously sending data over multiple paths. The respecti
 receiver side of the tunnel termination points has to deal with the unreliable
 transport character of the Unreliable Datagram Extension for QUIC and a possible
 re-assembly of the data stream. In practice, it is assumed that some sort of
-re-assembly has to be applied. Different to MPTCP, which is reliable by
-nature and has just to wait for missing segments, such re-assembly mechanisms
-have to account that packet loss may occur for any of the paths
-within the QUIC tunnel. Another issue is the packet reordering introduced when a
-QUIC tunnel communication is split across paths exposing very distinct latencies. In
-theory, applications have to deal with
-packet reordering, since for example typical best effort Internet traffic has no
-mechanism to prevent it.  However, in practice, some applications are sensitive to reordering. Without any multipath extension,
+re-assembly has to be applied. Different to MPTCP, which is reliable by nature
+and has just to wait for missing segments, such re-assembly mechanisms have to
+account that packet loss may occur for any of the paths within the QUIC tunnel.
+Another issue is the packet reordering introduced when a QUIC tunnel
+communication is split across paths exposing very distinct latencies. In theory,
+applications have to deal with packet reordering, since for example typical best
+effort Internet traffic has no mechanism to prevent it.  However, in practice,
+some applications are sensitive to reordering. Without any multipath extension,
 packet reordering can be assumed to be very limited.  Therefore most services on
 top of the Unreliable Datagrame Extension QUIC tunnel are not expecting massive
 packet reordering and degrades their performance if it happens anyway.
 
 It is assumed that this is a solvable task similar to {{MPDCCP-paper}}, but is
-probably left to the implementer, to take care.
+probably left to the implementer, to take care. Even if re-assembly does not
+become a standardized part of the MP-QUIC in {{sec-mpquic-tunnel}}, it possibly
+requires path sequencing and end-to-end sequencing.
 
 ## Multiple/Redundant Encryptions
 
