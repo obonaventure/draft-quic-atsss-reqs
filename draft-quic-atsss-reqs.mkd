@@ -318,7 +318,7 @@ To avoid such issue, the ATSSS UPF may be configured with a pool of IP addresses
 - Access Traffic Switching: migration of all packets of an ongoing data flow from one access network to another access network while ensuring session continuity. 
 - Access Traffic Splitting: split of the packets of a data flow across multiple access networks.
 
-Techniques to provide ATSSS are classified by the 3GPP into two flavors: (1) high-layer techniques which operate above the IP layer (e.g., MPTCP), and (2) low-layer techniques which operate below the IP layer. Only high-layer steering techniques are discussed in this document.
+Techniques to provide ATSSS are classified by the 3GPP into two flavors: (1) high-layer techniques which operate above the IP layer (e.g., MPTCP), and (2) low-layer techniques which operate below the IP layer. 
 
 ## ATSSS Rules {#sec-rules}
 
@@ -468,7 +468,7 @@ Network input can be especially beneficial for cases such as:
 
 ## QUIC as an ATSSS Data Plane Protocol {#sec-quic-data}
 
-This section elaborates how non-TCP traffic (UDP or a subset like QUIC) can to be encapsulated into a tunnel between the UE and the ATSSS UPF to enable so called ATSSS higher-layer steering for all traffic, not only TCP or QUIC. This section discusses to what extent QUIC can be used as a tunneling protocol for the ATSSS service and whether gaps are found.
+This section elaborates how non-TCP traffic (UDP or a subset like QUIC) can to be encapsulated into a tunnel between the UE and the ATSSS UPF to enable ATSSS for all traffic, not only TCP or QUIC. This section discusses to what extent QUIC can be used as a tunneling protocol for the ATSSS service and whether gaps are found.
 
 When tunneling non-TCP (e.g., UDP, plain IP) over QUIC the Unreliable Datagram Extension
 {{I-D.ietf-quic-datagram}} can be used. Each data packet would be transported unreliably as a datagram
