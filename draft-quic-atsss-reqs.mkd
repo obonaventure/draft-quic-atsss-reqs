@@ -710,21 +710,21 @@ Wireless LAN (WLAN)
 
 # QUIC Version 1 Gap Analysis for ATSSS Version 2 {#gap-analysis}
 
-These are additional QUIC protocol capabilities that would be useful for ATSSS Version 2, as described in {{sec-ver2}}, along with our understanding of their maturity level.
+These are additional QUIC protocol capabilities that would be useful for ATSSS Phase 2, as described in {{sec-ver2}}, along with our understanding of their maturity level.
 
-1. ATSSS Version 2 will need transport services for Ethernet frames and IP packets (with the intention of supporting TCP, UDP, and UDP-encapsulated transport protocols such as QUIC). QUIC Version 1 provides transport services for HTTP/3 but does not yet provide support for tunnelling Ethernet or IP directly over QUIC, as envisioned in ATSSS Version 2. The QUIC working group is not chartered to provide this capability, although proposals exist.
+- ATSSS Phase 2 will need transport services for Ethernet frames and IP packets (with the intention of supporting TCP, UDP, and UDP-encapsulated transport protocols such as QUIC). QUIC Version 1 provides transport services for HTTP/3 but does not yet provide support for tunnelling Ethernet or IP directly over QUIC, as envisioned in ATSSS Phase 2. The QUIC working group is not chartered to provide this capability, although proposals exist.
 
-1. We envision the ability to select paths (steering), detect path failures and reroute traffic (switching), and forward packets on multiple active paths simultaneously (splitting), based on external policies, including active-standby, smallest delay, weighted load-balancing, and path selection based on assigned priorities, for the full range of encapsulated protocols in ATSSS Version 2, similar to the abilities provided by Multipath TCP for ATSSS Version 1. 
+- We envision the ability to select paths (steering), detect path failures and reroute traffic (switching), and forward packets on multiple active paths simultaneously (splitting), based on external policies, including active-standby, smallest delay, weighted load-balancing, and path selection based on assigned priorities, for the full range of encapsulated protocols in ATSSS Phase 2, similar to the abilities provided by Multipath TCP for ATSSS Phase 1. 
 
-1. QUIC Version 1 does not provide a multipath transport capability similar to Multipath TCP, as used in ATSSS Version 1. The QUIC working group is chartered to produce a multipath extension document by December 2021. Proposals exist, although the working group has not yet adopted a draft as the basis for its work. 
+- QUIC Version 1 does not provide a multipath transport capability similar to Multipath TCP, as used in ATSSS Phase 1. The QUIC working group is chartered to produce a multipath extension document by December 2021. Proposals exist, although the working group has not yet adopted a draft as the basis for its work. 
 
-1. QUIC Version 1 does not yet provide support for unreliable datagrams, needed for the additional user-plane protocols as envisioned in ATSSS Version 2. The QUIC working group is chartered to produce this capability by March 2021, and has adopted a proposal as a working group draft.
+- QUIC Version 1 does not provide support for unreliable datagrams, needed for the additional user-plane protocols as envisioned in ATSSS Phase 2. The QUIC working group is chartered to produce this capability by March 2021, and has adopted a proposal as a working group draft.
 
-1. We recognize that Multipath QUIC may not provide reassembly or appropriate sequencing for the encapsulated protocols. 
+- We recognize that Multipath QUIC may not provide reassembly or appropriate sequencing for the encapsulated protocols. 
 
-1. We recognize that nested congestion control mechanisms (such as QUIC encapsulated in QUIC) require further study. 
+- We recognize that nested congestion control mechanisms (such as QUIC encapsulated in QUIC) have implications that require further study. 
 
-1. We recognize that the complete ATSSS Version 2 protocol stack would include encrypted headers at multiple levels, and that if this is a problem for ATSSS, it is likely 3GPP's problem to solve. 
+- We recognize that the complete ATSSS Phase 2 protocol stack would include encrypted headers at multiple levels, and that if this is a problem for ATSSS, it is likely 3GPP's problem to solve. Likewise, the implications of the various encapsulation overhead is to be further assessed within 3GPP.
 
 # IANA Considerations
 
