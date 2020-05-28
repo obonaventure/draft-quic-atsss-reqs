@@ -631,7 +631,7 @@ Such multiple encryptions may have performance implications on the UE, in partic
 
 Many applications that are sending unreliable traffic use various congestion control algorithms to detect congestion and adjust their sending rate based on inferred end-to-end latency and loss characteristics. Examples include Adaptive Video Streaming using e.g. SCREAM {{RFC8298}}, or other media streaming applications that use QUIC as transport layer. When using QUIC version 1 with Unreliable Datagram Extension or Multipath QUIC as ATSSS solution, this leads to nested congestion control, where both inner and outer congestion control coexist. When using Multiple QUICv1 tunnels with Unreliable Datagram Extension or MP-QUIC tunneling, the packet scheduler has additional impact on perceived end-to-end latency and loss due to the potential difference of the individual path characteristics.
 
-When deploying ATSSSv1 and ATSSSv2 in parallel and the UE is serving both reliable and unreliable flows simultaneously, different congestion control algorithms may coexist on individual paths, which may lead to fairness issues.
+When deploying ATSSSv1 and ATSSSv2 in parallel and the UE is serving both reliable and unreliable flows simultaneously, different congestion control algorithms may coexist on individual paths, which may lead to fairness issues or even meltdown effects.
 
 We recognize that nested congestion control mechanisms (such as
 QUIC encapsulated in QUIC or SCREAM encapsulated in QUIC) and coexistence of ATSSSv1 and ATSSSv2 have implications that require further study.
