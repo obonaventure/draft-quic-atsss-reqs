@@ -96,6 +96,7 @@ informative:
   RFC6459:
   RFC6824:
   RFC8041:
+  RFC8298:
   IETFJ16:
     author:
       - ins: O. Bonaventure
@@ -474,9 +475,8 @@ When tunneling non-TCP (e.g., UDP, plain IP) over QUIC the Unreliable Datagram E
 {{I-D.ietf-quic-datagram}} can be used. Each data packet would be transported unreliably as a datagram
 over a QUIC connection. Transporting these datagrams unreliably as
 in IPsec or DTLS-based tunnels is especially important for flows that do not require reliable delivery 
-and suffer from unnecessary delay when reliability is added. QUIC datagrams are congestion-controlled, 
-however, as the latency between the UE and the ATSSS UPF is small compared to the end-to-end latency,
-having another local congestion control loops should not impact the end-to-end congestion control negatively.
+and suffer from unnecessary delay when reliability is added. QUIC datagrams are congestion-controlled,  
+however, and the local congestion control loop and the latency between the UE and the ATSSS UPF may have an impact on the end-to-end congestion control.
 
 This document discusses three approaches:
 
@@ -626,6 +626,15 @@ More investigation is required to assess whether the ATSSSv2 overhead is an issu
 QUIC data that matches an ATSSS rule will be subject to two encryptions (i.e., the one required with the remote peer and the one used to steer data via an ATSSS UPF) when forwarded via a 3GPP network access. Three encryptions will be imposed on the same data when forwarded over a non-3GPP network access (see {{sec-overhead}}). Some of these encryptions are redundant (e.g., ATSSS encryption vs. IP Encapsulating Security Payload (ESP)).
 
 Such multiple encryptions may have performance implications on the UE, in particular. Means to optimize the various redundant encryptions are for further investigation. 
+
+## Congestion Control in Congestion Control and Coexistence {#sec-congcong}
+
+Many applications that are sending unreliable traffic use various congestion control algorithms to detect congestion and adjust their sending rate based on inferred end-to-end latency and loss characteristics. Examples include Adaptive Video Streaming using e.g. SCREAM {{RFC8298}}, or other media streaming applications that use QUIC as transport layer. When using QUIC version 1 with Unreliable Datagram Extension or Multipath QUIC as ATSSS solution, this leads to nested congestion control, where both inner and outer congestion control coexist. When using Multiple QUICv1 tunnels with Unreliable Datagram Extension or MP-QUIC tunneling, the packet scheduler has additional impact on perceived end-to-end latency and loss due to the potential difference of the individual path characteristics.
+
+When deploying ATSSS and ATSSSv1 in parallel and the UE is serving both reliable and unreliable flows simultaneously, different congestion control algorithms may coexist on individual paths, which may lead to fairness issues.
+
+We recognize that nested congestion control mechanisms (such as
+QUIC encapsulated in QUIC or SCREAM encapsulated in QUIC) and coexistence of ATSSSv1 and ATSSSv2 have implications that require further study.
 
 # Terms used in this document
 
