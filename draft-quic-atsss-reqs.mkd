@@ -244,7 +244,7 @@ Also, the document uses the following additional terms:
 
 - Data Network Name (DNN): is a Fully Qualified Domain Name (FQDN) and resolves to a set of gateways in an operator's network. DNN is used for the selection of the UPF(s) for a PDU Session.
 
-- 5G Core (5GC) network: Refers the part of the 5G System which is independent of the access technology used by an UE (e.g., cellular, WLAN) {{TS23501}}. A 5G Core network can be reached via one or more access networks. 
+- 5G Core (5GC) network: Refers to the part of the 5G System which is independent of the access technology used by an UE (e.g., cellular, WLAN) {{TS23501}}. A 5G Core network can be reached via one or more access networks. 
 
 - 3GPP access network: Refers to a radio access network used by an UE to reach a 5G Core network. In such case, the UE uses an access technology that is specified by the 3GPP.
 
