@@ -649,7 +649,7 @@ communication is split across paths exposing very distinct latencies. In theory,
 applications have to deal with packet reordering, since for example typical best
 effort Internet traffic has no mechanism to prevent it.  However, in practice,
 without any multipath extension, packet reordering can be assumed to be very
-limited. Therefore most piggybacked services on top of a Unreliable Datagrame
+limited. Therefore most piggybacked services on top of a Unreliable Datagram
 Extension QUIC tunnel which is splitted as in {{sec-quic-tunnel}} and
 {{sec-mpquic-tunnel}} are not expecting massive packet reordering and degrades
 their performance if it happens anyway. These potentially are all those services
