@@ -476,7 +476,7 @@ When tunneling non-TCP (e.g., UDP, plain IP) over QUIC the Unreliable Datagram E
 over a QUIC connection. Transporting these datagrams unreliably as
 in IPsec or DTLS-based tunnels is especially important for flows that do not require reliable delivery 
 and suffer from unnecessary delay when reliability is added. QUIC datagrams are congestion-controlled,  
-however, and the local congestion control loop and the latency between the UE and the ATSSS UPF may have an impact on the end-to-end congestion control.
+however, the local congestion control loop as well as the latency between the UE and the ATSSS UPF may have an impact on the end-to-end congestion control.
 
 This document discusses three approaches:
 
