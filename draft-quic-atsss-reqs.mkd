@@ -634,7 +634,7 @@ Many applications that are sending unreliable traffic use various congestion con
 When deploying ATSSSv1 and ATSSSv2 in parallel and the UE is serving both reliable and unreliable flows simultaneously, different congestion control algorithms may coexist on individual paths, which may lead to fairness issues or even meltdown effects.
 
 We recognize that nested congestion control mechanisms (such as
-QUIC encapsulated in QUIC or SCREAM encapsulated in QUIC) and coexistence of ATSSSv1 and ATSSSv2 have implications that require further study.
+QUIC encapsulated in QUIC or SCREAM encapsulated in QUIC) as well as the coexistence of ATSSS Phase 1 and Phase 2 have implications that require further study.
 
 # Terms used in this document
 
