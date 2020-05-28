@@ -468,7 +468,7 @@ Network input can be especially beneficial for cases such as:
 
 ## QUIC as an ATSSS Data Plane Protocol {#sec-quic-data}
 
-This section elaborates how non-TCP traffic (UDP or a subset like QUIC) can to be encapsulated into a tunnel between the UE and the ATSSS UPF to enable ATSSS for all traffic, not only TCP or QUIC. This section discusses to what extent QUIC can be used as a tunneling protocol for the ATSSS service and whether gaps are found.
+This section elaborates how non-TCP traffic (UDP or a subset like QUIC) can be encapsulated into a tunnel between the UE and the ATSSS UPF to enable ATSSS for all traffic, not only TCP or QUIC. This section discusses to what extent QUIC can be used as a tunneling protocol for the ATSSS service and whether gaps are found.
 
 When tunneling non-TCP (e.g., UDP, plain IP) over QUIC the Unreliable Datagram Extension
 {{I-D.ietf-quic-datagram}} can be used. Each data packet would be transported unreliably as a datagram
