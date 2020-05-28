@@ -634,7 +634,7 @@ In 3GPP architectures, a variety of encapsulations are already used to convey us
 
 More investigation is required to assess whether the ATSSSv2 overhead is an issue. Solutions to optimize that overhead might be considered, if needed.
 
-## Packet order reconstruction for (MP-)QUIC Splitting Mode
+## Packet Order Reconstruction for (MP-)QUIC Splitting Mode
 
 Both tunnel solutions in {{sec-quic-tunnel}} and {{sec-mpquic-tunnel}} allow the
 splitting mode for simultaneously sending data over multiple paths. The respective
