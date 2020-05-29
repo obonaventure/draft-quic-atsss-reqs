@@ -742,7 +742,8 @@ high amounts of reordering and expirience decreased performanced.
 
 As such it is desirable that the respective
 receiver side of the tunnel termination points has the ability to reconstruct of the original packet ordering. 
-When the Unreliable Datagram Extension for QUIC is used, the reconstruction mechanism has to further
+While in the case when using the MPTCP converter, losses are retransmitted quickly on the local segement,
+when the Unreliable Datagram Extension for QUIC is used, the reconstruction mechanism has to further
 account for packet loss which may occur for any of the paths within the QUIC tunnel. This can cause 
 delays in the reordering logic, which in turn can have a negative impact on application that do not require
 in-order delivery, auch as real-time transmissions.
