@@ -395,12 +395,11 @@ Also, both the MPTCP Client and MPTCP proxy are configured with ATSSS rules from
  |Client|                      +--------|Proxy|        +------+
  +--+---+                      |        +-----+
     |                          |
-    |                          |
     |          ------------    |
     |         /            \   |
-    +--------| Access Net B |--+
-              \ (non 3GPP) /
-               ------------
+    +--------| Access Net B |--+        Legend:
+              \ (non 3GPP) /               --- MPTCP subflow
+               ------------                === Proxied TCP flow
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {: #fig-mptcp-arch title="Simplified Reference Architecture for ATSSS with Multipath TCP"}
 
@@ -488,6 +487,26 @@ This document discusses three approaches:
 
 ### Single QUICv1 Tunnel with Unreliable Datagram Extension and Connection Migration
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               ------------
+    *---------/            \---------*
+    |........| Access Net A |........|
+    |:*-------\   (3GPP)   /-------*:|
+    |:|        ------------        |:|
+    |v|                            |:|
+ +--+-+-+                       +--+-+-+
+ |QUIC  |                       |QUIC  |        +------+
+ |      |                       |      |.......>|Server|
+ |Client|                       |Proxy |        +------+
+ +------+                       +------+
+
+               ------------
+              /            \
+             | Access Net B |           Legend:
+              \ (non 3GPP) /               --- QUIC tunnel connection
+               ------------                ... Tunneled non-TCP flow
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{: #fig-single-quic title="Single QUICv1 tunnel"}
 
 QUIC can be used as a tunneling protocol between the UE and the ATSSS UPF. Use of the Unreliable 
 Datagram Extension avoids unnecessary delays due to local retransmissions and, more important, subsequently 
@@ -511,6 +530,27 @@ maximum capacity available, which can also be benefical in some cases.
 This option is not a valid approach for the ATSSS Phase 2 discussed within the 3GPP.
 
 ### Multiple QUICv1 Tunnels with Unreliable Datagram Extension and Connection Migration
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               ------------
+    *---------/            \---------*
+    |........| Access Net A |........|
+    |:*-------\   (3GPP)   /-------*:|
+    |:|        ------------        |:|
+    |v|                            |:|
+ +--+-+-+                       +--+-+-+       +------+
+ |QUIC  |                       |QUIC  |......>|      |
+ |      |                       |      |       |Server|
+ |Client|                       |Proxy |......>|      |
+ +--+-+-+                       +--+-+-+       +------+
+    |^|                            |:|
+    |:|        ------------        |:|
+    |:*-------/            \-------*:|
+    |........| Access Net B |........|  Legend:
+    *---------\ (non 3GPP) /---------*     --- QUIC tunnel connection
+               ------------                ... Tunneled non-TCP flow
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{: #fig-multiple-quic title="Traffic steering of two end-to-end flows using multiple QUICv1 tunnels"}
 
 Another approach is to use one QUIC connection over each access network.
 In this case, there are multiple QUIC connections that are used as tunnels from the UE
@@ -539,6 +579,27 @@ delivery of subsequent data over the other session.
 Experience with MPTCP on smartphones shows that its integrated mechanisms (e.g., congestion control, round-trip-time estimation, packet scheduler) are well suited to support splitting and switching. Providing a similar service over independent QUIC connections would require a complex application that would need to track the congestion window, round-trip-time, and loss characteristics of the underlying QUIC connections as well as some specific application layer signalling to glue the various QUIC connections together. This option is not considered as a valid approach for the ATSSS Phase 2 discussed within the 3GPP.
 
 ### MP-QUIC Tunneling
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               ------------
+    *---------/            \---------*
+    | . . . .| Access Net A |. . . . |
+    |.*-------\   (3GPP)   /-------*.|
+    | |        ------------        | |
+    |.|                            |.|
+ +--+-+-+                       +--+-+-+       +------+
+ |MPQUIC|                       |MPQUIC|       |      |
+ |      |                       |      |......>|Server|
+ |Client|                       |Proxy |       |      |
+ +--+-+-+                       +--+-+-+       +------+
+    |.|                            |.|
+    | |        ------------        | |
+    |.*-------/            \-------*.|
+    | . . . .| Access Net B |. . . . |  Legend:
+    *---------\ (non 3GPP) /---------*     --- MPQUIC subflow
+               ------------                ... Tunneled non-TCP flow
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{: #fig-mp-quic title="Traffic splitting using a Multipath QUIC tunnel"}
 
 A third candidate solution is to leverage the ability of QUIC to support multiple
 streams and the Unreliable Datagram Extension but extends it with
