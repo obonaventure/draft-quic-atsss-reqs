@@ -651,7 +651,7 @@ provided rules.
 
 Switching can be improved by splitting traffic simulaneously over
 both link first such that the congestion window of the new path can be open before
-the old path goes aways. This makes handovers smoother, as experience with Multipath TCP on
+the old path goes away. This makes handovers smoother, as experience with Multipath TCP on
 smartphones has shown that handovers are not a binary process. When
 a smartphone performs handovers, there are frequently short periods
 of time during which both networks are imperfect {{MPTester}}. Using use both networks
