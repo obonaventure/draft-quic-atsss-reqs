@@ -366,7 +366,7 @@ The traffic that matches an ATSSS rule can be distributed among available access
 
 In order to provide the above-mentioned steering modes, measurement information about the current network state of each path are needed. Often if a multipath capabale protocol is used, the measurements are available as part of the protocol itself. For ATSSS approaches where this is not the case, a dedicated protocol called Performance Measurement Function (PMF) protocol can be uased. This protocol is enabled between the UE and the UPF in order to provide RTT measurements and report access availability/unavailability by the UE to the UPF. 
 
-These modes of operations can used by multipath protocols
+These modes of operations can be met by using multipath protocols
 such as MPTCP {{RFC6824}} to select the different paths between
 the UE and the ATSSS. Such protocols usually include two
 types of mechanisms to control the utilization of the paths: (i) a
