@@ -1,7 +1,7 @@
 xml2rfc ?= xml2rfc
 kramdown-rfc2629 ?= kramdown-rfc2629
 
-drafts := draft-quic-atsss-reqs.txt 
+drafts := draft-bonaventure-quic-atsss-overview.txt
 xml := $(drafts:.txt=.xml)
 mkd := $(drafts:.txt=.mkd)
 
