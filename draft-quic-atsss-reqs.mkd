@@ -504,11 +504,7 @@ splitting traffic over multiple paths simulaneously can be beneficial for a smoo
 Further, of course, the ability to use multiple paths simultaneously also increases the 
 maximum capacity available, which can also be benefical in some cases.
 
-<<<<<<< Updated upstream
-This option is not a valid approach for the ATSSS Phase 2 discussed within the 3GPP.
-=======
 This option is not considered a valid approach for the ATSSS Phase 2 discussed within the 3GPP.
->>>>>>> Stashed changes
 
 ### Multiple QUICv1 Tunnels with Unreliable Datagram Extension and Connection Migration {#sec-quic-multiple-tunnels}
 
@@ -536,13 +532,9 @@ available for each QUIC session varies as a function of the congestion experienc
 over each access network, data sent over a congested session could delay the
 delivery of subsequent data over the other session. 
 
-<<<<<<< Updated upstream
 Experience with MPTCP on smartphones shows that its integrated mechanisms (e.g., congestion control, round-trip-time estimation, packet scheduler) are well suited to support splitting and switching. Providing a similar service over independent QUIC connections would require a complex application that would need to track the congestion window, round-trip-time, and loss characteristics of the underlying QUIC connections as well as some specific application layer signalling to glue the various QUIC connections together. This option is not considered as a valid approach for the ATSSS Phase 2 discussed within the 3GPP.
-=======
-Experience with MPTCP on smartphones shows that its integrated mechanisms (e.g., congestion control, RTT estimation, packet scheduler) are well suited to support splitting and switching. Providing a similar service over independent QUIC connections would require a complex application that would need to track the congestion window, RTT, and loss characteristics of the underlying QUIC connections as well as some specific application layer signalling to glue the various QUIC connections together. 
->>>>>>> Stashed changes
 
-This option is not considered a valid approach for the ATSSSv2 discussed within the 3GPP.
+This option is not considered a valid approach for the ATSSS Phase 2 discussed within the 3GPP.
 
 ### MP-QUIC Tunneling {#sec-mpquic-data}
 
@@ -622,15 +614,9 @@ Both proposals rely upon single QUIC connections and inherit thus the same issue
 
 ## Encapsulation Overhead {#sec-overhead}
 
-<<<<<<< Updated upstream
-In 3GPP architectures, a variety of encapsulations are already used to convey user data. The use of QUIC as a tunneling method for ATSSS purposes will thus add an extra overhead. This overhead is even exacerbated when the user data is forwarded over a non-3GPP network access given than an IPsec tunnel is used to graft the UE to the 5G Core Network. For example, the overhead without taking into account the QUIC tunnel is at least 142 octets for an IPv6 packet forwarded over a non-3GPP network access. As a reminder, ATSSS Phase 1 does not add any overhead. 
-
-More investigation is required to assess whether the ATSSS Phase 2 overhead is an issue. Solutions to optimize that overhead might be considered, if needed. 
-=======
 In 3GPP architectures, a variety of encapsulations are already used to carry user data. The use of QUIC as a tunneling method for ATSSS purposes will add an extra overhead. This overhead is even exacerbated when the user data is forwarded over a non-3GPP network access given that an IPsec tunnel is used to graft the UE to the 5G Core Network. For example, the overhead without taking into account the QUIC tunnel is at least 142 octets for an IPv6 packet forwarded over a non-3GPP network access. This compares unfavorably to ATSSS Phase 1, which does not add any overhead. 
 
 More investigation is required to assess whether the ATSSS Phase 2 overhead is an issue. Solutions to optimize that overhead could be considered, if needed. 
->>>>>>> Stashed changes
 
 ## Multiple Encryptions
 
