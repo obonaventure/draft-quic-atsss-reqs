@@ -310,7 +310,7 @@ The 5G control plane provides the UE and the ATSSS UPF with rules as discussed i
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  ............( Rules From Network )........
+  ........(ATSSS Rules From Network)........
   .                                        .
   .            ------------                .
   .           /            \               .
@@ -409,10 +409,10 @@ For ATSSS with Multipath TCP functionality, a client with two interfaces connect
 
 During the attachment of an ATSSS-capable UE to the network, the UE may retrieve the MPTCP proxy information: an IP address, a port number, and the type of proxy. In the current release, the mandatory MPTCP proxy type is the "Transport Converter" {{I-D.ietf-tcpm-converters}}.
 
-Also, both the MPTCP Client and MPTCP proxy are configured with rules from the network that govern how the multiple network paths between the MPTCP Client and MPTCP proxy are used. This relationship is shown using "." between the MPTCP Client and MPTCP Proxy. 
+Also, both the MPTCP Client and MPTCP proxy are configured with ATSSS rules that govern how the multiple network paths between the MPTCP Client and MPTCP proxy are used. This relationship is shown using "." between the MPTCP Client and MPTCP Proxy. 
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ............( Rules From Network )........
+  ........(ATSSS Rules From Network)........
   .                                        .
   .            ------------                .
   .           /            \               .
