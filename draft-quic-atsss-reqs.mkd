@@ -90,6 +90,7 @@ informative:
   I-D.piraux-quic-tunnel-tcp:
   I-D.boucadair-mptcp-plain-mode:
   I-D.bonaventure-iccrg-schedulers:
+  RFC0793:
   RFC5533:
   RFC6275:
   RFC5213:
@@ -141,6 +142,19 @@ informative:
     title: Hybrid Access Broadband Network Architecture
     date: 2016
     target: https://www.broadband-forum.org/download/TR-348.pdf
+  MPDCCP-paper:
+    author:
+      - ins: M.Amend
+      - ins: E. Bogenfeld
+      - ins: M. Cvjetkovic
+      - ins: V. Rakocevic
+      - ins: M. Pieska
+      - ins: A. Kassler
+      - ins: A. Brunstrom
+    title: A Framework for Multiaccess Support for Unreliable Traffic using Multipath DCCP
+    seriesinfo: 2019 IEEE 44th Conference on Local Computer Networks (LCN)
+    date: 2019
+    target: https://doi.org/10.1109/LCN44214.2019.8990746
     
 --- abstract
 
@@ -531,7 +545,7 @@ maximum capacity available, which can also be benefical in some cases.
 
 This option is not a valid approach for the ATSSS Phase 2 discussed within the 3GPP.
 
-### Multiple QUICv1 Tunnels with Unreliable Datagram Extension and Connection Migration
+### Multiple QUICv1 Tunnels with Unreliable Datagram Extension and Connection Migration {#sec-quic-tunnel}
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
                ------------
@@ -580,7 +594,7 @@ delivery of subsequent data over the other session.
 
 Experience with MPTCP on smartphones shows that its integrated mechanisms (e.g., congestion control, round-trip-time estimation, packet scheduler) are well suited to support splitting and switching. Providing a similar service over independent QUIC connections would require a complex application that would need to track the congestion window, round-trip-time, and loss characteristics of the underlying QUIC connections as well as some specific application layer signalling to glue the various QUIC connections together. This option is not considered as a valid approach for the ATSSS Phase 2 discussed within the 3GPP.
 
-### MP-QUIC Tunneling
+### MP-QUIC Tunneling {#sec-mpquic-tunnel}
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
                ------------
@@ -682,7 +696,34 @@ Both proposals rely upon single QUIC connections and inherit thus the same issue
 
 In 3GPP architectures, a variety of encapsulations are already used to convey user data. The use of QUIC as a tunneling method for ATSSS purposes will thus add an extra overhead. This overhead is even exacerbated when the user data is forwarded over a non-3GPP network access given than an IPsec tunnel is used to graft the UE to the 5G Core Network. For example, the overhead without taking into account the QUIC tunnel is at least 142 octets for an IPv6 packet forwarded over a non-3GPP network access. As a reminder, ATSSS Phase 1 does not add any overhead. 
 
-More investigation is required to assess whether the ATSSS Phase 2 overhead is an issue. Solutions to optimize that overhead might be considered, if needed. 
+More investigation is required to assess whether the ATSSS Phase 2 overhead is an issue. Solutions to optimize that overhead might be considered, if needed.
+
+## Packet Order Reconstruction for (MP-)QUIC Splitting Mode
+
+Both tunnel solutions in {{sec-quic-tunnel}} and {{sec-mpquic-tunnel}} allow the
+splitting mode for simultaneously sending data over multiple paths. The respective
+receiver side of the tunnel termination points has to deal with the unreliable
+transport character of the Unreliable Datagram Extension for QUIC and a possible
+reconstruction of the original packet ordering. In practice, it is assumed that some sort of
+reconstruction has to be applied. Different to MPTCP, which is reliable by nature
+and has just to wait for missing segments, such reconstruction mechanisms have to
+account that packet loss may occur for any of the paths within the QUIC tunnel.
+Another issue is the packet reordering introduced when a QUIC tunnel
+communication is split across paths exposing very distinct latencies. In theory,
+applications have to deal with packet reordering, since for example typical best
+effort Internet traffic has no mechanism to prevent it.  However, in practice,
+without any multipath extension, packet reordering can be assumed to be very
+limited. Therefore most piggybacked services on top of a Unreliable Datagram
+Extension QUIC tunnel which is splitted as in {{sec-quic-tunnel}} and
+{{sec-mpquic-tunnel}} are not expecting massive packet reordering and degrades
+their performance if it happens anyway. These potentially are all those services
+that rely on {{RFC0793}} and {{I-D.ietf-quic-transport}} or
+applications that are sensitive to reordering due to real-time demand.
+
+It is assumed that this is a solvable task similar to {{MPDCCP-paper}}, but is
+probably left to the implementer, to take care. Even if the reconstruction of the packet order does not
+become a standardized part of the MP-QUIC in {{sec-mpquic-tunnel}}, it possibly
+requires path sequencing and end-to-end sequencing.
 
 ## Multiple Encryptions
 
