@@ -97,6 +97,7 @@ informative:
   RFC6459:
   RFC6824:
   RFC8041:
+  RFC8298:
   RFC8684:
   IETFJ16:
     author:
@@ -499,9 +500,8 @@ When tunneling non-TCP (e.g., UDP, plain IP) over QUIC the Unreliable Datagram E
 {{I-D.ietf-quic-datagram}} can be used. Each data packet would be transported unreliably as a datagram
 over a QUIC connection. Transporting these datagrams unreliably as
 in IPsec or DTLS-based tunnels is especially important for flows that do not require reliable delivery 
-and suffer from unnecessary delay when reliability is added. QUIC datagrams are congestion-controlled, 
-however, as the latency between the UE and the ATSSS UPF is small compared to the end-to-end latency,
-having another local congestion control loops should not impact the end-to-end congestion control negatively.
+and suffer from unnecessary delay when reliability is added. QUIC datagrams are congestion-controlled,  
+however, the local congestion control loop as well as the latency between the UE and the ATSSS UPF may have an impact on the end-to-end congestion control.
 
 This document discusses three approaches:
 
@@ -704,9 +704,18 @@ Both proposals rely upon single QUIC connections and inherit thus the same issue
 
 ## Encapsulation Overhead {#sec-overhead}
 
-In 3GPP architectures, a variety of encapsulations are already used to convey user data. The use of QUIC as a tunneling method for ATSSS purposes will thus add an extra overhead. This overhead is even exacerbated when the user data is forwarded over a non-3GPP network access given than an IPsec tunnel is used to graft the UE to the 5G Core Network. For example, the overhead without taking into account the QUIC tunnel is at least 142 octets for an IPv6 packet forwarded over a non-3GPP network access. As a reminder, ATSSS Phase 1 does not add any overhead. 
+In 3GPP architectures, a variety of encapsulations are already used to convey user data. The use of QUIC as a tunneling method for ATSSS purposes will thus add an extra overhead. This overhead is even exacerbated when the user data is forwarded over a non-3GPP network access given than an IPsec tunnel is used to graft the UE to the 5G Core Network. For example, the overhead without taking into account the QUIC tunnel is at least 142 octets for an IPv6 packet forwarded over a non-3GPP network access. As a reminder, ATSSS Phase 1 does not add any overhead.
 
 More investigation is required to assess whether the ATSSS Phase 2 overhead is an issue. Solutions to optimize that overhead might be considered, if needed.
+
+## Congestion Control in Congestion Control and Coexistence {#sec-congcong}
+
+Many applications that are sending unreliable traffic use various congestion control algorithms to detect congestion and adjust their sending rate based on inferred end-to-end latency and loss characteristics. Examples include Adaptive Video Streaming using e.g. SCREAM {{RFC8298}}, or other media streaming applications that use QUIC as transport layer. When using QUIC version 1 with Unreliable Datagram Extension or Multipath QUIC as ATSSS solution, this leads to nested congestion control, where both inner and outer congestion control coexist. When using Multiple QUICv1 tunnels with Unreliable Datagram Extension or MP-QUIC tunneling, the packet scheduler has additional impact on perceived end-to-end latency and loss due to the potential difference of the individual path characteristics.
+
+When deploying ATSSS Phase 1 and Phase 2 in parallel, with the UE serving both reliable and unreliable flows, different congestion control algorithms may coexist on individual paths, which may lead to fairness issues or even meltdown effects.
+
+We recognize that nested congestion control mechanisms (such as
+QUIC encapsulated in QUIC or SCREAM encapsulated in QUIC) as well as the coexistence of ATSSS Phase 1 and Phase 2 have implications that require further study.
 
 ## Packet Order Reconstruction for (MP-)QUIC Splitting Mode
 
