@@ -529,7 +529,7 @@ Because both (tunnel) QUIC connections are completely independent of each other 
 different access networks may have different latency, this approach would likely
 result in reordering of packets that belong to
 a split flow. If reordering should be avoided, this would require additional signaling
-between the UE and the ATSSS UPF, e.g., adding sequence numbers, and adding a reordering buffer and logic to both the UE and ATSSS UDF.
+between the UE and the ATSSS UPF, e.g., adding sequence numbers, and adding a reordering buffer and logic to both the UE and ATSSS UPF.
 
 Furthermore, since the bandwidth
 available for each QUIC session varies as a function of the congestion experienced
