@@ -715,7 +715,7 @@ More investigation is required to assess whether the ATSSS Phase 2 overhead is a
 
 ## Multiple Encryptions
 
-The use of QUIC as a tunneling protocol in ATSSS will add an additional layer of encryption. As there is already encryptions on other layers (e.g., IP Encapsulating Security Payload (ESP)) this leads to multiple layer of encryption with might be redundant.
+The use of QUIC as a tunneling protocol in ATSSS will add an additional layer of encryption. As there is already encryptions on other layers (e.g., IP Encapsulating Security Payload (ESP)) this leads to multiple layers of encryption, which might be redundant.
 
 Such multiple encryptions will have performance implications on the UE, in particular. Means to optimize the various redundant encryptions are for further investigation in 3GPP.
 
@@ -733,8 +733,8 @@ QUIC encapsulated in QUIC or SCREAM encapsulated in QUIC) as well as the coexist
 Both tunnel solutions in {{sec-quic-multiple-tunnels}} and {{sec-mpquic-tunnel}} allow the
 splitting mode for simultaneously sending data over multiple paths. In this case packet reordering 
 can occur when a QUIC tunnel
-communication is split across paths with very differnet latencies.
-Generally, applications have to have a way deal with packet reordering, since the best
+communication is split across paths with very different latencies.
+Generally, applications have to deal with packet reordering, since the best
 effort for Internet traffic has no guarantee to prevent it. However, in practice, 
 packet reordering in the network s assumed to be very limited. Applications 
 that require in-order delivery and e.g. rely on TCP or implement a similar mechanism itself can be sensitive to
@@ -764,7 +764,7 @@ This section summarizes QUIC protocol capabilities that would be beneficial for 
 
 - When QUIC is used as a tunneling protocol, nested congestion control mechanisms (such as QUIC encapsulated in QUIC) have implications that require further study. 
 
-- When QUIC is used as a tunneling protocol, the complete ATSSS Phase 2 protocol stack would include encrypted headers at multiple layers. It needs further investigation if this is a problem for ATSSS, however, it is likely a problem that can be solve in the 3GPP architecture. Likewise, the implications of the various encapsulation overhead is to be further assessed within 3GPP.
+- When QUIC is used as a tunneling protocol, the complete ATSSS Phase 2 protocol stack would include encrypted headers at multiple layers. It needs further investigation if this is a problem for ATSSS, however, it is likely a problem that can be solved by the 3GPP. Likewise, the implications of the various encapsulation overhead is to be further assessed within 3GPP.
 
 # IANA Considerations
 
@@ -781,7 +781,7 @@ Multipath QUIC-specific security considerations can be found in Section 8 of {{I
 
 Section 6 of {I-D.ietf-quic-datagram} discusses security considerations specific to the use of the Unreliable Datagram Extension to QUIC.
 
-This document does not specify specific mechanisms to use QUIC as a tunneling protocol towards a ATSSS proxy, as the intention of this document is to provide an informational overview of the ongoing work in 3GPP on ATSSS to support non-TCP, rather than discussing a detailed solution. Nevertheless, this document cites candidate solutions to provide such tunneling service. Security considerations specific to these solutions are provided below.  
+This document does not specify specific mechanisms to use QUIC as a tunneling protocol towards an ATSSS proxy, as the intention of this document is to provide an informational overview of the ongoing work in 3GPP on ATSSS to support non-TCP, rather than discussing a detailed solution. Nevertheless, this document cites candidate solutions to provide such tunneling service. Security considerations specific to these solutions are provided below.  
 
 # Acknowledgements
 
