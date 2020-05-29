@@ -250,7 +250,7 @@ The 5G Core supports a service that provides exchange of data between a User Equ
 
 It is out of the scope of this document to provide a comprehensive overview of 5G System (5GS) architecture. In particular, this document does not describe how PDU Sessions are established, and thus how IP addresses/prefixes are assigned to requesting UEs. 
 
-An UE can be provided a multi-access PDU Connectivity Service. That is, an UE can exchange data with a PDN by using a "3GPP access network" and a "non-3GPP access network" (often a WLAN that is not managed by the 5G network provider). This is realized by use of the ATSSS service that is provided in the 5G core network usually collocated with the User Plane Function (UPF) that manages the UE's PDU session.
+An UE can be provided a multi-access PDU Connectivity Service. That is, an UE can exchange data with a PDN by using a "3GPP access network" and a "non-3GPP access network" (often a WLAN). This is realized by use of the ATSSS service that is provided in the 5G core network usually collocated with the User Plane Function (UPF) that manages the UE's PDU session.
 
 
 ## Reference Architecture {#ref-arch}
