@@ -59,7 +59,12 @@ author:
   name: Markus Amend
   organization: Deutsche Telekom
   email: markus.amend@telekom.de
- -
+-
+ ins: A. Kassler
+ name: Andreas Kassler
+ organization: Karlstad University
+ email: andreas.kassler@kau.se
+-
   ins: Q. An
   name: Qing An
   organization: Alibaba Group
@@ -795,7 +800,7 @@ Section 6 of {I-D.ietf-quic-datagram} discusses security considerations specific
 
 # Acknowledgements
 
-(Reviewers and commenters - your name goes here!)
+Many thanks to Anna Brunstrom, Dieter Gludovacz, Dirk von-Hugo, Tim Costello, Stephen Johnson, and Florin Baboescu for the review, comments, and suggestions.
 
 # Document History
 
