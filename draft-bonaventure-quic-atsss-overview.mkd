@@ -44,11 +44,11 @@ author:
   name: Spencer Dawkins
   organization: Tencent America
   email: spencerdawkins.ietf@gmail.com
- -  
+ -
   ins: M. Kuehlewind
-   name: Mirja Kuehlewind
-   organization: Ericsson
-   email: mirja.kuehlewind@ericsson.com
+  name: Mirja Kuehlewind
+  organization: Ericsson
+  email: mirja.kuehlewind@ericsson.com
  -
   ins: M. Amend
   name: Markus Amend
