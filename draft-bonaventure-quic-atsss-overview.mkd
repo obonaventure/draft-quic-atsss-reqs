@@ -1,5 +1,5 @@
 ---
-title: 3GPPP Access Traffic Steering, Switching, and Splitting (ATSSS) Overview for IETF Participants
+title: 3GPP Access Traffic Steering, Switching, and Splitting (ATSSS) Overview for IETF Participants
 abbrev: QUIC ATSSS
 docname: draft-bonaventure-quic-atsss-overview-00
 date: 2020-05-29
@@ -45,6 +45,11 @@ author:
   organization: Tencent America
   email: spencerdawkins.ietf@gmail.com
  -
+  ins: M. Kuehlewind
+  name: Mirja Kuehlewind
+  organization: Ericsson
+  email: mirja.kuehlewind@ericsson.com
+-
   ins: M. Amend
   name: Markus Amend
   organization: Deutsche Telekom
@@ -589,7 +594,7 @@ tunnels are used simultaneously for different packets of the same flow.
 
 However, this approach for splitting is challenging
 since data from the same flow are sent over different connections,
-again using unreliable datagram to minimise head-of-line blocking.
+again using unreliable datagram to minimize head-of-line blocking.
 Because both (tunnel) QUIC connections are completely independent of each other and the paths on the
 different access networks may have different latency, this approach would likely
 result in reordering of packets that belong to
@@ -644,9 +649,9 @@ Steering can be also supported, similarly to MPTCP. The path scheduler can
 map datagrams carrying an entire flow to one or another access network based on the
 ATSSS rules. 
 
-Switching can be improved by splitting traffic simulaneously over
+Switching can be improved by splitting traffic simultaneously over
 both link first such that the congestion window of the new path can be open before
-the old path goes aways. This makes handovers smoother, as experience with Multipath TCP on
+the old path goes away. This makes handovers smoother, as experience with Multipath TCP on
 smartphones has shown that handovers are not a binary process. When
 a smartphone performs handovers, there are frequently short periods
 of time during which both networks are imperfect {{MPTester}}. Using use both networks
@@ -716,7 +721,7 @@ Such multiple encryptions will have performance implications on the UE, in parti
 
 ## Congestion Control in Congestion Control and Coexistence {#sec-congcong}
 
-Many applications that are sending unreliable traffic use various congestion control algorithms to detect congestion and adjust their sending rate based on inferred end-to-end latency and loss characteristics. Examples include Adaptive Video Streaming using e.g. SCREAM {{RFC8298}}, or other media streaming applications that use QUIC as transport layer. When using QUIC version 1 with Unreliable Datagram Extension or Multipath QUIC as ATSSS solution, this leads to nested congestion control, where both inner and outer congestion control coexist. When using Multiple QUICv1 tunnels with Unreliable Datagram Extension or MP-QUIC tunneling, the packet scheduler has additional impact on perceived end-to-end latency and loss due to the potential difference of the individual path characteristics.
+Many applications that are sending unreliable traffic use various congestion control algorithms to detect congestion and adjust their sending rate based on inferred end-to-end latency and loss characteristics. Examples include Adaptive Video Streaming using, e.g. SCREAM {{RFC8298}}, or other media streaming applications that use QUIC as transport layer. When using QUIC version 1 with Unreliable Datagram Extension or Multipath QUIC as ATSSS solution, this leads to nested congestion control, where both inner and outer congestion control coexist. When using Multiple QUICv1 tunnels with Unreliable Datagram Extension or MP-QUIC tunneling, the packet scheduler has additional impact on perceived end-to-end latency and loss due to the potential difference of the individual path characteristics.
 
 When deploying ATSSS Phase 1 and Phase 2 in parallel, with the UE serving both reliable and unreliable flows, different congestion control algorithms may coexist on individual paths, which may lead to fairness issues or even meltdown effects.
 
@@ -739,7 +744,7 @@ applications have to deal with packet reordering, since for example typical best
 effort Internet traffic has no mechanism to prevent it.  However, in practice,
 without any multipath extension, packet reordering can be assumed to be very
 limited. Therefore most piggybacked services on top of a Unreliable Datagram
-Extension QUIC tunnel which is splitted as in {{sec-quic-multiple-tunnels}} and
+Extension QUIC tunnel which is split as in {{sec-quic-multiple-tunnels}} and
 {{sec-mpquic-tunnel}} are not expecting massive packet reordering and degrades
 their performance if it happens anyway. These potentially are all those services
 that rely on {{RFC0793}} and {{I-D.ietf-quic-transport}} or
@@ -766,7 +771,7 @@ These are additional QUIC protocol capabilities that would be useful for ATSSS P
 
 - We recognize that nested congestion control mechanisms (such as QUIC encapsulated in QUIC) have implications that require further study. 
 
-- We recognize that the complete ATSSS Phase 2 protocol stack would include encrypted headers at multiple levels, and that if this is a problem for ATSSS, it is likely 3GPP's problem to solve. Likewise, the implications of the various encapsulation overhead is to be further assessed within 3GPP.
+- We recognize that the complete ATSSS Phase 2 protocol stack would include encrypted headers at multiple levels, and that if this is a problem for ATSSS, it is likely 3GPP's problem to solve. Likewise, the implications of the overhead of the various encapsulations are to be further assessed within 3GPP.
 
 # IANA Considerations
 
