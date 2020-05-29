@@ -271,7 +271,7 @@ Also, the document uses the following additional terms:
 
 - 5G control plane: Denotes the 5G control management component of use plane resources (e.g., forwarding policies).
 
-# High level Overview {#overview}
+# High Level ATSSS Overview {#overview}
 
 The 5G Core supports a service that provides exchange of data between a User Equipment (UE) and a data network (referred to as Packet Data Network (PDN)) identified by a Data Network Name (DNN). This connectivity service, called the Protocol Data Unit (PDU) Connectivity Service, is realized via 'PDU Sessions' that are established upon request from User Equipment (UE) when the UE first connects to that network. The type of PDU Session can be IPv4, IPv6, IPv4v6, Ethernet or Unstructured.
 
@@ -749,7 +749,7 @@ probably left to the implementer, to take care. Even if the reconstruction of th
 become a standardized part of the MP-QUIC in {{sec-mpquic-tunnel}}, it possibly
 requires path sequencing and end-to-end sequencing. 
 
-# QUIC Version 1 Gap Analysis for ATSSS Version 2 {#gap-analysis}
+# QUIC Version 1 Gap Analysis for ATSSS Phase 2 {#gap-analysis}
 
 These are additional QUIC protocol capabilities that would be useful for ATSSS Phase 2, as described in {{sec-ver2}}, along with our understanding of their maturity level.
 
@@ -769,9 +769,7 @@ These are additional QUIC protocol capabilities that would be useful for ATSSS P
 
 # IANA Considerations
 
-(Note to RFC Editor - if this document ever reaches you, please remove this section)
-
-This document makes no requests of IANA.
+This document does not make any request to IANA.
 
 # Security Considerations
 
