@@ -1,5 +1,5 @@
 ---
-title: 3GPPP Access Traffic Steering, Switching, and Splitting (ATSSS) Overview for IETF Participants
+title: 3GPP Access Traffic Steering, Switching, and Splitting (ATSSS) Overview for IETF Participants
 abbrev: QUIC ATSSS
 docname: draft-bonaventure-quic-atsss-overview-00
 date: 2020-05-29
@@ -44,6 +44,11 @@ author:
   name: Spencer Dawkins
   organization: Tencent America
   email: spencerdawkins.ietf@gmail.com
+ -  
+  ins: M. Kuehlewind
+   name: Mirja Kuehlewind
+   organization: Ericsson
+   email: mirja.kuehlewind@ericsson.com
  -
   ins: M. Amend
   name: Markus Amend
