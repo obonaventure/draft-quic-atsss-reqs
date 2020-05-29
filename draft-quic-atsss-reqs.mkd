@@ -468,7 +468,7 @@ Network input can be especially beneficial for cases such as:
 
 This section elaborates how non-TCP traffic (UDP or a subset like QUIC) can to be encapsulated into a tunnel between the UE and the ATSSS UPF to enable so called ATSSS higher-layer steering for all traffic, not only TCP or QUIC. This section discusses to what extent QUIC can be used as a tunneling protocol for the ATSSS service and whether gaps are found.
 
-When tunneling non-TCP (e.g., UDP, IP, etc.) over QUIC the Unreliable Datagram Extension
+When tunneling non-TCP (e.g., UDP, IP) over QUIC the Unreliable Datagram Extension
 {{I-D.ietf-quic-datagram}} can be used. Each data packet would be transported unreliably as a datagram
 over a QUIC connection. Transporting these datagrams unreliably as would be done
 in IPsec or DTLS-based tunnels is especially important for flows that do not require reliable delivery 
