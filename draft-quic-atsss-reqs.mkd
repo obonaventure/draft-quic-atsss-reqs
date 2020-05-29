@@ -97,6 +97,7 @@ informative:
   RFC6459:
   RFC6824:
   RFC8041:
+  RFC8684:
   IETFJ16:
     author:
       - ins: O. Bonaventure
@@ -176,6 +177,8 @@ As part of preparation for Release 17 studies, 3GPP has expressed an interest in
 Because "3GPP SA kindly requests IETF to take the above information into account when discussing future work in prioritizing the multipath work for QUIC", but the complete specification of ATSSS in the relevant 3GPP architecture documents reflects the complexity of 3GPP networks, the authors of this document worked to provide a high level overview of the parts of ATSSS that would be impacted by IETF protocol design, in terminology that is more familiar to IETF participants. 
 
 ## Notes for Readers
+
+We provide a high-level overview of ATSSS in {{overview}}, describe the current ATSSS version in {{sec-ver1}}, describe our thoughts about a QUIC-based version of ATSSS in {{sec-ver2}}, and conclude with our understanding of the gaps between QUIC version 1 and what a QUIC-based version of ATSSS will require in {{gap-analysis}}.
 
 This document is an informational Internet-Draft from individuals, and does not carry any special status within the IETF.
 
@@ -347,7 +350,7 @@ The traffic that matches an ATSSS rule can be distributed among available access
 - “Load-Balancing”: The traffic associated with the matching flow will be distributed among available access networks following a distribution ratio (e.g., 30% via a first access, 70% via a second access).
 - “Priority-based”: For this mode, accesses are assigned priority levels that indicate which access to be used first. Concretely, the traffic associated with the matching flow will be steered on the access with a high priority till congestion is detected, then the overflow will be forwarded over a low priority access. 
 
-In order to provide the above-mentioned steering modes, the ATSSS service relies upon a dedicated protocol called Performance Measurement Function (PMF) protocol. This protocol is enabled between the UE and the UPF and is meant to provide RTT measurements and reporting access availability/unavailability by the UE to the UPF. PMF is not specific to a given ATSSS version. 
+In order to provide the above-mentioned steering modes, the ATSSS service relies upon a dedicated protocol called Performance Measurement Function (PMF) protocol. This protocol is enabled between the UE and the UPF and is meant to provide RTT measurements and reporting access availability/unavailability by the UE to the UPF. PMF is not specific to a given ATSSS Phase {{sec-phases}}. 
 
 Furthermore, these modes of operations were designed assuming that multipath protocols
 such as MPTCP {{RFC6824}} would be used over the different paths between
@@ -380,12 +383,12 @@ and a packet scheduler that prefers the high priority path. These
 path manager and scheduler are similar to the ones used in
 deployed Hybrid Access networks {{Hybrid}}.
 
-## ATSSS Versions
+## ATSSS Phases {#sec-phases}
 
-We first describe in {{sec-ver1}} the ATSSS as specified in Release 16 (called hereafter, ATSSS version 1) that uses
-Multipath TCP {{RFC6824}} and the Convert Protocol {{I-D.ietf-tcpm-converters}}. We then discuss in {{sec-ver2}} the data plane requirements for version 2 of the ATSSS specification that 3GPP plans for Release 17. More details about 3GPP releases can be found at: https://www.3gpp.org/specifications/Releases.
+We first describe in {{sec-ver1}} the ATSSS as specified in Release 16 (called hereafter, ATSSS Phase 1) that uses
+Multipath TCP {{RFC6824}} and the Convert Protocol {{I-D.ietf-tcpm-converters}}. We then discuss in {{sec-ver2}} the data plane requirements for Phase 2 of the ATSSS specification that 3GPP plans for Release 17. More details about 3GPP releases can be found at: https://www.3gpp.org/specifications/Releases.
 
-# ATSSS Version 1: Support for TCP {#sec-ver1}
+# ATSSS Phase 1: Support for TCP {#sec-ver1}
 
 For ATSSS with Multipath TCP functionality, a client with two interfaces connected to two disjoint access networks (in this case, Access Net A and Access Net B), uses MPTCP to reach an MPTCP proxy over either, or both, of the access networks. This allows the client to communicate with a server which does not terminate MPTCP connections.
 
@@ -408,12 +411,11 @@ Also, both the MPTCP Client and MPTCP proxy are configured with ATSSS rules from
  |Client|                      +--------|Proxy|        +------+
  +--+---+                      |        +-----+
     |                          |
-    |                          |
     |          ------------    |
     |         /            \   |
-    +--------| Access Net B |--+
-              \ (non 3GPP) /
-               ------------
+    +--------| Access Net B |--+        Legend:
+              \ (non 3GPP) /               --- MPTCP subflow
+               ------------                === Proxied TCP flow
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {: #fig-mptcp-arch title="Simplified Reference Architecture for ATSSS with Multipath TCP"}
 
@@ -445,7 +447,7 @@ This approach provides 0-RTT (Zero Round-Trip Time) conversion service since no 
 
 If the server supports MPTCP, the Convert Protocol provides an option for clients to "opt-out". In such case, an MPTCP connection is directly established between the client and the server. Given that few servers are MPTCP capable, relying on the ATSSS service is the only option for UEs to make use of available multiple paths simultaneously.
 
-# ATSSS Version 2: Adding Non-TCP Support {#sec-ver2}
+# ATSSS Phase 2: Adding Non-TCP Support {#sec-ver2}
 
 The MPTCP-based ATSSS approach discussed in the previous section is specific to TCP,
 obviously. Therefore it does not support non-TCP traffic, such as
@@ -455,8 +457,7 @@ As the share of these protocols grows, mainly driven by QUIC deployment, and the
 Several proposals to carry non-TCP traffic were discussed, including
 using TCP {{I-D.boucadair-mptcp-plain-mode}} or
 defining multipath extensions to DCCP {{I-D.amend-tsvwg-multipath-dccp}}.
-The work within 3GPP now focuses on using QUIC as the baseline for the second
-version of ATSSS.
+The work within 3GPP now focuses on using QUIC as the baseline for the ATSSS Phase 2.
 
 ## QUIC and Multihoming
 
@@ -502,6 +503,27 @@ This document discusses three approaches:
 
 ### Single QUICv1 Tunnel with Unreliable Datagram Extension and Connection Migration
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               ------------
+    *---------/            \---------*
+    |........| Access Net A |........|
+    |:*-------\   (3GPP)   /-------*:|
+    |:|        ------------        |:|
+    |v|                            |:|
+ +--+-+-+                       +--+-+-+
+ |QUIC  |                       |QUIC  |        +------+
+ |      |                       |      |.......>|Server|
+ |Client|                       |Proxy |        +------+
+ +------+                       +------+
+
+               ------------
+              /            \
+             | Access Net B |           Legend:
+              \ (non 3GPP) /               --- QUIC tunnel connection
+               ------------                ... Tunneled non-TCP flow
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{: #fig-single-quic title="Single QUICv1 tunnel"}
+
 QUIC can be used as a tunneling protocol between the UE and the ATSSS UPF. Use of the Unreliable 
 Datagram Extension avoids unnecessary delays due to local retransmissions and, more important, subsequently 
 head-of-line blocking.
@@ -521,9 +543,30 @@ splitting traffic over multiple paths simulaneously can be beneficial for a smoo
 Further, of course, the ability to use multiple paths simultaneously also increases the 
 maximum capacity available, which can also be benefical in some cases.
 
-This option is not a valid approach for the ATSSSv2 discussed within the 3GPP.
+This option is not a valid approach for the ATSSS Phase 2 discussed within the 3GPP.
 
 ### Multiple QUICv1 Tunnels with Unreliable Datagram Extension and Connection Migration {#sec-quic-tunnel}
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               ------------
+    *---------/            \---------*
+    |........| Access Net A |........|
+    |:*-------\   (3GPP)   /-------*:|
+    |:|        ------------        |:|
+    |v|                            |:|
+ +--+-+-+                       +--+-+-+       +------+
+ |QUIC  |                       |QUIC  |......>|      |
+ |      |                       |      |       |Server|
+ |Client|                       |Proxy |......>|      |
+ +--+-+-+                       +--+-+-+       +------+
+    |^|                            |:|
+    |:|        ------------        |:|
+    |:*-------/            \-------*:|
+    |........| Access Net B |........|  Legend:
+    *---------\ (non 3GPP) /---------*     --- QUIC tunnel connection
+               ------------                ... Tunneled non-TCP flow
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{: #fig-multiple-quic title="Traffic steering of two end-to-end flows using multiple QUICv1 tunnels"}
 
 Another approach is to use one QUIC connection over each access network.
 In this case, there are multiple QUIC connections that are used as tunnels from the UE
@@ -549,9 +592,30 @@ available for each QUIC session varies as a function of the congestion experienc
 over each access network, data sent over a congested session could delay the
 delivery of subsequent data over the other session. 
 
-Experience with MPTCP on smartphones shows that its integrated mechanisms (e.g., congestion control, round-trip-time estimation, packet scheduler) are well suited to support splitting and switching. Providing a similar service over independent QUIC connections would require a complex application that would need to track the congestion window, round-trip-time, and loss characteristics of the underlying QUIC connections as well as some specific application layer signalling to glue the various QUIC connections together. This option is not considered as a valid approach for the ATSSSv2 discussed within the 3GPP.
+Experience with MPTCP on smartphones shows that its integrated mechanisms (e.g., congestion control, round-trip-time estimation, packet scheduler) are well suited to support splitting and switching. Providing a similar service over independent QUIC connections would require a complex application that would need to track the congestion window, round-trip-time, and loss characteristics of the underlying QUIC connections as well as some specific application layer signalling to glue the various QUIC connections together. This option is not considered as a valid approach for the ATSSS Phase 2 discussed within the 3GPP.
 
 ### MP-QUIC Tunneling {#sec-mpquic-tunnel}
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               ------------
+    *---------/            \---------*
+    | . . . .| Access Net A |. . . . |
+    |.*-------\   (3GPP)   /-------*.|
+    | |        ------------        | |
+    |.|                            |.|
+ +--+-+-+                       +--+-+-+       +------+
+ |MPQUIC|                       |MPQUIC|       |      |
+ |      |                       |      |......>|Server|
+ |Client|                       |Proxy |       |      |
+ +--+-+-+                       +--+-+-+       +------+
+    |.|                            |.|
+    | |        ------------        | |
+    |.*-------/            \-------*.|
+    | . . . .| Access Net B |. . . . |  Legend:
+    *---------\ (non 3GPP) /---------*     --- MPQUIC subflow
+               ------------                ... Tunneled non-TCP flow
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{: #fig-mp-quic title="Traffic splitting using a Multipath QUIC tunnel"}
 
 A third candidate solution is to leverage the ability of QUIC to support multiple
 streams and the Unreliable Datagram Extension but extends it with
@@ -583,8 +647,8 @@ if one of the access networks fails or becomes congested.
 
 ## Mapping of Both TCP and Non-TCP to QUIC Streams and Datagrams
 
-In ATSSSv1, each TCP connection originated by the UE corresponds to
-one MPTCP connection that is terminated on the ATSSS UPF. With ATSSSv2
+In ATSSS Phase 1, each TCP connection originated by the UE corresponds to
+one MPTCP connection that is terminated on the ATSSS UPF. With ATSSS Phase 2
 using MPQUIC as a tunneling protocol, one can leverage the multi-stream capability of QUIC to carry the bytestreams
 of multiple TCP connections over a single MPQUIC session.
 
@@ -613,15 +677,15 @@ in-order delivery. It is more appropriate to use QUIC with the Unreliable Datagr
 <----> MPQUIC session
 <====> TCP connection
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-{: #fig-atssv2-tcp title="ATSSSv2 Maps Each TCP Connection on a Stream of the MPQUIC Connection Between the UE and the ATSSS UPF"}
+{: #fig-atssv2-tcp title="ATSSS Phase 2 Maps Each TCP Connection on a Stream of the MPQUIC Connection Between the UE and the ATSSS UPF"}
 
 Two application layer protocols are proposed to manage the mapping
 of TCP connections to QUIC streams as well as the transmission of UDP
 datagrams over QUIC datagrams: 
 
-(1) The to-be MASQUE working group extends the HTTP/3 CONNECT method
+(1) The proposed MASQUE working group extends the HTTP/3 CONNECT method
 with a UDPCONNECT method to use QUIC as a tunnel for UDP traffic {{I-D.schinazi-masque-connect-udp}}.
-Another use case in scope for the MASQUE group is IP proxying which can be used for tunneling and forwarding of TCP connections. 
+Another use case in scope for MASQUE is IP proxying which can be used for tunneling and forwarding of TCP connections {{I-D.schinazi-masque-protocol}}. 
 
 (2) QUIC Tunnel is a close proposal providing similar
 functionalities to MASQUE based on a binary protocol {{I-D.piraux-quic-tunnel}}{{I-D.piraux-quic-tunnel-tcp}}, and focusing on the ATSSS use case. 
@@ -630,9 +694,9 @@ Both proposals rely upon single QUIC connections and inherit thus the same issue
 
 ## Encapsulation Overhead {#sec-overhead}
 
-In 3GPP architectures, a variety of encapsulations are already used to convey user data. The use of QUIC as a tunneling method for ATSSS purposes will thus add an extra overhead. This overhead is even exacerbated when the user data is forwarded over a non-3GPP network access given than an IPsec tunnel is used to graft the UE to the 5G Core Network. For example, the overhead without taking into account the QUIC tunnel is at least 142 octets for an IPv6 packet forwarded over a non-3GPP network access. As a reminder, ATSSSv1 does not add any overhead. 
+In 3GPP architectures, a variety of encapsulations are already used to convey user data. The use of QUIC as a tunneling method for ATSSS purposes will thus add an extra overhead. This overhead is even exacerbated when the user data is forwarded over a non-3GPP network access given than an IPsec tunnel is used to graft the UE to the 5G Core Network. For example, the overhead without taking into account the QUIC tunnel is at least 142 octets for an IPv6 packet forwarded over a non-3GPP network access. As a reminder, ATSSS Phase 1 does not add any overhead. 
 
-More investigation is required to assess whether the ATSSSv2 overhead is an issue. Solutions to optimize that overhead might be considered, if needed.
+More investigation is required to assess whether the ATSSS Phase 2 overhead is an issue. Solutions to optimize that overhead might be considered, if needed.
 
 ## Packet Order Reconstruction for (MP-)QUIC Splitting Mode
 
@@ -661,11 +725,11 @@ probably left to the implementer, to take care. Even if the reconstruction of th
 become a standardized part of the MP-QUIC in {{sec-mpquic-tunnel}}, it possibly
 requires path sequencing and end-to-end sequencing.
 
-## Multiple/Redundant Encryptions
+## Multiple Encryptions
 
-QUIC data that matches an ATSSS rule will be subject to two encryptions (i.e., the one required with the remote peer and the one used to steer data via an ATSSS UPF) when forwarded via a 3GPP network access. Three encryptions will be imposed on the same data when forwarded over a non-3GPP network access (see {{sec-overhead}}). Some of these encryptions are redundant (e.g., ATSSS encryption vs. IP Encapsulating Security Payload (ESP)).
+QUIC data that matches an ATSSS rule will be subject to multiple instances of encryptions. Some of these encryptions are redundant (e.g., ATSSS encryption vs. IP Encapsulating Security Payload (ESP)).
 
-Such multiple encryptions may have performance implications on the UE, in particular. Means to optimize the various redundant encryptions are for further investigation. 
+Such multiple encryptions will have performance implications on the UE, in particular. Means to optimize the various redundant encryptions are for further investigation in 3GPP. 
 
 # Terms used in this document
 
@@ -746,10 +810,23 @@ Volume-based Quota
 
 Wireless LAN (WLAN)
 
-# Conclusion {#conclusion}
+# QUIC Version 1 Gap Analysis for ATSSS Version 2 {#gap-analysis}
 
-Based on the two above questions, it should be clear that MPQUIC could
-cover both cases.
+These are additional QUIC protocol capabilities that would be useful for ATSSS Phase 2, as described in {{sec-ver2}}, along with our understanding of their maturity level.
+
+- ATSSS Phase 2 will need transport services for Ethernet frames and IP packets (with the intention of supporting TCP, UDP, and UDP-encapsulated transport protocols such as QUIC). QUIC Version 1 provides transport services for HTTP/3 but does not yet provide support for tunnelling Ethernet or IP directly over QUIC, as envisioned in ATSSS Phase 2. The QUIC working group is not chartered to provide this capability, although proposals exist.
+
+- We envision the ability to select paths (steering), detect path failures and reroute traffic (switching), and forward packets on multiple active paths simultaneously (splitting), based on external policies, including active-standby, smallest delay, weighted load-balancing, and path selection based on assigned priorities, for the full range of encapsulated protocols in ATSSS Phase 2, similar to the abilities provided by Multipath TCP for ATSSS Phase 1. 
+
+- QUIC Version 1 does not provide a multipath transport capability similar to Multipath TCP, as used in ATSSS Phase 1. The QUIC working group is chartered to produce a multipath extension document by December 2021. Proposals exist, although the working group has not yet adopted a draft as the basis for its work. 
+
+- QUIC Version 1 does not provide support for unreliable datagrams, needed for the additional user-plane protocols as envisioned in ATSSS Phase 2. The QUIC working group is chartered to produce this capability by March 2021, and has adopted a proposal as a working group draft.
+
+- We recognize that Multipath QUIC may not provide reassembly or appropriate sequencing for the encapsulated protocols. 
+
+- We recognize that nested congestion control mechanisms (such as QUIC encapsulated in QUIC) have implications that require further study. 
+
+- We recognize that the complete ATSSS Phase 2 protocol stack would include encrypted headers at multiple levels, and that if this is a problem for ATSSS, it is likely 3GPP's problem to solve. Likewise, the implications of the various encapsulation overhead is to be further assessed within 3GPP.
 
 # IANA Considerations
 
@@ -760,7 +837,7 @@ This document makes no requests of IANA.
 # Security Considerations
 
 Section 9 of {{RFC6459}} provides an overview of security considerations in 3GPP networks.
-ATSSSv1 data plane security considerations are documented in Section 9 of {{I-D.ietf-tcpm-converters}}. 
+ATSSS Phase 1 data plane security considerations are documented in Section 9 of {{I-D.ietf-tcpm-converters}}. 
 
 This document discusses the use of QUIC (including Multipath QUIC) as an additional ATSSS steering method. QUIC-specific security considerations are discussed in Section 21 of {{I-D.ietf-quic-transport}}. Multipath QUIC-specific security considerations can be found in Section 8 of {{I-D.deconinck-quic-multipath}}. Section 6 of {I-D.ietf-quic-datagram} discusses security considerations specific to the use of the Unreliable Datagram Extension to QUIC.
 
