@@ -454,7 +454,7 @@ A flow example of an MPTCP-proxied connection is shown in {{fig-example}}. This 
 
 Legend:
      []: Convert Protocol TLVs
-    MPC: MP_CAPABLE option  [RFC8684] 
+    MPC: MP_CAPABLE option [RFC6824] 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {: #fig-example title="An Example of MPTCP-proxied Connection Matching an ATSSS Rule."}
 
