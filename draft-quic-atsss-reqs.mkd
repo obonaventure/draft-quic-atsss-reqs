@@ -307,7 +307,7 @@ The 5G control plane provides the UE and the UPF with ATSSS rules as discussed i
 
 The ATSSS UPF translates the access network specific addresses into an address called Multi-Access (MA) IP address and vice versa. Such address is also directly assigned to the UE (that is, packets that are not eligible to the ATSSS service are sourced by the UE with that IP address).
 
-Absent any coordination between the UE and the ATSSS UPF (e.g., assignment of port ranges), the same port number may be used simultaneously by the ATSSS UPF and the UE; which is problematic.
+Absent any coordination between the UE and the ATSSS UPF (e.g., assignment of port ranges), the same IP address and port number could be used simultaneously by the ATSSS UPF and the UE; which is problematic.
 
 To avoid such issue, the ATSSS UPF may be configured with a pool of IP addresses that it can use in the Internet-facing interfaces instead of preserving the MA IP address assigned to the UE. How that pool is used is deployment- and implementation-specific.
 
