@@ -98,7 +98,6 @@ informative:
   RFC6824:
   RFC8041:
   RFC8298:
-  RFC8684:
   IETFJ16:
     author:
       - ins: O. Bonaventure
@@ -726,7 +725,7 @@ QUIC encapsulated in QUIC or SCREAM encapsulated in QUIC) as well as the coexist
 
 ## Packet Order Reconstruction for (MP-)QUIC Splitting Mode
 
-Both tunnel solutions in {{sec-quic-tunnel}} and {{sec-mpquic-tunnel}} allow the
+Both tunnel solutions in {{sec-quic-multiple-tunnels}} and {{sec-mpquic-tunnel}} allow the
 splitting mode for simultaneously sending data over multiple paths. The respective
 receiver side of the tunnel termination points has to deal with the unreliable
 transport character of the Unreliable Datagram Extension for QUIC and a possible
@@ -740,7 +739,7 @@ applications have to deal with packet reordering, since for example typical best
 effort Internet traffic has no mechanism to prevent it.  However, in practice,
 without any multipath extension, packet reordering can be assumed to be very
 limited. Therefore most piggybacked services on top of a Unreliable Datagram
-Extension QUIC tunnel which is splitted as in {{sec-quic-tunnel}} and
+Extension QUIC tunnel which is splitted as in {{sec-quic-multiple-tunnels}} and
 {{sec-mpquic-tunnel}} are not expecting massive packet reordering and degrades
 their performance if it happens anyway. These potentially are all those services
 that rely on {{RFC0793}} and {{I-D.ietf-quic-transport}} or
