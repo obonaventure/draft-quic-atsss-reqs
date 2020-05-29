@@ -629,7 +629,7 @@ More investigation is required to assess whether the ATSSS Phase 2 overhead is a
 =======
 In 3GPP architectures, a variety of encapsulations are already used to carry user data. The use of QUIC as a tunneling method for ATSSS purposes will add an extra overhead. This overhead is even exacerbated when the user data is forwarded over a non-3GPP network access given that an IPsec tunnel is used to graft the UE to the 5G Core Network. For example, the overhead without taking into account the QUIC tunnel is at least 142 octets for an IPv6 packet forwarded over a non-3GPP network access. This compares unfavorably to ATSSS Phase 1, which does not add any overhead. 
 
-More investigation is required to assess whether the ATSSSv2 overhead is an issue. Solutions to optimize that overhead could be considered, if needed. 
+More investigation is required to assess whether the ATSSS Phase 2 overhead is an issue. Solutions to optimize that overhead could be considered, if needed. 
 >>>>>>> Stashed changes
 
 ## Multiple Encryptions
