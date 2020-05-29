@@ -507,7 +507,7 @@ maximum capacity available, which can also be benefical in some cases.
 <<<<<<< Updated upstream
 This option is not a valid approach for the ATSSS Phase 2 discussed within the 3GPP.
 =======
-This option is not considered a valid approach for the ATSSSv2 discussed within the 3GPP.
+This option is not considered a valid approach for the ATSSS Phase 2 discussed within the 3GPP.
 >>>>>>> Stashed changes
 
 ### Multiple QUICv1 Tunnels with Unreliable Datagram Extension and Connection Migration {#sec-quic-multiple-tunnels}
