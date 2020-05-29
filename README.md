@@ -1,4 +1,4 @@
-# draft-quic-atsss-reqs
+# draft-bonaventure-quic-atsss-overview
 
 Tentative IETF draft on describing the requiring that ATSSS could have on QUIC
 
