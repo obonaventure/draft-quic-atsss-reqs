@@ -709,7 +709,7 @@ Both proposals rely upon single QUIC connections and inherit thus the same issue
 
 ## Encapsulation Overhead {#sec-overhead}
 
-In 3GPP architectures, a variety of encapsulations are already used to carry user data. The use of QUIC as a tunneling method for ATSSS will add some additional overhead. When the user data is forwarded over a non-3GPP network access, this overhead comes further in addition to an IPsec tunnel between the UE to the 5G Core Network which is already at least 142 octets for an IPv6 packet forwarded over a non-3GPP network access. In contrast, the MPTCP based mechanism in ATSSS Phase 1, does only add some minor overheading during connection establishment, but addiotional over during the rest of the connection. 
+In 3GPP architectures, a variety of encapsulations are already used to carry user data. The use of QUIC as a tunneling method for ATSSS will add some additional overhead. When the user data is forwarded over a non-3GPP network access, this overhead comes further in addition to an IPsec tunnel between the UE to the 5G Core Network which is already at least 142 octets for an IPv6 packet forwarded over a non-3GPP network access. In contrast, the MPTCP based mechanism in ATSSS Phase 1 does only add a minor overhead during connection establishment, but no additional overhead during the rest of the connection. 
 
 More investigation is required to assess whether the ATSSS Phase 2 overhead is an issue. Solutions to optimize that overhead could be considered, if needed. 
 
