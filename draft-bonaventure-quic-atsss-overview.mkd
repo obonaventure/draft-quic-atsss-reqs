@@ -715,7 +715,7 @@ More investigation is required to assess whether the ATSSS Phase 2 overhead is a
 
 ## Multiple Encryptions
 
-The use of QUIC as a tunneling protocol in ATSSS with add an additional layer of encryption. As there is already encryptions on other layers (e.g.  IP Encapsulating Security Payload (ESP)) this leads to multiple layer of encryption with might be redundant.
+The use of QUIC as a tunneling protocol in ATSSS will add an additional layer of encryption. As there is already encryptions on other layers (e.g., IP Encapsulating Security Payload (ESP)) this leads to multiple layer of encryption with might be redundant.
 
 Such multiple encryptions will have performance implications on the UE, in particular. Means to optimize the various redundant encryptions are for further investigation in 3GPP.
 
