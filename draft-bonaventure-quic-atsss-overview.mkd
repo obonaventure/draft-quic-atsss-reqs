@@ -19,6 +19,7 @@ author:
   ins: M. Boucadair
   name: Mohamed Boucadair
   organization: Orange
+  role: editor
   street: Clos Courtel
   city: Rennes
   code: 35000
@@ -28,11 +29,13 @@ author:
   ins: O. Bonaventure
   name: Olivier Bonaventure
   organization: UCLouvain
+  role: editor
   email: Olivier.Bonaventure@uclouvain.be
  -
   ins: M. Piraux
   name: Maxime Piraux
   organization: UCLouvain
+  role: editor
   email: Maxime.Piraux@uclouvain.be
  -
   ins: Q. De Coninck
@@ -43,11 +46,13 @@ author:
   ins: S. Dawkins
   name: Spencer Dawkins
   organization: Tencent America
+  role: editor
   email: spencerdawkins.ietf@gmail.com
  -
   ins: M. Kuehlewind
   name: Mirja Kuehlewind
   organization: Ericsson
+  role: editor
   email: mirja.kuehlewind@ericsson.com
 -
   ins: M. Amend
