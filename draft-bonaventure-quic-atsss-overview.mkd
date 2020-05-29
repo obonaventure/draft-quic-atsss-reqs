@@ -649,7 +649,7 @@ Steering can be also supported, similarly to MPTCP. The path scheduler can
 map datagrams carrying an entire flow to one or another access network based on the
 provided rules. 
 
-Switching can be improved by splitting traffic simulaneously over
+Switching can be improved by splitting traffic simultaneously over
 both link first such that the congestion window of the new path can be open before
 the old path goes away. This makes handovers smoother, as experience with Multipath TCP on
 smartphones has shown that handovers are not a binary process. When
