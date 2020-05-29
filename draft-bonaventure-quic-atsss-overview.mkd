@@ -305,7 +305,7 @@ The ATSSS UPF enables the UE to use a transport protocol that supports
 the different access networks even if the server does not support it (i.e., is not multipath-capable
 at transport layer).
 
-The 5G control plane provides the UE and the ATSSS UPF with rules as discussed in {{sec-rules}}.
+The 5G control plane provides the UE and the ATSSS UPF with rules as discussed in {{sec-rules}}. Note that, as per 3GPP definition, the rules provided to the UE are called ATSSS Rules, while the ATSSS information provided to the UPF is carried via Multi-Access Rules, but for simplicity this document uses the term “ATSSS rules” for the ATSSS information provided to both UE and UPF.
 
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
