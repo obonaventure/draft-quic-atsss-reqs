@@ -721,7 +721,7 @@ Such multiple encryptions will have performance implications on the UE, in parti
 
 ## Congestion Control in Congestion Control and Coexistence {#sec-congcong}
 
-Many applications that are sending unreliable traffic use various congestion control algorithms to detect congestion and adjust their sending rate based on inferred end-to-end latency and loss characteristics. Examples include Adaptive Video Streaming using e.g. SCREAM {{RFC8298}}, or other media streaming applications that use QUIC as transport layer. When using QUIC version 1 with Unreliable Datagram Extension or Multipath QUIC as ATSSS solution, this leads to nested congestion control, where both inner and outer congestion control coexist. When using Multiple QUICv1 tunnels with Unreliable Datagram Extension or MP-QUIC tunneling, the packet scheduler has additional impact on perceived end-to-end latency and loss due to the potential difference of the individual path characteristics.
+Many applications that are sending unreliable traffic use various congestion control algorithms to detect congestion and adjust their sending rate based on inferred end-to-end latency and loss characteristics. Examples include Adaptive Video Streaming using e.g. SCREAM {{RFC8298}}, or other media streaming applications that use QUIC as transport layer. When using QUIC version 1 with Unreliable Datagram Extension or Multipath QUIC as ATSSS solution, this leads to nested congestion control, where both inner and outer congestion control coexist. When using Multiple QUICv1 tunnels with Unreliable Datagram Extension or MP-QUIC tunneling, the packet scheduler could have an additional impact on the perceived end-to-end latency and loss due to the potential difference of the individual path characteristics.
 
 When deploying ATSSS Phase 1 and Phase 2 in parallel, with the UE serving both reliable and unreliable flows, different congestion control algorithms may coexist on individual paths, which may lead to fairness issues or even meltdown effects.
 
@@ -741,11 +741,11 @@ that require in-order delivery and e.g. rely on TCP or implement a similar mecha
 high amounts of reordering and expirience decreased performanced. 
 
 As such it is desirable that the respective
-receiver side of the tunnel termination points has the ability to reconstruct of the original packet ordering. 
+receiver side of the tunnel termination points has the ability to reconstruct the original packet ordering. 
 While in the case when using the MPTCP converter, losses are retransmitted quickly on the local segment,
 when the Unreliable Datagram Extension for QUIC is used, the reconstruction mechanism has to further
 account for packet loss which may occur for any of the paths within the QUIC tunnel. This can cause 
-delays in the reordering logic, which in turn can have a negative impact on application that do not require
+delays in the reordering logic, which in turn can have a negative impact on applications that do not require
 in-order delivery, auch as real-time transmissions.
 
 It is assumed that this is a solvable task similar to {{MPDCCP-paper}}, but is
@@ -759,7 +759,7 @@ This section summarizes QUIC protocol capabilities that would be beneficial for 
 
 - ATSSS Phase 2 is focused on transport services for Ethernet frames and IP packets (with the intention of supporting TCP, UDP, and UDP-encapsulated transport protocols such as QUIC). The discussed approaches are based on tunnelling Ethernet or IP directly over QUIC. The masque working group that is currently in the chartering validation process is scoped to cover UDP and IP proxying. While UDP proxying does cover the most important use case to support ATSSS for UDP/QUIC, a more generic solution based on IP proxying would simplify the ATSSS design. However, IP proxying is only considered at a later stage by the masque working group. Also, multipath mechanisms of QUIC are not covered in the proposed charter.   
 
-- We envision the ability to select paths (steering), detect path failures and reroute traffic (switching), and forward packets on multiple active paths simultaneously (splitting), based on external policies, including active-standby, smallest delay, weighted load-balancing, and path selection based on assigned priorities, for the full range of encapsulated protocols in ATSSS Phase 2, similar to the abilities provided by Multipath TCP for ATSSS Phase 1. Splitting cannot be supported easily in the discussed QUICv1-based approaches. Multipath transport capability similar to Multipath TCP, as used in ATSSS Phase 1, would support splitting well. The QUIC working group is originally chartered to produce a multipath extension document by December 2021. Proposals exist, however, this work has been postponed to QUICv2 and discussion is still on-going if support will be kept in the chather.
+- We envision the ability to select paths (steering), detect path failures and reroute traffic (switching), and forward packets on multiple active paths simultaneously (splitting), based on external policies, including active-standby, smallest delay, weighted load-balancing, and path selection based on assigned priorities, for the full range of encapsulated protocols in ATSSS Phase 2, similar to the abilities provided by Multipath TCP for ATSSS Phase 1. Splitting cannot be supported easily in the discussed QUICv1-based approaches. Multipath transport capability similar to Multipath TCP, as used in ATSSS Phase 1, would support splitting well. The QUIC working group is originally chartered to produce a multipath extension document by December 2021. Proposals exist, however, this work has been postponed to QUICv2 and discussion is still on-going if support will be kept in the charter.
 
 - While the base protocol for QUICv1 does not provide support for unreliable datagrams, an QUIC extension for datagram support has been adopted by the group and the QUIC working group is chartered to produce this capability by March 2021. This can be used to support for the additional user-plane protocols as envisioned in ATSSS Phase 2.
 
