@@ -59,12 +59,12 @@ author:
   name: Markus Amend
   organization: Deutsche Telekom
   email: markus.amend@telekom.de
--
- ins: A. Kassler
- name: Andreas Kassler
- organization: Karlstad University
- email: andreas.kassler@kau.se
--
+ -
+  ins: A. Kassler
+  name: Andreas Kassler
+  organization: Karlstad University
+  email: andreas.kassler@kau.se
+ -
   ins: Q. An
   name: Qing An
   organization: Alibaba Group
