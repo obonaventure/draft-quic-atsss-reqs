@@ -594,7 +594,7 @@ tunnels are used simultaneously for different packets of the same flow.
 
 However, this approach for splitting is challenging
 since data from the same flow are sent over different connections,
-again using unreliable datagram to minimise head-of-line blocking.
+again using unreliable datagram to minimize head-of-line blocking.
 Because both (tunnel) QUIC connections are completely independent of each other and the paths on the
 different access networks may have different latency, this approach would likely
 result in reordering of packets that belong to
