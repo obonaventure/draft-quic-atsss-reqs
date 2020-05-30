@@ -105,7 +105,6 @@ informative:
   I-D.piraux-quic-tunnel-tcp:
   I-D.boucadair-mptcp-plain-mode:
   I-D.bonaventure-iccrg-schedulers:
-  RFC0793:
   RFC5533:
   RFC6275:
   RFC5213:
