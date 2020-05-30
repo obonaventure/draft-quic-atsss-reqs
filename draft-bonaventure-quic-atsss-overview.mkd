@@ -396,7 +396,7 @@ The "Smallest Delay" mode can be implemented using a path manager that
 establishes a subflow over both paths and a packet scheduler that measures
 their RTTs and prefers the one having the lowest RTT.
 These
-path manager and scheduler are similar to those
+path manager and scheduler are similar to those used
 by Multipath TCP on Linux {{RFC8041}}.
 
 The "Load-Balancing" mode would use the same path manager with a weighted
@@ -711,9 +711,9 @@ Two application layer protocols are proposed to manage the mapping
 of TCP connections to QUIC streams as well as the transmission of UDP
 datagrams over QUIC datagrams: 
 
-(1) The proposed MASQUE working group extends the HTTP/3 CONNECT method
+(1) The proposed masque working group (wg) extends the HTTP/3 CONNECT method
 with a UDPCONNECT method to use QUIC as a tunnel for UDP traffic {{I-D.schinazi-masque-connect-udp}}.
-Another use case in scope for MASQUE is IP proxying which can be used for tunneling and forwarding of TCP connections {{I-D.schinazi-masque-protocol}}. 
+Another use case in scope for masque wg is IP proxying which can be used for tunneling and forwarding of TCP connections {{I-D.schinazi-masque-protocol}}. 
 
 (2) QUIC Tunnel is a close proposal providing similar
 functionalities to MASQUE based on a binary protocol {{I-D.piraux-quic-tunnel}}{{I-D.piraux-quic-tunnel-tcp}}, and focusing on the ATSSS use case. 
@@ -791,11 +791,11 @@ ATSSS Phase 1 data plane security considerations are documented in Section 9 of 
 
 This document discusses the use of QUIC (including Multipath QUIC) as an additional ATSSS steering method. QUIC-specific security considerations are discussed in Section 21 of {{I-D.ietf-quic-transport}}. 
 
+This document does not specify specific mechanisms to use QUIC as a tunneling protocol towards an ATSSS proxy, as the intention of this document is to provide an informational overview of the ongoing work in 3GPP on ATSSS to support non-TCP, rather than discussing a detailed solution. Nevertheless, this document cites candidate solutions to provide such tunneling service. Security considerations specific to these solutions are provided below.
+
 Multipath QUIC-specific security considerations can be found in Section 8 of {{I-D.deconinck-quic-multipath}}. 
 
 Section 6 of {I-D.ietf-quic-datagram} discusses security considerations specific to the use of the Unreliable Datagram Extension to QUIC.
-
-This document does not specify specific mechanisms to use QUIC as a tunneling protocol towards an ATSSS proxy, as the intention of this document is to provide an informational overview of the ongoing work in 3GPP on ATSSS to support non-TCP, rather than discussing a detailed solution. Nevertheless, this document cites candidate solutions to provide such tunneling service. Security considerations specific to these solutions are provided below.  
 
 # Acknowledgements
 
