@@ -408,7 +408,7 @@ and a packet scheduler that prefers the high priority path. These
 path manager and scheduler are similar to the ones used in
 deployed Hybrid Access networks {{Hybrid}}.
 
-# ATSSS Phases {#sec-phases}
+## ATSSS Phases {#sec-phases}
 
 We first describe in {{sec-ver1}} ATSSS as specified in Release 16 (called hereafter, ATSSS Phase 1) that uses
 Multipath TCP {{RFC6824}} and the 0-RTT Convert Protocol {{I-D.ietf-tcpm-converters}} to handle TCP traffic. We then discuss in {{sec-ver2}} the data plane requirements for Phase 2 of the ATSSS specification that 3GPP plans for Release 17. More details about 3GPP releases can be found at: https://www.3gpp.org/specifications/Releases.
@@ -474,7 +474,7 @@ MPTCP uses this performance information to support splitting and switching.
 
 If the server supports MPTCP, the Convert Protocol provides an option for clients to "opt-out". In such case, an MPTCP connection is directly established between the client and the server. Given that few servers are MPTCP capable, relying on the ATSSS service is the only option for UEs to make use of available multiple paths to most servers simultaneously.
 
-## ATSSS Phase 2: Adding Non-TCP Support {#sec-ver2}
+# ATSSS Phase 2: Adding Non-TCP Support {#sec-ver2}
 
 The MPTCP-based ATSSS approach discussed in the previous section is specific to TCP,
 obviously. Therefore it does not support non-TCP traffic, such as
@@ -487,7 +487,7 @@ using TCP {{I-D.boucadair-mptcp-plain-mode}} or
 defining multipath extensions to DCCP {{I-D.amend-tsvwg-multipath-dccp}}.
 The work within 3GPP now focuses on using QUIC as the baseline for ATSSS Phase 2.
 
-### QUIC and Multihoming
+## QUIC and Multihoming
 
 
 For non-TCP traffic, QUIC is already the dominant part of UDP traffic. A solution as realized with the Convert Protocol for (MP)TCP is not possible for QUIC as a QUIC connection cannot be intercepted and converted as in the ATSSS architecture for (MP)TCP ({{fig-mptcp-arch}}). For (MP)TCP only the transport protocol (TCP) is intercepted, while transport security provided by Transport Layer Security (TLS) on top of TCP stays in tact. For QUIC transport, security is integrated into the transport protocol and thus cannot be intercepted.
@@ -506,7 +506,7 @@ Network input can be especially beneficial for cases such as:
 
 - avoiding frequent connection migration if both access networks could be used to forward packets (each with a distinct source IP address).
 
-### QUIC as an ATSSS Data Plane Protocol {#sec-quic-data}
+## QUIC as an ATSSS Data Plane Protocol {#sec-quic-data}
 
 This section elaborates how non-TCP traffic (UDP or a subset like QUIC) can be encapsulated into a tunnel between the UE and the ATSSS UPF to enable ATSSS for all traffic, not only TCP or QUIC. This section discusses to what extent QUIC can be used as a tunneling protocol for the ATSSS service and whether gaps are found.
 
