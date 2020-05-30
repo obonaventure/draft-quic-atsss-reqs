@@ -5,7 +5,7 @@
 QUIC Working Group                                     M. Boucadair, Ed.
 Internet-Draft                                                    Orange
 Intended status: Informational                       O. Bonaventure, Ed.
-Expires: November 30, 2020                                M. Piraux, Ed.
+Expires: December 1, 2020                                 M. Piraux, Ed.
                                                            Q. De Coninck
                                                                UCLouvain
                                                          S. Dawkins, Ed.
@@ -22,7 +22,7 @@ Expires: November 30, 2020                                M. Piraux, Ed.
                                                                 Tessares
                                                                   S. Seo
                                                            Korea Telecom
-                                                            May 29, 2020
+                                                            May 30, 2020
 
 
 3GPP Access Traffic Steering Switching and Splitting (ATSSS) - Overview
@@ -53,7 +53,7 @@ Status of This Memo
 
 
 
-Boucadair, et al.       Expires November 30, 2020               [Page 1]
+Boucadair, et al.       Expires December 1, 2020                [Page 1]
 
 Internet-Draft                 QUIC ATSSS                       May 2020
 
@@ -68,7 +68,7 @@ Internet-Draft                 QUIC ATSSS                       May 2020
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on November 30, 2020.
+   This Internet-Draft will expire on December 1, 2020.
 
 Copyright Notice
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Boucadair, et al.       Expires November 30, 2020               [Page 2]
+Boucadair, et al.       Expires December 1, 2020                [Page 2]
 
 Internet-Draft                 QUIC ATSSS                       May 2020
 
@@ -165,7 +165,7 @@ Internet-Draft                 QUIC ATSSS                       May 2020
 
 
 
-Boucadair, et al.       Expires November 30, 2020               [Page 3]
+Boucadair, et al.       Expires December 1, 2020                [Page 3]
 
 Internet-Draft                 QUIC ATSSS                       May 2020
 
@@ -221,7 +221,7 @@ Internet-Draft                 QUIC ATSSS                       May 2020
 
 
 
-Boucadair, et al.       Expires November 30, 2020               [Page 4]
+Boucadair, et al.       Expires December 1, 2020                [Page 4]
 
 Internet-Draft                 QUIC ATSSS                       May 2020
 
@@ -277,7 +277,7 @@ Internet-Draft                 QUIC ATSSS                       May 2020
 
 
 
-Boucadair, et al.       Expires November 30, 2020               [Page 5]
+Boucadair, et al.       Expires December 1, 2020                [Page 5]
 
 Internet-Draft                 QUIC ATSSS                       May 2020
 
@@ -333,7 +333,7 @@ Internet-Draft                 QUIC ATSSS                       May 2020
 
 
 
-Boucadair, et al.       Expires November 30, 2020               [Page 6]
+Boucadair, et al.       Expires December 1, 2020                [Page 6]
 
 Internet-Draft                 QUIC ATSSS                       May 2020
 
@@ -389,7 +389,7 @@ Internet-Draft                 QUIC ATSSS                       May 2020
 
 
 
-Boucadair, et al.       Expires November 30, 2020               [Page 7]
+Boucadair, et al.       Expires December 1, 2020                [Page 7]
 
 Internet-Draft                 QUIC ATSSS                       May 2020
 
@@ -445,7 +445,7 @@ Internet-Draft                 QUIC ATSSS                       May 2020
 
 
 
-Boucadair, et al.       Expires November 30, 2020               [Page 8]
+Boucadair, et al.       Expires December 1, 2020                [Page 8]
 
 Internet-Draft                 QUIC ATSSS                       May 2020
 
@@ -501,7 +501,7 @@ Internet-Draft                 QUIC ATSSS                       May 2020
 
 
 
-Boucadair, et al.       Expires November 30, 2020               [Page 9]
+Boucadair, et al.       Expires December 1, 2020                [Page 9]
 
 Internet-Draft                 QUIC ATSSS                       May 2020
 
@@ -551,13 +551,13 @@ Internet-Draft                 QUIC ATSSS                       May 2020
    The "Smallest Delay" mode can be implemented using a path manager
    that establishes a subflow over both paths and a packet scheduler
    that measures their RTTs and prefers the one having the lowest RTT.
-   These path manager and scheduler are similar to those by Multipath
-   TCP on Linux [RFC8041].
+   These path manager and scheduler are similar to those used by
+   Multipath TCP on Linux [RFC8041].
 
 
 
 
-Boucadair, et al.       Expires November 30, 2020              [Page 10]
+Boucadair, et al.       Expires December 1, 2020               [Page 10]
 
 Internet-Draft                 QUIC ATSSS                       May 2020
 
@@ -613,7 +613,7 @@ Internet-Draft                 QUIC ATSSS                       May 2020
 
 
 
-Boucadair, et al.       Expires November 30, 2020              [Page 11]
+Boucadair, et al.       Expires December 1, 2020               [Page 11]
 
 Internet-Draft                 QUIC ATSSS                       May 2020
 
@@ -669,7 +669,7 @@ Internet-Draft                 QUIC ATSSS                       May 2020
 
 
 
-Boucadair, et al.       Expires November 30, 2020              [Page 12]
+Boucadair, et al.       Expires December 1, 2020               [Page 12]
 
 Internet-Draft                 QUIC ATSSS                       May 2020
 
@@ -725,7 +725,7 @@ Internet-Draft                 QUIC ATSSS                       May 2020
 
 
 
-Boucadair, et al.       Expires November 30, 2020              [Page 13]
+Boucadair, et al.       Expires December 1, 2020               [Page 13]
 
 Internet-Draft                 QUIC ATSSS                       May 2020
 
@@ -781,7 +781,7 @@ Internet-Draft                 QUIC ATSSS                       May 2020
 
 
 
-Boucadair, et al.       Expires November 30, 2020              [Page 14]
+Boucadair, et al.       Expires December 1, 2020               [Page 14]
 
 Internet-Draft                 QUIC ATSSS                       May 2020
 
@@ -837,7 +837,7 @@ Internet-Draft                 QUIC ATSSS                       May 2020
 
 
 
-Boucadair, et al.       Expires November 30, 2020              [Page 15]
+Boucadair, et al.       Expires December 1, 2020               [Page 15]
 
 Internet-Draft                 QUIC ATSSS                       May 2020
 
@@ -893,7 +893,7 @@ Internet-Draft                 QUIC ATSSS                       May 2020
 
 
 
-Boucadair, et al.       Expires November 30, 2020              [Page 16]
+Boucadair, et al.       Expires December 1, 2020               [Page 16]
 
 Internet-Draft                 QUIC ATSSS                       May 2020
 
@@ -949,7 +949,7 @@ Internet-Draft                 QUIC ATSSS                       May 2020
 
 
 
-Boucadair, et al.       Expires November 30, 2020              [Page 17]
+Boucadair, et al.       Expires December 1, 2020               [Page 17]
 
 Internet-Draft                 QUIC ATSSS                       May 2020
 
@@ -973,9 +973,6 @@ Internet-Draft                 QUIC ATSSS                       May 2020
    window, round-trip-time, and loss characteristics of the underlying
    QUIC connections as well as some specific application layer
    signalling to glue the various QUIC connections together.
-
-   This option is not considered a valid approach for the ATSSS Phase 2
-   discussed within the 3GPP.
 
 7.1.5.  MP-QUIC Tunneling
 
@@ -1001,17 +998,17 @@ Internet-Draft                 QUIC ATSSS                       May 2020
 
    A third candidate solution is to leverage the ability of QUIC to
    support multiple streams and the Unreliable Datagram Extension, and
+   to extend it with Multipath capabilities as described in
+   [I-D.deconinck-quic-multipath].
 
 
 
 
-Boucadair, et al.       Expires November 30, 2020              [Page 18]
+
+Boucadair, et al.       Expires December 1, 2020               [Page 18]
 
 Internet-Draft                 QUIC ATSSS                       May 2020
 
-
-   to extend it with Multipath capabilities as described in
-   [I-D.deconinck-quic-multipath].
 
    In this case, there is a single (Multipath) QUIC connection between
    the UE and the ATSSS UPF.  With a multipath transport, splitting is
@@ -1061,7 +1058,10 @@ Internet-Draft                 QUIC ATSSS                       May 2020
 
 
 
-Boucadair, et al.       Expires November 30, 2020              [Page 19]
+
+
+
+Boucadair, et al.       Expires December 1, 2020               [Page 19]
 
 Internet-Draft                 QUIC ATSSS                       May 2020
 
@@ -1089,10 +1089,10 @@ Internet-Draft                 QUIC ATSSS                       May 2020
    TCP connections to QUIC streams as well as the transmission of UDP
    datagrams over QUIC datagrams:
 
-   (1) The proposed MASQUE working group extends the HTTP/3 CONNECT
+   (1) The proposed masque working group (wg) extends the HTTP/3 CONNECT
    method with a UDPCONNECT method to use QUIC as a tunnel for UDP
    traffic [I-D.schinazi-masque-connect-udp].  Another use case in scope
-   for MASQUE is IP proxying which can be used for tunneling and
+   for masque wg is IP proxying which can be used for tunneling and
    forwarding of TCP connections [I-D.schinazi-masque-protocol].
 
    (2) QUIC Tunnel is a close proposal providing similar functionalities
@@ -1117,7 +1117,7 @@ Internet-Draft                 QUIC ATSSS                       May 2020
 
 
 
-Boucadair, et al.       Expires November 30, 2020              [Page 20]
+Boucadair, et al.       Expires December 1, 2020               [Page 20]
 
 Internet-Draft                 QUIC ATSSS                       May 2020
 
@@ -1173,7 +1173,7 @@ Internet-Draft                 QUIC ATSSS                       May 2020
 
 
 
-Boucadair, et al.       Expires November 30, 2020              [Page 21]
+Boucadair, et al.       Expires December 1, 2020               [Page 21]
 
 Internet-Draft                 QUIC ATSSS                       May 2020
 
@@ -1189,8 +1189,8 @@ Internet-Draft                 QUIC ATSSS                       May 2020
    However, in practice, packet reordering in the network is assumed to
    be very limited.  Applications that require in-order delivery and
    e.g. rely on TCP or implement a similar mechanism itself can be
-   sensitive to high amounts of reordering and expirience decreased
-   performanced.
+   sensitive to high amounts of reordering and experience decreased
+   performance.
 
    As such it is desirable that the respective receiver side of the
    tunnel termination points has the ability to reconstruct the original
@@ -1229,7 +1229,7 @@ Internet-Draft                 QUIC ATSSS                       May 2020
 
 
 
-Boucadair, et al.       Expires November 30, 2020              [Page 22]
+Boucadair, et al.       Expires December 1, 2020               [Page 22]
 
 Internet-Draft                 QUIC ATSSS                       May 2020
 
@@ -1285,20 +1285,13 @@ Internet-Draft                 QUIC ATSSS                       May 2020
 
 
 
-Boucadair, et al.       Expires November 30, 2020              [Page 23]
+Boucadair, et al.       Expires December 1, 2020               [Page 23]
 
 Internet-Draft                 QUIC ATSSS                       May 2020
 
 
    considerations are discussed in Section 21 of
    [I-D.ietf-quic-transport].
-
-   Multipath QUIC-specific security considerations can be found in
-   Section 8 of [I-D.deconinck-quic-multipath].
-
-   Section 6 of {I-D.ietf-quic-datagram} discusses security
-   considerations specific to the use of the Unreliable Datagram
-   Extension to QUIC.
 
    This document does not specify specific mechanisms to use QUIC as a
    tunneling protocol towards an ATSSS proxy, as the intention of this
@@ -1307,6 +1300,13 @@ Internet-Draft                 QUIC ATSSS                       May 2020
    detailed solution.  Nevertheless, this document cites candidate
    solutions to provide such tunneling service.  Security considerations
    specific to these solutions are provided below.
+
+   Multipath QUIC-specific security considerations can be found in
+   Section 8 of [I-D.deconinck-quic-multipath].
+
+   Section 6 of {I-D.ietf-quic-datagram} discusses security
+   considerations specific to the use of the Unreliable Datagram
+   Extension to QUIC.
 
 11.  Acknowledgements
 
@@ -1341,7 +1341,7 @@ Internet-Draft                 QUIC ATSSS                       May 2020
 
 
 
-Boucadair, et al.       Expires November 30, 2020              [Page 24]
+Boucadair, et al.       Expires December 1, 2020               [Page 24]
 
 Internet-Draft                 QUIC ATSSS                       May 2020
 
@@ -1397,7 +1397,7 @@ Internet-Draft                 QUIC ATSSS                       May 2020
 
 
 
-Boucadair, et al.       Expires November 30, 2020              [Page 25]
+Boucadair, et al.       Expires December 1, 2020               [Page 25]
 
 Internet-Draft                 QUIC ATSSS                       May 2020
 
@@ -1453,7 +1453,7 @@ Internet-Draft                 QUIC ATSSS                       May 2020
 
 
 
-Boucadair, et al.       Expires November 30, 2020              [Page 26]
+Boucadair, et al.       Expires December 1, 2020               [Page 26]
 
 Internet-Draft                 QUIC ATSSS                       May 2020
 
@@ -1509,7 +1509,7 @@ Authors' Addresses
 
 
 
-Boucadair, et al.       Expires November 30, 2020              [Page 27]
+Boucadair, et al.       Expires December 1, 2020               [Page 27]
 
 Internet-Draft                 QUIC ATSSS                       May 2020
 
@@ -1565,7 +1565,7 @@ Internet-Draft                 QUIC ATSSS                       May 2020
 
 
 
-Boucadair, et al.       Expires November 30, 2020              [Page 28]
+Boucadair, et al.       Expires December 1, 2020               [Page 28]
 
 Internet-Draft                 QUIC ATSSS                       May 2020
 
@@ -1621,4 +1621,4 @@ Internet-Draft                 QUIC ATSSS                       May 2020
 
 
 
-Boucadair, et al.       Expires November 30, 2020              [Page 29]
+Boucadair, et al.       Expires December 1, 2020               [Page 29]
