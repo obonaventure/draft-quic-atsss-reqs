@@ -751,7 +751,7 @@ Generally, applications have to deal with packet reordering, since the best
 effort for Internet traffic has no guarantee to prevent it. However, in practice, 
 packet reordering in the network is assumed to be very limited. Applications 
 that require in-order delivery and e.g. rely on TCP or implement a similar mechanism itself can be sensitive to
-high amounts of reordering and expirience decreased performanced. 
+high amounts of reordering and experience decreased performance. 
 
 As such it is desirable that the respective
 receiver side of the tunnel termination points has the ability to reconstruct the original packet ordering. 
